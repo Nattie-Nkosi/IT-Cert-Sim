@@ -99,10 +99,20 @@ export const adminRoutes = new Elysia({ prefix: '/api/admin' })
         questions: t.Array(
           t.Object({
             questionText: t.String(),
-            questionType: t.String(),
+            questionType: t.Union([
+              t.Literal('SINGLE_CHOICE'),
+              t.Literal('MULTIPLE_CHOICE'),
+              t.Literal('TRUE_FALSE'),
+            ]),
             explanation: t.Optional(t.String()),
             certificationId: t.String(),
-            difficulty: t.Optional(t.String()),
+            difficulty: t.Optional(
+              t.Union([
+                t.Literal('EASY'),
+                t.Literal('MEDIUM'),
+                t.Literal('HARD'),
+              ])
+            ),
             answers: t.Array(
               t.Object({
                 answerText: t.String(),
