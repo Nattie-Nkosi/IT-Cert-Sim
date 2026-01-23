@@ -1,0 +1,93 @@
+{
+  "questions": [
+    {
+      "questionText": "Which OSI layer is responsible for logical addressing and routing?",
+      "questionType": "SINGLE_CHOICE",
+      "explanation": "The Network Layer (Layer 3) handles logical addressing (IP addresses) and routing packets between networks.",
+      "certificationId": "cmkqqxm440002nw5kc0vbyab3",
+      "difficulty": "MEDIUM",
+      "answers": [
+        {"answerText": "Physical Layer", "isCorrect": false},
+        {"answerText": "Data Link Layer", "isCorrect": false},
+        {"answerText": "Network Layer", "isCorrect": true},
+        {"answerText": "Transport Layer", "isCorrect": false}
+      ]
+    },
+    {
+      "questionText": "What is the default subnet mask for a Class C IP address?",
+      "questionType": "SINGLE_CHOICE",
+      "explanation": "Class C addresses have a default subnet mask of 255.255.255.0 or /24, providing 254 usable host addresses per network.",
+      "certificationId": "cmkqqxm440002nw5kc0vbyab3",
+      "difficulty": "EASY",
+      "answers": [
+        {"answerText": "255.0.0.0", "isCorrect": false},
+        {"answerText": "255.255.0.0", "isCorrect": false},
+        {"answerText": "255.255.255.0", "isCorrect": true},
+        {"answerText": "255.255.255.255", "isCorrect": false}
+      ]
+    },
+    {
+      "questionText": "Which protocol operates at the Transport Layer and provides connectionless communication?",
+      "questionType": "SINGLE_CHOICE",
+      "explanation": "UDP (User Datagram Protocol) operates at Layer 4 and provides fast, connectionless communication without guaranteed delivery.",
+      "certificationId": "cmkqqxm440002nw5kc0vbyab3",
+      "difficulty": "MEDIUM",
+      "answers": [
+        {"answerText": "TCP", "isCorrect": false},
+        {"answerText": "UDP", "isCorrect": true},
+        {"answerText": "IP", "isCorrect": false},
+        {"answerText": "ICMP", "isCorrect": false}
+      ]
+    },
+    {
+      "questionText": "What is the maximum distance limitation for Cat6 Ethernet cable?",
+      "questionType": "SINGLE_CHOICE",
+      "explanation": "Cat6 cable has a maximum segment length of 100 meters (328 feet) for Ethernet connections to maintain signal integrity.",
+      "certificationId": "cmkqqxm440002nw5kc0vbyab3",
+      "difficulty": "EASY",
+      "answers": [
+        {"answerText": "50 meters", "isCorrect": false},
+        {"answerText": "100 meters", "isCorrect": true},
+        {"answerText": "200 meters", "isCorrect": false},
+        {"answerText": "500 meters", "isCorrect": false}
+      ]
+    },
+    {
+      "questionText": "Which of the following are private IP address ranges? (Select TWO)",
+      "questionType": "MULTIPLE_CHOICE",
+      "explanation": "Private IP ranges are 10.0.0.0/8, 172.16.0.0/12, and 192.168.0.0/16. These cannot be routed on the public internet.",
+      "certificationId": "cmkqqxm440002nw5kc0vbyab3",
+      "difficulty": "MEDIUM",
+      "answers": [
+        {"answerText": "10.0.0.0/8", "isCorrect": true},
+        {"answerText": "172.16.0.0/12", "isCorrect": true},
+        {"answerText": "8.8.8.8/32", "isCorrect": false},
+        {"answerText": "1.1.1.1/32", "isCorrect": false}
+      ]
+    },
+    {
+      "questionText": "What port does HTTPS use by default?",
+      "questionType": "SINGLE_CHOICE",
+      "explanation": "HTTPS (HTTP Secure) uses port 443 by default for encrypted web traffic using TLS/SSL.",
+      "certificationId": "cmkqqxm440002nw5kc0vbyab3",
+      "difficulty": "EASY",
+      "answers": [
+        {"answerText": "80", "isCorrect": false},
+        {"answerText": "443", "isCorrect": true},
+        {"answerText": "8080", "isCorrect": false},
+        {"answerText": "22", "isCorrect": false}
+      ]
+    },
+    {
+      "questionText": "True or False: A switch operates at Layer 2 of the OSI model.",
+      "questionType": "TRUE_FALSE",
+      "explanation": "Switches operate at the Data Link Layer (Layer 2) and use MAC addresses to forward frames within a local network.",
+      "certificationId": "cmkqqxm440002nw5kc0vbyab3",
+      "difficulty": "EASY",
+      "answers": [
+        {"answerText": "True", "isCorrect": true},
+        {"answerText": "False", "isCorrect": false}
+      ]
+    }
+  ]
+}

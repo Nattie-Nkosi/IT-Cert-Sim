@@ -1,0 +1,132 @@
+{
+  "questions": [
+    {
+      "questionText": "Which of the following is the PRIMARY purpose of RAM in a computer system?",
+      "questionType": "SINGLE_CHOICE",
+      "explanation": "RAM (Random Access Memory) is used for temporary storage of data and programs that are currently being used by the CPU. It provides fast read and write access.",
+      "certificationId": "cmkqqxd2a0001nw5keywnlml1",
+      "difficulty": "EASY",
+      "answers": [
+        {"answerText": "Temporary data storage while programs are running", "isCorrect": true},
+        {"answerText": "Permanent storage of operating system files", "isCorrect": false},
+        {"answerText": "Long-term storage of user documents", "isCorrect": false},
+        {"answerText": "Backup storage for system files", "isCorrect": false}
+      ]
+    },
+    {
+      "questionText": "What is the maximum data transfer rate of USB 3.0?",
+      "questionType": "SINGLE_CHOICE",
+      "explanation": "USB 3.0, also known as SuperSpeed USB, has a maximum theoretical data transfer rate of 5 Gbps (gigabits per second), which is approximately 625 MB/s.",
+      "certificationId": "cmkqqxd2a0001nw5keywnlml1",
+      "difficulty": "MEDIUM",
+      "answers": [
+        {"answerText": "480 Mbps", "isCorrect": false},
+        {"answerText": "5 Gbps", "isCorrect": true},
+        {"answerText": "10 Gbps", "isCorrect": false},
+        {"answerText": "12 Mbps", "isCorrect": false}
+      ]
+    },
+    {
+      "questionText": "Which of the following components is responsible for processing graphics and displaying images on a monitor?",
+      "questionType": "SINGLE_CHOICE",
+      "explanation": "The GPU (Graphics Processing Unit) or graphics card is specifically designed to handle graphics processing and display output to monitors.",
+      "certificationId": "cmkqqxd2a0001nw5keywnlml1",
+      "difficulty": "EASY",
+      "answers": [
+        {"answerText": "CPU", "isCorrect": false},
+        {"answerText": "RAM", "isCorrect": false},
+        {"answerText": "GPU", "isCorrect": true},
+        {"answerText": "PSU", "isCorrect": false}
+      ]
+    },
+    {
+      "questionText": "What is the purpose of BIOS/UEFI in a computer system?",
+      "questionType": "SINGLE_CHOICE",
+      "explanation": "BIOS (Basic Input/Output System) or UEFI (Unified Extensible Firmware Interface) initializes and tests hardware components during boot and loads the operating system.",
+      "certificationId": "cmkqqxd2a0001nw5keywnlml1",
+      "difficulty": "MEDIUM",
+      "answers": [
+        {"answerText": "Manage network connections", "isCorrect": false},
+        {"answerText": "Initialize hardware and boot the operating system", "isCorrect": true},
+        {"answerText": "Provide antivirus protection", "isCorrect": false},
+        {"answerText": "Store user files", "isCorrect": false}
+      ]
+    },
+    {
+      "questionText": "Which type of cable is used for modern Ethernet connections at speeds of 1000 Mbps?",
+      "questionType": "SINGLE_CHOICE",
+      "explanation": "Cat5e and Cat6 cables support Gigabit Ethernet (1000 Mbps). Cat6 provides better performance and reduced crosstalk.",
+      "certificationId": "cmkqqxd2a0001nw5keywnlml1",
+      "difficulty": "EASY",
+      "answers": [
+        {"answerText": "Cat3", "isCorrect": false},
+        {"answerText": "Cat5e or Cat6", "isCorrect": true},
+        {"answerText": "Coaxial", "isCorrect": false},
+        {"answerText": "Fiber optic only", "isCorrect": false}
+      ]
+    },
+    {
+      "questionText": "A user reports that their laptop screen is very dim. Which component is MOST likely causing this issue?",
+      "questionType": "SINGLE_CHOICE",
+      "explanation": "The backlight or inverter provides illumination for LCD screens. When faulty, the screen appears very dim even though the image is still visible.",
+      "certificationId": "cmkqqxd2a0001nw5keywnlml1",
+      "difficulty": "MEDIUM",
+      "answers": [
+        {"answerText": "Hard drive", "isCorrect": false},
+        {"answerText": "RAM", "isCorrect": false},
+        {"answerText": "Backlight/Inverter", "isCorrect": true},
+        {"answerText": "CPU", "isCorrect": false}
+      ]
+    },
+    {
+      "questionText": "Which of the following are advantages of SSD over HDD? (Select TWO)",
+      "questionType": "MULTIPLE_CHOICE",
+      "explanation": "SSDs have no moving parts, making them faster, more durable, and silent. They consume less power and are resistant to physical shock.",
+      "certificationId": "cmkqqxd2a0001nw5keywnlml1",
+      "difficulty": "EASY",
+      "answers": [
+        {"answerText": "Faster read/write speeds", "isCorrect": true},
+        {"answerText": "Lower cost per GB", "isCorrect": false},
+        {"answerText": "No moving parts", "isCorrect": true},
+        {"answerText": "Higher storage capacity", "isCorrect": false}
+      ]
+    },
+    {
+      "questionText": "What is the purpose of thermal paste in a computer?",
+      "questionType": "SINGLE_CHOICE",
+      "explanation": "Thermal paste fills microscopic gaps between the CPU/GPU and heatsink, improving heat transfer and cooling efficiency.",
+      "certificationId": "cmkqqxd2a0001nw5keywnlml1",
+      "difficulty": "MEDIUM",
+      "answers": [
+        {"answerText": "Secure components to the motherboard", "isCorrect": false},
+        {"answerText": "Improve heat transfer between CPU and heatsink", "isCorrect": true},
+        {"answerText": "Prevent static electricity", "isCorrect": false},
+        {"answerText": "Clean internal components", "isCorrect": false}
+      ]
+    },
+    {
+      "questionText": "True or False: DDR4 RAM is backward compatible with DDR3 slots.",
+      "questionType": "TRUE_FALSE",
+      "explanation": "DDR4 RAM is NOT backward compatible with DDR3 slots. They have different pin configurations, voltages, and physical designs.",
+      "certificationId": "cmkqqxd2a0001nw5keywnlml1",
+      "difficulty": "EASY",
+      "answers": [
+        {"answerText": "True", "isCorrect": false},
+        {"answerText": "False", "isCorrect": true}
+      ]
+    },
+    {
+      "questionText": "Which Windows utility allows you to view and manage running processes and system performance?",
+      "questionType": "SINGLE_CHOICE",
+      "explanation": "Task Manager provides information about running applications, processes, performance, and resource usage in Windows.",
+      "certificationId": "cmkqqxd2a0001nw5keywnlml1",
+      "difficulty": "EASY",
+      "answers": [
+        {"answerText": "Control Panel", "isCorrect": false},
+        {"answerText": "Task Manager", "isCorrect": true},
+        {"answerText": "Device Manager", "isCorrect": false},
+        {"answerText": "Disk Management", "isCorrect": false}
+      ]
+    }
+  ]
+}

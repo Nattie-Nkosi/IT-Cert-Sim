@@ -1,0 +1,93 @@
+{
+  "questions": [
+    {
+      "questionText": "Which type of attack involves overwhelming a system with traffic to make it unavailable?",
+      "questionType": "SINGLE_CHOICE",
+      "explanation": "A Denial of Service (DoS) or Distributed Denial of Service (DDoS) attack floods a system with traffic to exhaust resources and make it unavailable to legitimate users.",
+      "certificationId": "cmkqqxmaa0003nw5kl3dbld3t",
+      "difficulty": "EASY",
+      "answers": [
+        {"answerText": "Phishing", "isCorrect": false},
+        {"answerText": "DDoS", "isCorrect": true},
+        {"answerText": "SQL Injection", "isCorrect": false},
+        {"answerText": "Man-in-the-Middle", "isCorrect": false}
+      ]
+    },
+    {
+      "questionText": "What is the primary purpose of encryption?",
+      "questionType": "SINGLE_CHOICE",
+      "explanation": "Encryption converts plaintext data into ciphertext to protect confidentiality and prevent unauthorized access to sensitive information.",
+      "certificationId": "cmkqqxmaa0003nw5kl3dbld3t",
+      "difficulty": "EASY",
+      "answers": [
+        {"answerText": "Ensure data availability", "isCorrect": false},
+        {"answerText": "Protect data confidentiality", "isCorrect": true},
+        {"answerText": "Increase processing speed", "isCorrect": false},
+        {"answerText": "Compress data", "isCorrect": false}
+      ]
+    },
+    {
+      "questionText": "Which of the following are components of the CIA Triad? (Select THREE)",
+      "questionType": "MULTIPLE_CHOICE",
+      "explanation": "The CIA Triad consists of Confidentiality, Integrity, and Availability - the three core principles of information security.",
+      "certificationId": "cmkqqxmaa0003nw5kl3dbld3t",
+      "difficulty": "EASY",
+      "answers": [
+        {"answerText": "Confidentiality", "isCorrect": true},
+        {"answerText": "Integrity", "isCorrect": true},
+        {"answerText": "Availability", "isCorrect": true},
+        {"answerText": "Authorization", "isCorrect": false}
+      ]
+    },
+    {
+      "questionText": "What type of malware encrypts files and demands payment for decryption?",
+      "questionType": "SINGLE_CHOICE",
+      "explanation": "Ransomware encrypts victim's files and demands payment (usually in cryptocurrency) to provide the decryption key.",
+      "certificationId": "cmkqqxmaa0003nw5kl3dbld3t",
+      "difficulty": "MEDIUM",
+      "answers": [
+        {"answerText": "Trojan", "isCorrect": false},
+        {"answerText": "Ransomware", "isCorrect": true},
+        {"answerText": "Worm", "isCorrect": false},
+        {"answerText": "Rootkit", "isCorrect": false}
+      ]
+    },
+    {
+      "questionText": "Which authentication factor is 'something you know'?",
+      "questionType": "SINGLE_CHOICE",
+      "explanation": "Passwords and PINs are 'something you know' factors. Other factors include 'something you have' (tokens) and 'something you are' (biometrics).",
+      "certificationId": "cmkqqxmaa0003nw5kl3dbld3t",
+      "difficulty": "EASY",
+      "answers": [
+        {"answerText": "Fingerprint", "isCorrect": false},
+        {"answerText": "Smart card", "isCorrect": false},
+        {"answerText": "Password", "isCorrect": true},
+        {"answerText": "Security token", "isCorrect": false}
+      ]
+    },
+    {
+      "questionText": "True or False: A firewall can prevent all types of cyber attacks.",
+      "questionType": "TRUE_FALSE",
+      "explanation": "False. While firewalls are important security controls, they cannot prevent all attacks. They primarily filter network traffic but don't protect against threats like phishing, malware in encrypted traffic, or insider threats.",
+      "certificationId": "cmkqqxmaa0003nw5kl3dbld3t",
+      "difficulty": "EASY",
+      "answers": [
+        {"answerText": "True", "isCorrect": false},
+        {"answerText": "False", "isCorrect": true}
+      ]
+    },
+    {
+      "questionText": "What is the purpose of a digital signature?",
+      "questionType": "SINGLE_CHOICE",
+      "explanation": "Digital signatures provide authentication (verify sender identity), integrity (ensure message hasn't been altered), and non-repudiation (sender cannot deny sending).",
+      "certificationId": "cmkqqxmaa0003nw5kl3dbld3t",
+      "difficulty": "MEDIUM",
+      "answers": [
+        {"answerText": "Encrypt email content", "isCorrect": false},
+        {"answerText": "Verify identity and ensure integrity", "isCorrect": true},
+        {"answerText": "Compress attachments", "isCorrect": false},
+        {"answerText": "Block spam", "isCorrect": false}
+      ]
+    }
+  ]
+}

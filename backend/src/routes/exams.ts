@@ -1,5 +1,4 @@
 import { Elysia, t } from 'elysia';
-import { authMiddleware } from '../middleware/auth';
 import { prisma } from '../lib/prisma';
 
 export const examRoutes = new Elysia({ prefix: '/api/exams' })
@@ -50,10 +49,24 @@ export const examRoutes = new Elysia({ prefix: '/api/exams' })
   })
 
   // Submit exam attempt (protected)
-  .use(authMiddleware)
   .post(
     '/:id/submit',
-    async ({ params, body, user }) => {
+    async ({ params, body, headers, jwt }) => {
+      // Manual auth check
+      const auth = headers.authorization;
+      if (!auth || !auth.startsWith('Bearer ')) {
+        throw new Error('Unauthorized');
+      }
+
+      const token = auth.slice(7);
+      const payload = await jwt.verify(token);
+
+      if (!payload) {
+        throw new Error('Invalid token');
+      }
+
+      const user = payload as { id: string; email: string; role: string };
+
       const exam = await prisma.exam.findUnique({
         where: { id: params.id },
         include: {
@@ -126,7 +139,22 @@ export const examRoutes = new Elysia({ prefix: '/api/exams' })
   )
 
   // Get user's exam attempts
-  .get('/attempts/my', async ({ user }) => {
+  .get('/attempts/my', async ({ headers, jwt }) => {
+    // Manual auth check
+    const auth = headers.authorization;
+    if (!auth || !auth.startsWith('Bearer ')) {
+      throw new Error('Unauthorized');
+    }
+
+    const token = auth.slice(7);
+    const payload = await jwt.verify(token);
+
+    if (!payload) {
+      throw new Error('Invalid token');
+    }
+
+    const user = payload as { id: string; email: string; role: string };
+
     return await prisma.examAttempt.findMany({
       where: { userId: user.id },
       include: {
@@ -143,7 +171,22 @@ export const examRoutes = new Elysia({ prefix: '/api/exams' })
   })
 
   // Get specific attempt details
-  .get('/attempts/:id', async ({ params, user }) => {
+  .get('/attempts/:id', async ({ params, headers, jwt }) => {
+    // Manual auth check
+    const auth = headers.authorization;
+    if (!auth || !auth.startsWith('Bearer ')) {
+      throw new Error('Unauthorized');
+    }
+
+    const token = auth.slice(7);
+    const payload = await jwt.verify(token);
+
+    if (!payload) {
+      throw new Error('Invalid token');
+    }
+
+    const user = payload as { id: string; email: string; role: string };
+
     const attempt = await prisma.examAttempt.findUnique({
       where: { id: params.id },
       include: {
