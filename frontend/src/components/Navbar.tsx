@@ -23,7 +23,7 @@ export default function Navbar() {
           <div className="flex items-center space-x-8">
             <Link href={user ? "/dashboard" : "/"} className="flex items-center space-x-2">
               <span className="text-2xl">🎓</span>
-              <span className="text-xl font-bold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
+              <span className="text-xl font-bold bg-gradient-to-r from-primary to-sky-600 bg-clip-text text-transparent">
                 IT Cert Simulator
               </span>
             </Link>

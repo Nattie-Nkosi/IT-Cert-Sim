@@ -121,16 +121,19 @@ export default function AdminQuestionsPage() {
       const formData = new FormData();
       formData.append('file', uploadFile);
 
-      const response = await api.post('/admin/questions/parse-pdf', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
+      const response = await api.post('/admin/questions/parse-pdf', formData);
+
+      if (response.data.error) {
+        setError(response.data.error);
+        return;
+      }
 
       setParsedQuestions(response.data.questions);
       setSuccess(`Successfully parsed ${response.data.count} questions from PDF`);
     } catch (err: any) {
-      setError('Failed to parse PDF: ' + (err.response?.data?.message || err.message));
+      const errorMsg = err.response?.data?.error || err.response?.data?.message || err.message;
+      setError('Failed to parse PDF: ' + errorMsg);
+      console.error('PDF parsing error:', err);
     } finally {
       setParsing(false);
     }
@@ -227,7 +230,7 @@ export default function AdminQuestionsPage() {
     <div className="container mx-auto px-4 py-8">
       <div className="mb-8 flex items-center justify-between">
         <div>
-          <h1 className="text-4xl font-bold mb-3 bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
+          <h1 className="text-4xl font-bold mb-3 bg-gradient-to-r from-primary to-sky-600 bg-clip-text text-transparent">
             Question Management
           </h1>
           <p className="text-lg text-muted-foreground">
@@ -236,7 +239,7 @@ export default function AdminQuestionsPage() {
         </div>
         <button
           onClick={() => setShowUploadModal(true)}
-          className="px-6 py-3 bg-gradient-to-r from-primary to-purple-600 text-white rounded-lg hover:opacity-90 font-semibold shadow-lg transition-all hover:scale-105"
+          className="px-6 py-3 bg-gradient-to-r from-primary to-sky-600 text-white rounded-lg hover:opacity-90 font-semibold shadow-lg transition-all hover:scale-105"
         >
           Upload from PDF
         </button>
@@ -278,14 +281,14 @@ export default function AdminQuestionsPage() {
           <p className="text-muted-foreground mt-4">Loading questions...</p>
         </div>
       ) : questions.length === 0 ? (
-        <div className="text-center py-12 bg-gradient-to-br from-primary/5 to-purple-500/5 rounded-xl shadow-sm border border-primary/10">
+        <div className="text-center py-12 bg-gradient-to-br from-primary/5 to-sky-500/5 rounded-xl shadow-sm border border-primary/10">
           <div className="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-4">
             <span className="text-3xl">📝</span>
           </div>
           <p className="text-muted-foreground mb-4">No questions found</p>
           <button
             onClick={() => setShowUploadModal(true)}
-            className="inline-block px-6 py-3 bg-gradient-to-r from-primary to-purple-600 text-white rounded-lg hover:opacity-90 transition-all hover:scale-105 shadow-md font-semibold"
+            className="inline-block px-6 py-3 bg-gradient-to-r from-primary to-sky-600 text-white rounded-lg hover:opacity-90 transition-all hover:scale-105 shadow-md font-semibold"
           >
             Upload Questions from PDF
           </button>
@@ -592,7 +595,7 @@ export default function AdminQuestionsPage() {
 
                 <button
                   onClick={handleUpdateQuestion}
-                  className="w-full px-6 py-3 bg-gradient-to-r from-primary to-purple-600 text-white rounded-lg hover:opacity-90 font-semibold shadow-lg transition-all"
+                  className="w-full px-6 py-3 bg-gradient-to-r from-primary to-sky-600 text-white rounded-lg hover:opacity-90 font-semibold shadow-lg transition-all"
                 >
                   Update Question
                 </button>

@@ -75,7 +75,7 @@ export default function HistoryPage() {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="mb-10">
-        <h1 className="text-4xl font-bold mb-3 bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
+        <h1 className="text-4xl font-bold mb-3 bg-gradient-to-r from-primary to-sky-600 bg-clip-text text-transparent">
           Exam History
         </h1>
         <p className="text-lg text-muted-foreground">
@@ -147,7 +147,7 @@ export default function HistoryPage() {
             onClick={() => setFilter('all')}
             className={`px-5 py-2.5 rounded-lg text-sm font-semibold transition-all ${
               filter === 'all'
-                ? 'bg-gradient-to-r from-primary to-purple-600 text-white shadow-md'
+                ? 'bg-gradient-to-r from-primary to-sky-600 text-white shadow-md'
                 : 'bg-primary/5 hover:bg-primary/10 text-primary'
             }`}
           >
@@ -183,7 +183,7 @@ export default function HistoryPage() {
           <p className="text-muted-foreground mt-4">Loading history...</p>
         </div>
       ) : filteredAttempts.length === 0 ? (
-        <div className="text-center py-12 bg-gradient-to-br from-primary/5 to-purple-500/5 rounded-xl shadow-sm border border-primary/10">
+        <div className="text-center py-12 bg-gradient-to-br from-primary/5 to-sky-500/5 rounded-xl shadow-sm border border-primary/10">
           <div className="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-4">
             <span className="text-3xl">📈</span>
           </div>
@@ -195,7 +195,7 @@ export default function HistoryPage() {
           {filter === 'all' && (
             <Link
               href="/exams"
-              className="inline-block px-6 py-3 bg-gradient-to-r from-primary to-purple-600 text-white rounded-lg hover:opacity-90 transition-all hover:scale-105 shadow-md font-semibold"
+              className="inline-block px-6 py-3 bg-gradient-to-r from-primary to-sky-600 text-white rounded-lg hover:opacity-90 transition-all hover:scale-105 shadow-md font-semibold"
             >
               Browse Exams
             </Link>
@@ -256,7 +256,7 @@ export default function HistoryPage() {
                   </Link>
                   <Link
                     href={`/exam/${attempt.exam.id}`}
-                    className="px-4 py-2 bg-gradient-to-r from-primary to-purple-600 text-white rounded-lg hover:opacity-90 transition-all hover:scale-105 text-center text-sm font-semibold whitespace-nowrap shadow-md"
+                    className="px-4 py-2 bg-gradient-to-r from-primary to-sky-600 text-white rounded-lg hover:opacity-90 transition-all hover:scale-105 text-center text-sm font-semibold whitespace-nowrap shadow-md"
                   >
                     Retake
                   </Link>

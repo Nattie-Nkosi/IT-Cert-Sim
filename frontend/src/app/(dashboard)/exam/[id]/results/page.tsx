@@ -119,7 +119,7 @@ export default function ExamResultsPage() {
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-4xl mx-auto">
         {/* Results Header */}
-        <div className="bg-gradient-to-br from-primary/5 to-purple-500/5 p-8 rounded-xl shadow-sm border border-primary/10 mb-8">
+        <div className="bg-gradient-to-br from-primary/5 to-sky-500/5 p-8 rounded-xl shadow-sm border border-primary/10 mb-8">
           <div className="text-center mb-6">
             <div
               className={`inline-flex items-center justify-center w-24 h-24 rounded-full mb-4 ${
@@ -132,7 +132,7 @@ export default function ExamResultsPage() {
                 {attempt.passed ? '✓' : '✗'}
               </span>
             </div>
-            <h1 className="text-4xl font-bold mb-3 bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
+            <h1 className="text-4xl font-bold mb-3 bg-gradient-to-r from-primary to-sky-600 bg-clip-text text-transparent">
               {attempt.passed ? 'Congratulations!' : 'Keep Practicing!'}
             </h1>
             <p className="text-lg text-muted-foreground">
@@ -170,10 +170,10 @@ export default function ExamResultsPage() {
             </div>
 
             <div className="text-center p-5 bg-white/80 rounded-xl shadow-sm border hover:shadow-md transition-shadow">
-              <div className="w-10 h-10 bg-purple-500/20 rounded-lg flex items-center justify-center mx-auto mb-2">
+              <div className="w-10 h-10 bg-sky-500/20 rounded-lg flex items-center justify-center mx-auto mb-2">
                 <span className="text-lg">📅</span>
               </div>
-              <div className="text-2xl font-bold text-purple-600">
+              <div className="text-2xl font-bold text-sky-600">
                 {new Date(attempt.completedAt).toLocaleDateString()}
               </div>
               <div className="text-sm text-muted-foreground mt-1 font-medium">Date</div>
@@ -185,14 +185,14 @@ export default function ExamResultsPage() {
         <div className="bg-white p-6 rounded-xl shadow-sm border mb-6">
           <div className="flex items-start justify-between">
             <div>
-              <h2 className="text-2xl font-bold mb-2 bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
+              <h2 className="text-2xl font-bold mb-2 bg-gradient-to-r from-primary to-sky-600 bg-clip-text text-transparent">
                 {attempt.exam.name}
               </h2>
               <p className="text-sm text-muted-foreground font-medium">
                 {attempt.exam.certification.name} ({attempt.exam.certification.code})
               </p>
             </div>
-            <div className="w-12 h-12 bg-gradient-to-br from-primary/20 to-purple-500/20 rounded-lg flex items-center justify-center">
+            <div className="w-12 h-12 bg-gradient-to-br from-primary/20 to-sky-500/20 rounded-lg flex items-center justify-center">
               <span className="text-2xl">🎓</span>
             </div>
           </div>
@@ -289,7 +289,7 @@ export default function ExamResultsPage() {
         <div className="flex gap-4 flex-col sm:flex-row">
           <Link
             href={`/exam/${attempt.exam.id}`}
-            className="flex-1 px-6 py-4 bg-gradient-to-r from-primary to-purple-600 text-white rounded-lg hover:opacity-90 transition-all hover:scale-105 text-center font-semibold shadow-md"
+            className="flex-1 px-6 py-4 bg-gradient-to-r from-primary to-sky-600 text-white rounded-lg hover:opacity-90 transition-all hover:scale-105 text-center font-semibold shadow-md"
           >
             Retake Exam
           </Link>

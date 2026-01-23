@@ -59,7 +59,7 @@ export default function ExamsPage() {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="mb-10">
-        <h1 className="text-4xl font-bold mb-3 bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
+        <h1 className="text-4xl font-bold mb-3 bg-gradient-to-r from-primary to-sky-600 bg-clip-text text-transparent">
           Available Exams
         </h1>
         <p className="text-lg text-muted-foreground">
@@ -79,7 +79,7 @@ export default function ExamsPage() {
           <p className="text-muted-foreground mt-4">Loading exams...</p>
         </div>
       ) : exams.length === 0 ? (
-        <div className="text-center py-12 bg-gradient-to-br from-primary/5 to-purple-500/5 rounded-xl shadow-sm border border-primary/10">
+        <div className="text-center py-12 bg-gradient-to-br from-primary/5 to-sky-500/5 rounded-xl shadow-sm border border-primary/10">
           <div className="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-4">
             <span className="text-3xl">🎯</span>
           </div>
@@ -104,7 +104,7 @@ export default function ExamsPage() {
                   <div className="text-xs font-medium text-primary/80">
                     {exam.certification.vendor} • {exam.certification.code}
                   </div>
-                  <div className="w-10 h-10 bg-gradient-to-br from-primary/20 to-purple-500/20 rounded-lg flex items-center justify-center">
+                  <div className="w-10 h-10 bg-gradient-to-br from-primary/20 to-sky-500/20 rounded-lg flex items-center justify-center">
                     <span className="text-lg">⏱️</span>
                   </div>
                 </div>
@@ -146,7 +146,7 @@ export default function ExamsPage() {
 
               <Link
                 href={`/exam/${exam.id}`}
-                className="block w-full px-4 py-3 bg-gradient-to-r from-primary to-purple-600 text-white rounded-lg hover:opacity-90 transition-all hover:scale-105 text-center font-semibold shadow-md"
+                className="block w-full px-4 py-3 bg-gradient-to-r from-primary to-sky-600 text-white rounded-lg hover:opacity-90 transition-all hover:scale-105 text-center font-semibold shadow-md"
               >
                 Start Exam
               </Link>

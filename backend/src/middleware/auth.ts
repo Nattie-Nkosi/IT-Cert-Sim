@@ -1,37 +1,55 @@
 import { Elysia } from 'elysia';
-import { jwt } from '@elysiajs/jwt';
 
 export const authMiddleware = new Elysia()
-  .use(
-    jwt({
-      name: 'jwt',
-      secret: process.env.JWT_SECRET || 'your-super-secret-jwt-key-change-in-production',
-    })
-  )
-  .derive(async ({ headers, jwt }) => {
-    const auth = headers.authorization;
-    if (!auth || !auth.startsWith('Bearer ')) {
-      throw new Error('Unauthorized');
+  .derive(async (context: any) => {
+    try {
+      const { headers, jwt } = context;
+
+      console.log('Auth middleware - checking authorization');
+
+      const auth = headers.authorization;
+      if (!auth || !auth.startsWith('Bearer ')) {
+        console.error('No authorization header or invalid format');
+        throw new Error('Unauthorized');
+      }
+
+      const token = auth.slice(7);
+      const payload = await jwt.verify(token);
+
+      if (!payload) {
+        console.error('Invalid token - verification failed');
+        throw new Error('Invalid token');
+      }
+
+      console.log('Auth successful for user:', payload.id);
+
+      return {
+        user: payload as { id: string; email: string; role: string },
+      };
+    } catch (error: any) {
+      console.error('Auth middleware error:', error.message);
+      throw error;
     }
-
-    const token = auth.slice(7);
-    const payload = await jwt.verify(token);
-
-    if (!payload) {
-      throw new Error('Invalid token');
-    }
-
-    return {
-      user: payload as { id: string; email: string; role: string },
-    };
   });
 
 export const adminMiddleware = new Elysia()
   .use(authMiddleware)
   .derive((context: any) => {
-    const user = context.user;
-    if (user.role !== 'ADMIN') {
-      throw new Error('Forbidden: Admin access required');
+    try {
+      const user = context.user;
+
+      console.log('Admin middleware - checking role for user:', user?.id, 'role:', user?.role);
+
+      if (!user || user.role !== 'ADMIN') {
+        console.error('User is not admin, role:', user?.role);
+        throw new Error('Forbidden: Admin access required');
+      }
+
+      console.log('Admin check passed');
+
+      return { user };
+    } catch (error: any) {
+      console.error('Admin middleware error:', error.message);
+      throw error;
     }
-    return { user };
   });

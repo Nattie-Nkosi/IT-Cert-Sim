@@ -12,7 +12,7 @@ export default function Home() {
             </span>
           </div>
 
-          <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
+          <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-primary to-sky-600 bg-clip-text text-transparent">
             Master IT Certifications
           </h1>
 

@@ -153,7 +153,7 @@ export default function ExamTakingPage() {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
+              <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-sky-600 bg-clip-text text-transparent">
                 {exam.name}
               </h1>
               <p className="text-sm text-muted-foreground font-medium">
@@ -164,7 +164,7 @@ export default function ExamTakingPage() {
               <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg ${
                 timeRemaining < 300
                   ? 'bg-red-50 border-2 border-red-500'
-                  : 'bg-gradient-to-br from-primary/10 to-purple-500/10 border-2 border-primary/20'
+                  : 'bg-gradient-to-br from-primary/10 to-sky-500/10 border-2 border-primary/20'
               }`}>
                 <span className="text-xl">{timeRemaining < 300 ? '⚠️' : '⏰'}</span>
                 <div>
@@ -187,7 +187,7 @@ export default function ExamTakingPage() {
             </div>
             <div className="w-full bg-gray-200 rounded-full h-3 shadow-inner">
               <div
-                className="bg-gradient-to-r from-primary to-purple-600 h-3 rounded-full transition-all duration-300 shadow-md"
+                className="bg-gradient-to-r from-primary to-sky-600 h-3 rounded-full transition-all duration-300 shadow-md"
                 style={{ width: `${progress}%` }}
               />
             </div>
@@ -201,7 +201,7 @@ export default function ExamTakingPage() {
           <div className="max-w-3xl mx-auto">
             <div className="bg-white p-8 rounded-xl shadow-lg border mb-6">
               <div className="flex items-center justify-between mb-6">
-                <span className="text-sm font-semibold px-4 py-2 bg-gradient-to-r from-primary/10 to-purple-500/10 text-primary rounded-full border border-primary/20">
+                <span className="text-sm font-semibold px-4 py-2 bg-gradient-to-r from-primary/10 to-sky-500/10 text-primary rounded-full border border-primary/20">
                   {currentQuestion.questionType.replace('_', ' ')}
                 </span>
                 <span className={`text-sm font-semibold px-4 py-2 rounded-full border ${
@@ -230,7 +230,7 @@ export default function ExamTakingPage() {
                       key={answer.id}
                       className={`flex items-start p-5 border-2 rounded-xl cursor-pointer transition-all ${
                         isSelected
-                          ? 'border-primary bg-gradient-to-r from-primary/10 to-purple-500/10 shadow-md scale-[1.02]'
+                          ? 'border-primary bg-gradient-to-r from-primary/10 to-sky-500/10 shadow-md scale-[1.02]'
                           : 'border-gray-200 hover:border-primary/50 hover:bg-primary/5 hover:shadow-sm'
                       }`}
                     >
@@ -280,7 +280,7 @@ export default function ExamTakingPage() {
               ) : (
                 <button
                   onClick={() => setCurrentQuestionIndex((prev) => Math.min(exam.questions.length - 1, prev + 1))}
-                  className="px-8 py-3 bg-gradient-to-r from-primary to-purple-600 text-white rounded-lg hover:opacity-90 font-semibold shadow-lg transition-all hover:scale-105"
+                  className="px-8 py-3 bg-gradient-to-r from-primary to-sky-600 text-white rounded-lg hover:opacity-90 font-semibold shadow-lg transition-all hover:scale-105"
                 >
                   Next →
                 </button>

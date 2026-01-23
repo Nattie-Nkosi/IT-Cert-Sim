@@ -64,7 +64,7 @@ export default function DashboardPage() {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="mb-10">
-        <h1 className="text-4xl font-bold mb-3 bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
+        <h1 className="text-4xl font-bold mb-3 bg-gradient-to-r from-primary to-sky-600 bg-clip-text text-transparent">
           Welcome back, {user.name}! 👋
         </h1>
         <p className="text-lg text-muted-foreground">
@@ -118,16 +118,16 @@ export default function DashboardPage() {
               <div className="text-4xl font-bold text-blue-600">{stats?.averageScore || 0}%</div>
             </div>
 
-            <div className="group bg-gradient-to-br from-purple-500/10 to-purple-500/5 p-6 rounded-xl shadow-sm border border-purple-500/20 hover:shadow-md hover:scale-105 transition-all duration-200">
+            <div className="group bg-gradient-to-br from-sky-500/10 to-sky-500/5 p-6 rounded-xl shadow-sm border border-sky-500/20 hover:shadow-md hover:scale-105 transition-all duration-200">
               <div className="flex items-center justify-between mb-3">
-                <div className="text-sm font-medium text-purple-700/80">
+                <div className="text-sm font-medium text-sky-700/80">
                   Available Exams
                 </div>
-                <div className="w-10 h-10 bg-purple-500/20 rounded-lg flex items-center justify-center">
+                <div className="w-10 h-10 bg-sky-500/20 rounded-lg flex items-center justify-center">
                   <span className="text-lg">🎯</span>
                 </div>
               </div>
-              <div className="text-4xl font-bold text-purple-600">
+              <div className="text-4xl font-bold text-sky-600">
                 {stats?.exams || 0}
               </div>
             </div>
@@ -139,12 +139,18 @@ export default function DashboardPage() {
                 <span className="mr-2">🛠️</span>
                 Admin Panel
               </h2>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
                 <Link
                   href="/admin/questions"
                   className="block w-full px-4 py-3 bg-gradient-to-r from-amber-600 to-orange-600 text-white rounded-lg hover:opacity-90 transition-all hover:scale-105 text-center font-semibold shadow-md"
                 >
                   📝 Manage Questions
+                </Link>
+                <Link
+                  href="/admin/exams"
+                  className="block w-full px-4 py-3 border-2 border-amber-500/30 rounded-lg hover:border-amber-500 hover:bg-amber-50 transition-all text-center font-semibold"
+                >
+                  🎯 Manage Exams
                 </Link>
                 <Link
                   href="/admin/upload"
@@ -171,7 +177,7 @@ export default function DashboardPage() {
               <div className="space-y-3">
                 <Link
                   href="/exams"
-                  className="block w-full px-6 py-4 bg-gradient-to-r from-primary to-purple-600 text-white rounded-lg hover:opacity-90 transition-all hover:scale-105 text-center font-semibold shadow-md"
+                  className="block w-full px-6 py-4 bg-gradient-to-r from-primary to-sky-600 text-white rounded-lg hover:opacity-90 transition-all hover:scale-105 text-center font-semibold shadow-md"
                 >
                   🎯 Browse Exams
                 </Link>
@@ -190,14 +196,14 @@ export default function DashboardPage() {
               </div>
             </div>
 
-            <div className="bg-gradient-to-br from-primary/5 to-purple-500/5 p-8 rounded-xl shadow-sm border border-primary/10 hover:shadow-md transition-shadow">
+            <div className="bg-gradient-to-br from-primary/5 to-sky-500/5 p-8 rounded-xl shadow-sm border border-primary/10 hover:shadow-md transition-shadow">
               <h2 className="text-2xl font-bold mb-6 flex items-center">
                 <span className="mr-2">🚀</span>
                 Getting Started
               </h2>
               <div className="space-y-5">
                 <div className="flex items-start">
-                  <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-primary to-purple-600 text-white rounded-lg flex items-center justify-center font-bold mr-4 shadow-sm">
+                  <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-primary to-sky-600 text-white rounded-lg flex items-center justify-center font-bold mr-4 shadow-sm">
                     1
                   </div>
                   <div>
@@ -209,7 +215,7 @@ export default function DashboardPage() {
                 </div>
 
                 <div className="flex items-start">
-                  <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-primary to-purple-600 text-white rounded-lg flex items-center justify-center font-bold mr-4 shadow-sm">
+                  <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-primary to-sky-600 text-white rounded-lg flex items-center justify-center font-bold mr-4 shadow-sm">
                     2
                   </div>
                   <div>
@@ -221,7 +227,7 @@ export default function DashboardPage() {
                 </div>
 
                 <div className="flex items-start">
-                  <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-primary to-purple-600 text-white rounded-lg flex items-center justify-center font-bold mr-4 shadow-sm">
+                  <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-primary to-sky-600 text-white rounded-lg flex items-center justify-center font-bold mr-4 shadow-sm">
                     3
                   </div>
                   <div>

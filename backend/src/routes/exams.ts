@@ -1,7 +1,14 @@
 import { Elysia, t } from 'elysia';
+import { jwt } from '@elysiajs/jwt';
 import { prisma } from '../lib/prisma';
 
 export const examRoutes = new Elysia({ prefix: '/api/exams' })
+  .use(
+    jwt({
+      name: 'jwt',
+      secret: process.env.JWT_SECRET || 'your-super-secret-jwt-key-change-in-production',
+    })
+  )
   // Get all active exams
   .get('/', async () => {
     return await prisma.exam.findMany({
@@ -45,13 +52,20 @@ export const examRoutes = new Elysia({ prefix: '/api/exams' })
       throw new Error('Exam not found');
     }
 
-    return exam;
+    // Filter out any exam questions where the question was deleted
+    const validQuestions = exam.questions.filter((eq: any) => eq.question !== null);
+
+    return {
+      ...exam,
+      questions: validQuestions,
+    };
   })
 
   // Submit exam attempt (protected)
   .post(
     '/:id/submit',
-    async ({ params, body, headers, jwt }) => {
+    async (context: any) => {
+      const { params, body, headers, jwt } = context;
       // Manual auth check
       const auth = headers.authorization;
       if (!auth || !auth.startsWith('Bearer ')) {
@@ -139,7 +153,8 @@ export const examRoutes = new Elysia({ prefix: '/api/exams' })
   )
 
   // Get user's exam attempts
-  .get('/attempts/my', async ({ headers, jwt }) => {
+  .get('/attempts/my', async (context: any) => {
+    const { headers, jwt } = context;
     // Manual auth check
     const auth = headers.authorization;
     if (!auth || !auth.startsWith('Bearer ')) {
@@ -171,7 +186,8 @@ export const examRoutes = new Elysia({ prefix: '/api/exams' })
   })
 
   // Get specific attempt details
-  .get('/attempts/:id', async ({ params, headers, jwt }) => {
+  .get('/attempts/:id', async (context: any) => {
+    const { params, headers, jwt } = context;
     // Manual auth check
     const auth = headers.authorization;
     if (!auth || !auth.startsWith('Bearer ')) {

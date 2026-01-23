@@ -3,6 +3,14 @@ import { adminMiddleware } from '../middleware/auth';
 import { prisma } from '../lib/prisma';
 
 export const adminRoutes = new Elysia({ prefix: '/api/admin' })
+  .onError(({ code, error, set }) => {
+    console.error('Admin route error:', code, error);
+    set.status = code === 'VALIDATION' ? 400 : 500;
+    return {
+      error: error instanceof Error ? error.message : String(error),
+      code: code,
+    };
+  })
   .use(adminMiddleware)
 
   // Create certification
@@ -26,20 +34,31 @@ export const adminRoutes = new Elysia({ prefix: '/api/admin' })
   // Create question with answers
   .post(
     '/questions',
-    async ({ body }) => {
-      const { answers, ...questionData } = body;
+    async ({ body, set }) => {
+      try {
+        const { answers, ...questionData } = body;
 
-      return await prisma.question.create({
-        data: {
-          ...questionData,
-          answers: {
-            create: answers,
+        console.log('Creating question with data:', { questionData, answers });
+
+        const question = await prisma.question.create({
+          data: {
+            ...questionData,
+            answers: {
+              create: answers,
+            },
           },
-        },
-        include: {
-          answers: true,
-        },
-      });
+          include: {
+            answers: true,
+          },
+        });
+
+        console.log('Question created successfully:', question.id);
+        return question;
+      } catch (error: any) {
+        console.error('Error creating question:', error);
+        set.status = 500;
+        return { error: error.message, details: error };
+      }
     },
     {
       body: t.Object({
@@ -167,10 +186,23 @@ export const adminRoutes = new Elysia({ prefix: '/api/admin' })
   // Parse PDF and extract questions
   .post(
     '/questions/parse-pdf',
-    async ({ body }) => {
+    async ({ body, set }) => {
       try {
         const pdfParse = require('pdf-parse');
-        const buffer = Buffer.from(await body.file.arrayBuffer());
+
+        // Get the file from the body
+        const file = body.file;
+
+        if (!file) {
+          set.status = 400;
+          return { error: 'No file provided' };
+        }
+
+        // Convert file to buffer
+        const arrayBuffer = await file.arrayBuffer();
+        const buffer = Buffer.from(arrayBuffer);
+
+        // Parse PDF
         const data = await pdfParse(buffer);
         const text = data.text;
 
@@ -222,7 +254,8 @@ export const adminRoutes = new Elysia({ prefix: '/api/admin' })
 
         return { count: questions.length, questions };
       } catch (error: any) {
-        throw new Error('Failed to parse PDF: ' + error.message);
+        set.status = 500;
+        return { error: 'Failed to parse PDF: ' + error.message };
       }
     },
     {
@@ -306,4 +339,78 @@ export const adminRoutes = new Elysia({ prefix: '/api/admin' })
       where: { id: params.id },
     });
     return { success: true };
+  })
+
+  // Get exam details for editing
+  .get('/exams/:id', async ({ params }) => {
+    const exam = await prisma.exam.findUnique({
+      where: { id: params.id },
+      include: {
+        certification: true,
+        questions: {
+          include: {
+            question: true,
+          },
+          orderBy: {
+            order: 'asc',
+          },
+        },
+      },
+    });
+
+    if (!exam) {
+      throw new Error('Exam not found');
+    }
+
+    return exam as typeof exam & {
+      questions: Array<{
+        id: string;
+        questionId: string;
+        question: any;
+      }>;
+    };
+  })
+
+  // Update exam questions
+  .put(
+    '/exams/:id/questions',
+    async ({ params, body }) => {
+      // Delete all existing exam questions
+      await prisma.examQuestion.deleteMany({
+        where: { examId: params.id },
+      });
+
+      // Create new exam questions
+      await prisma.examQuestion.createMany({
+        data: body.questionIds.map((questionId: string, index: number) => ({
+          examId: params.id,
+          questionId,
+          order: index,
+        })),
+      });
+
+      return { success: true };
+    },
+    {
+      body: t.Object({
+        questionIds: t.Array(t.String()),
+      }),
+    }
+  )
+
+  // Get all exams (for admin)
+  .get('/exams', async () => {
+    return await prisma.exam.findMany({
+      include: {
+        certification: true,
+        _count: {
+          select: {
+            questions: true,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
   });

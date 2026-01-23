@@ -1,9 +1,22 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useAuthStore } from '@/lib/store';
 import api from '@/lib/api';
 
+interface Certification {
+  id: string;
+  name: string;
+  code: string;
+  vendor: string;
+}
+
 export default function UploadQuestionPage() {
+  const router = useRouter();
+  const { user, token } = useAuthStore();
+
+  const [certifications, setCertifications] = useState<Certification[]>([]);
   const [questionText, setQuestionText] = useState('');
   const [questionType, setQuestionType] = useState('SINGLE_CHOICE');
   const [explanation, setExplanation] = useState('');
@@ -15,6 +28,24 @@ export default function UploadQuestionPage() {
   ]);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
+
+  useEffect(() => {
+    if (!token || !user || user.role !== 'ADMIN') {
+      router.push('/login');
+      return;
+    }
+
+    fetchCertifications();
+  }, [token, user, router]);
+
+  const fetchCertifications = async () => {
+    try {
+      const response = await api.get('/certifications');
+      setCertifications(response.data);
+    } catch (err: any) {
+      console.error('Failed to fetch certifications:', err);
+    }
+  };
 
   const handleAddAnswer = () => {
     setAnswers([...answers, { answerText: '', isCorrect: false }]);
@@ -62,41 +93,55 @@ export default function UploadQuestionPage() {
     }
   };
 
+  if (!user || user.role !== 'ADMIN') return null;
+
   return (
-    <div className="container mx-auto p-6">
-      <div className="max-w-2xl mx-auto bg-white p-6 rounded-lg shadow">
-        <h1 className="text-2xl font-bold mb-6">Upload Question</h1>
+    <div className="container mx-auto px-4 py-8">
+      <div className="max-w-2xl mx-auto">
+        <h1 className="text-4xl font-bold mb-3 bg-gradient-to-r from-primary to-sky-600 bg-clip-text text-transparent">
+          Upload Question
+        </h1>
+        <p className="text-lg text-muted-foreground mb-8">
+          Add a single question to a certification
+        </p>
 
         {message && (
-          <div className={`p-3 mb-4 rounded-md ${message.includes('success') ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+          <div className={`p-4 mb-6 rounded-lg border ${message.includes('success') ? 'bg-green-50 text-green-700 border-green-200' : 'bg-red-50 text-red-700 border-red-200'}`}>
             {message}
           </div>
         )}
 
+        <div className="bg-white p-8 rounded-xl shadow-sm border">
+
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium mb-1">
-              Certification ID
+            <label className="block text-sm font-semibold mb-2">
+              Certification
             </label>
-            <input
-              type="text"
+            <select
               required
               value={certificationId}
               onChange={(e) => setCertificationId(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md"
-              placeholder="Enter certification ID"
-            />
+              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+            >
+              <option value="">Select a certification...</option>
+              {certifications.map((cert) => (
+                <option key={cert.id} value={cert.id}>
+                  {cert.vendor} - {cert.name} ({cert.code})
+                </option>
+              ))}
+            </select>
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">
+            <label className="block text-sm font-semibold mb-2">
               Question Text
             </label>
             <textarea
               required
               value={questionText}
               onChange={(e) => setQuestionText(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md"
+              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
               rows={4}
               placeholder="Enter the question..."
             />
@@ -104,13 +149,13 @@ export default function UploadQuestionPage() {
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium mb-1">
+              <label className="block text-sm font-semibold mb-2">
                 Question Type
               </label>
               <select
                 value={questionType}
                 onChange={(e) => setQuestionType(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
               >
                 <option value="SINGLE_CHOICE">Single Choice</option>
                 <option value="MULTIPLE_CHOICE">Multiple Choice</option>
@@ -119,13 +164,13 @@ export default function UploadQuestionPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-1">
+              <label className="block text-sm font-semibold mb-2">
                 Difficulty
               </label>
               <select
                 value={difficulty}
                 onChange={(e) => setDifficulty(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
               >
                 <option value="EASY">Easy</option>
                 <option value="MEDIUM">Medium</option>
@@ -135,46 +180,46 @@ export default function UploadQuestionPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">
+            <label className="block text-sm font-semibold mb-2">
               Explanation (Optional)
             </label>
             <textarea
               value={explanation}
               onChange={(e) => setExplanation(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md"
+              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
               rows={3}
               placeholder="Explain the correct answer..."
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-2">
+            <label className="block text-sm font-semibold mb-2">
               Answers (check correct answer)
             </label>
             {answers.map((answer, index) => (
-              <div key={index} className="flex gap-2 mb-2">
+              <div key={index} className="flex gap-2 mb-3">
                 <input
                   type="text"
                   required
                   value={answer.answerText}
                   onChange={(e) => handleAnswerChange(index, 'answerText', e.target.value)}
-                  className="flex-1 px-3 py-2 border border-gray-300 rounded-md"
+                  className="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                   placeholder={`Answer ${index + 1}`}
                 />
-                <label className="flex items-center gap-2 px-3">
+                <label className="flex items-center gap-2 px-4 py-2 border rounded-lg cursor-pointer hover:bg-gray-50">
                   <input
                     type="checkbox"
                     checked={answer.isCorrect}
                     onChange={(e) => handleAnswerChange(index, 'isCorrect', e.target.checked)}
-                    className="w-4 h-4"
+                    className="w-5 h-5 accent-primary"
                   />
-                  <span className="text-sm">Correct</span>
+                  <span className="text-sm font-medium">Correct</span>
                 </label>
                 {answers.length > 2 && (
                   <button
                     type="button"
                     onClick={() => handleRemoveAnswer(index)}
-                    className="px-3 py-2 bg-red-500 text-white rounded-md"
+                    className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all"
                   >
                     Remove
                   </button>
@@ -184,20 +229,21 @@ export default function UploadQuestionPage() {
             <button
               type="button"
               onClick={handleAddAnswer}
-              className="mt-2 px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50"
+              className="mt-2 px-5 py-2 border-2 border-primary/20 rounded-lg hover:border-primary hover:bg-primary/5 text-primary font-semibold transition-all"
             >
-              Add Answer
+              + Add Answer
             </button>
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 px-4 bg-primary text-primary-foreground rounded-md hover:opacity-90 disabled:opacity-50"
+            className="w-full py-3 px-6 bg-gradient-to-r from-primary to-sky-600 text-white rounded-lg hover:opacity-90 disabled:opacity-50 font-semibold shadow-lg transition-all hover:scale-105"
           >
             {loading ? 'Uploading...' : 'Upload Question'}
           </button>
         </form>
+        </div>
       </div>
     </div>
   );
