@@ -133,6 +133,35 @@ export default function DashboardPage() {
             </div>
           </div>
 
+          {user.role === 'ADMIN' && (
+            <div className="mb-6 bg-gradient-to-r from-amber-500/10 to-orange-500/10 p-6 rounded-xl shadow-sm border border-amber-500/20">
+              <h2 className="text-2xl font-bold mb-4 flex items-center">
+                <span className="mr-2">🛠️</span>
+                Admin Panel
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                <Link
+                  href="/admin/questions"
+                  className="block w-full px-4 py-3 bg-gradient-to-r from-amber-600 to-orange-600 text-white rounded-lg hover:opacity-90 transition-all hover:scale-105 text-center font-semibold shadow-md"
+                >
+                  📝 Manage Questions
+                </Link>
+                <Link
+                  href="/admin/upload"
+                  className="block w-full px-4 py-3 border-2 border-amber-500/30 rounded-lg hover:border-amber-500 hover:bg-amber-50 transition-all text-center font-semibold"
+                >
+                  📤 Upload Question
+                </Link>
+                <Link
+                  href="/certifications"
+                  className="block w-full px-4 py-3 border-2 border-amber-500/30 rounded-lg hover:border-amber-500 hover:bg-amber-50 transition-all text-center font-semibold"
+                >
+                  🎓 Manage Certs
+                </Link>
+              </div>
+            </div>
+          )}
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-white p-8 rounded-xl shadow-sm border hover:shadow-md transition-shadow">
               <h2 className="text-2xl font-bold mb-6 flex items-center">

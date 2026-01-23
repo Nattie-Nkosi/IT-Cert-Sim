@@ -162,4 +162,148 @@ export const adminRoutes = new Elysia({ prefix: '/api/admin' })
         questionIds: t.Array(t.String()),
       }),
     }
-  );
+  )
+
+  // Parse PDF and extract questions
+  .post(
+    '/questions/parse-pdf',
+    async ({ body }) => {
+      try {
+        const pdfParse = require('pdf-parse');
+        const buffer = Buffer.from(await body.file.arrayBuffer());
+        const data = await pdfParse(buffer);
+        const text = data.text;
+
+        const questions = [];
+        const questionRegex = /Question:\s*(\d+)\s*([\s\S]*?)(?=Question:\s*\d+|$)/g;
+
+        let match;
+        while ((match = questionRegex.exec(text)) !== null) {
+          const questionNumber = match[1];
+          const questionBlock = match[2].trim();
+
+          const answerMatch = questionBlock.match(/Answer:\s*([A-D])/i);
+          const explanationMatch = questionBlock.match(/Explanation:\s*([\s\S]+?)$/i);
+
+          const lines = questionBlock.split('\n').filter(line => line.trim());
+
+          const questionTextLines = [];
+          const options: { letter: string; text: string }[] = [];
+          let foundOptions = false;
+
+          for (const line of lines) {
+            const optionMatch = line.match(/^([A-D])\.\s*(.+)$/);
+            if (optionMatch) {
+              foundOptions = true;
+              options.push({ letter: optionMatch[1], text: optionMatch[2].trim() });
+            } else if (!foundOptions && !line.startsWith('Answer:') && !line.startsWith('Explanation:')) {
+              questionTextLines.push(line.trim());
+            } else if (line.startsWith('Answer:') || line.startsWith('Explanation:')) {
+              break;
+            }
+          }
+
+          if (questionTextLines.length > 0 && options.length >= 2 && answerMatch) {
+            const correctAnswer = answerMatch[1].toUpperCase();
+
+            questions.push({
+              questionNumber: parseInt(questionNumber),
+              questionText: questionTextLines.join(' ').trim(),
+              questionType: 'SINGLE_CHOICE',
+              explanation: explanationMatch ? explanationMatch[1].trim() : null,
+              difficulty: 'MEDIUM',
+              answers: options.map(opt => ({
+                answerText: opt.text,
+                isCorrect: opt.letter === correctAnswer,
+              })),
+            });
+          }
+        }
+
+        return { count: questions.length, questions };
+      } catch (error: any) {
+        throw new Error('Failed to parse PDF: ' + error.message);
+      }
+    },
+    {
+      body: t.Object({
+        file: t.File(),
+      }),
+    }
+  )
+
+  // Get all questions with optional certification filter
+  .get('/questions', async ({ query }) => {
+    const where = query.certificationId
+      ? { certificationId: query.certificationId }
+      : {};
+
+    return await prisma.question.findMany({
+      where,
+      include: {
+        answers: true,
+        certification: true,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+  })
+
+  // Update question
+  .put(
+    '/questions/:id',
+    async ({ params, body }) => {
+      const { answers, ...questionData } = body;
+
+      await prisma.answer.deleteMany({
+        where: { questionId: params.id },
+      });
+
+      return await prisma.question.update({
+        where: { id: params.id },
+        data: {
+          ...questionData,
+          answers: {
+            create: answers,
+          },
+        },
+        include: {
+          answers: true,
+        },
+      });
+    },
+    {
+      body: t.Object({
+        questionText: t.String(),
+        questionType: t.Union([
+          t.Literal('SINGLE_CHOICE'),
+          t.Literal('MULTIPLE_CHOICE'),
+          t.Literal('TRUE_FALSE'),
+        ]),
+        explanation: t.Optional(t.String()),
+        certificationId: t.String(),
+        difficulty: t.Optional(
+          t.Union([
+            t.Literal('EASY'),
+            t.Literal('MEDIUM'),
+            t.Literal('HARD'),
+          ])
+        ),
+        answers: t.Array(
+          t.Object({
+            answerText: t.String(),
+            isCorrect: t.Boolean(),
+          })
+        ),
+      }),
+    }
+  )
+
+  // Delete question
+  .delete('/questions/:id', async ({ params }) => {
+    await prisma.question.delete({
+      where: { id: params.id },
+    });
+    return { success: true };
+  });

@@ -1,6 +1,13 @@
 import { Elysia } from 'elysia';
+import { jwt } from '@elysiajs/jwt';
 
 export const authMiddleware = new Elysia()
+  .use(
+    jwt({
+      name: 'jwt',
+      secret: process.env.JWT_SECRET || 'your-super-secret-jwt-key-change-in-production',
+    })
+  )
   .derive(async ({ headers, jwt }) => {
     const auth = headers.authorization;
     if (!auth || !auth.startsWith('Bearer ')) {
@@ -21,7 +28,8 @@ export const authMiddleware = new Elysia()
 
 export const adminMiddleware = new Elysia()
   .use(authMiddleware)
-  .derive(({ user }) => {
+  .derive((context: any) => {
+    const user = context.user;
     if (user.role !== 'ADMIN') {
       throw new Error('Forbidden: Admin access required');
     }
