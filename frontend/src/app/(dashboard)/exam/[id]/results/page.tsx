@@ -81,7 +81,10 @@ export default function ExamResultsPage() {
   if (loading) {
     return (
       <div className="container mx-auto px-4 py-8">
-        <p className="text-center text-muted-foreground">Loading results...</p>
+        <div className="text-center py-12">
+          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+          <p className="text-muted-foreground mt-4">Loading results...</p>
+        </div>
       </div>
     );
   }
@@ -89,10 +92,10 @@ export default function ExamResultsPage() {
   if (error || !attempt) {
     return (
       <div className="container mx-auto px-4 py-8">
-        <div className="p-4 bg-red-100 text-red-700 rounded-md mb-4">
+        <div className="p-4 bg-red-50 text-red-700 rounded-lg border border-red-200 mb-4">
           {error || 'Results not found'}
         </div>
-        <Link href="/dashboard" className="text-primary hover:underline">
+        <Link href="/dashboard" className="text-primary hover:underline font-semibold">
           ← Back to Dashboard
         </Link>
       </div>
@@ -116,21 +119,23 @@ export default function ExamResultsPage() {
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-4xl mx-auto">
         {/* Results Header */}
-        <div className="bg-white p-8 rounded-lg shadow-sm border mb-8">
+        <div className="bg-gradient-to-br from-primary/5 to-purple-500/5 p-8 rounded-xl shadow-sm border border-primary/10 mb-8">
           <div className="text-center mb-6">
             <div
-              className={`inline-flex items-center justify-center w-20 h-20 rounded-full mb-4 ${
-                attempt.passed ? 'bg-green-100' : 'bg-red-100'
+              className={`inline-flex items-center justify-center w-24 h-24 rounded-full mb-4 ${
+                attempt.passed
+                  ? 'bg-gradient-to-br from-green-400/20 to-green-600/20 border-2 border-green-500'
+                  : 'bg-gradient-to-br from-red-400/20 to-red-600/20 border-2 border-red-500'
               }`}
             >
-              <span className={`text-4xl ${attempt.passed ? 'text-green-600' : 'text-red-600'}`}>
+              <span className={`text-5xl ${attempt.passed ? 'text-green-600' : 'text-red-600'}`}>
                 {attempt.passed ? '✓' : '✗'}
               </span>
             </div>
-            <h1 className="text-3xl font-bold mb-2">
+            <h1 className="text-4xl font-bold mb-3 bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
               {attempt.passed ? 'Congratulations!' : 'Keep Practicing!'}
             </h1>
-            <p className="text-muted-foreground">
+            <p className="text-lg text-muted-foreground">
               {attempt.passed
                 ? 'You passed the exam!'
                 : "Don't give up, try again to improve your score"}
@@ -138,48 +143,72 @@ export default function ExamResultsPage() {
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="text-center p-4 bg-gray-50 rounded-lg">
-              <div className="text-3xl font-bold">{Math.round(attempt.score)}%</div>
-              <div className="text-sm text-muted-foreground mt-1">Your Score</div>
+            <div className="text-center p-5 bg-white/80 rounded-xl shadow-sm border hover:shadow-md transition-shadow">
+              <div className="w-10 h-10 bg-primary/20 rounded-lg flex items-center justify-center mx-auto mb-2">
+                <span className="text-lg">📊</span>
+              </div>
+              <div className="text-3xl font-bold text-primary">{Math.round(attempt.score)}%</div>
+              <div className="text-sm text-muted-foreground mt-1 font-medium">Your Score</div>
             </div>
 
-            <div className="text-center p-4 bg-gray-50 rounded-lg">
-              <div className="text-3xl font-bold">{attempt.exam.passingScore}%</div>
-              <div className="text-sm text-muted-foreground mt-1">Passing Score</div>
+            <div className="text-center p-5 bg-white/80 rounded-xl shadow-sm border hover:shadow-md transition-shadow">
+              <div className="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center mx-auto mb-2">
+                <span className="text-lg">🎯</span>
+              </div>
+              <div className="text-3xl font-bold text-blue-600">{attempt.exam.passingScore}%</div>
+              <div className="text-sm text-muted-foreground mt-1 font-medium">Passing Score</div>
             </div>
 
-            <div className="text-center p-4 bg-gray-50 rounded-lg">
-              <div className="text-3xl font-bold">
+            <div className="text-center p-5 bg-white/80 rounded-xl shadow-sm border hover:shadow-md transition-shadow">
+              <div className="w-10 h-10 bg-green-500/20 rounded-lg flex items-center justify-center mx-auto mb-2">
+                <span className="text-lg">✅</span>
+              </div>
+              <div className="text-3xl font-bold text-green-600">
                 {correctAnswersCount}/{attempt.exam.questions.length}
               </div>
-              <div className="text-sm text-muted-foreground mt-1">Correct</div>
+              <div className="text-sm text-muted-foreground mt-1 font-medium">Correct</div>
             </div>
 
-            <div className="text-center p-4 bg-gray-50 rounded-lg">
-              <div className="text-3xl font-bold">
+            <div className="text-center p-5 bg-white/80 rounded-xl shadow-sm border hover:shadow-md transition-shadow">
+              <div className="w-10 h-10 bg-purple-500/20 rounded-lg flex items-center justify-center mx-auto mb-2">
+                <span className="text-lg">📅</span>
+              </div>
+              <div className="text-2xl font-bold text-purple-600">
                 {new Date(attempt.completedAt).toLocaleDateString()}
               </div>
-              <div className="text-sm text-muted-foreground mt-1">Date</div>
+              <div className="text-sm text-muted-foreground mt-1 font-medium">Date</div>
             </div>
           </div>
         </div>
 
         {/* Exam Info */}
-        <div className="bg-white p-6 rounded-lg shadow-sm border mb-6">
-          <h2 className="text-xl font-bold mb-2">{attempt.exam.name}</h2>
-          <p className="text-sm text-muted-foreground">
-            {attempt.exam.certification.name} ({attempt.exam.certification.code})
-          </p>
+        <div className="bg-white p-6 rounded-xl shadow-sm border mb-6">
+          <div className="flex items-start justify-between">
+            <div>
+              <h2 className="text-2xl font-bold mb-2 bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
+                {attempt.exam.name}
+              </h2>
+              <p className="text-sm text-muted-foreground font-medium">
+                {attempt.exam.certification.name} ({attempt.exam.certification.code})
+              </p>
+            </div>
+            <div className="w-12 h-12 bg-gradient-to-br from-primary/20 to-purple-500/20 rounded-lg flex items-center justify-center">
+              <span className="text-2xl">🎓</span>
+            </div>
+          </div>
         </div>
 
         {/* Review Answers */}
-        <div className="bg-white p-6 rounded-lg shadow-sm border mb-6">
+        <div className="bg-white p-6 rounded-xl shadow-sm border mb-6">
           <button
             onClick={() => setShowAnswers(!showAnswers)}
-            className="w-full flex items-center justify-between text-left font-medium"
+            className="w-full flex items-center justify-between text-left font-bold text-lg hover:text-primary transition-colors"
           >
-            <span>Review Answers</span>
-            <span>{showAnswers ? '▼' : '▶'}</span>
+            <span className="flex items-center gap-2">
+              <span className="text-xl">📝</span>
+              Review Answers
+            </span>
+            <span className="text-primary">{showAnswers ? '▼' : '▶'}</span>
           </button>
 
           {showAnswers && (
@@ -257,16 +286,16 @@ export default function ExamResultsPage() {
         </div>
 
         {/* Actions */}
-        <div className="flex gap-4">
+        <div className="flex gap-4 flex-col sm:flex-row">
           <Link
             href={`/exam/${attempt.exam.id}`}
-            className="flex-1 px-6 py-3 bg-primary text-primary-foreground rounded-md hover:opacity-90 text-center font-medium"
+            className="flex-1 px-6 py-4 bg-gradient-to-r from-primary to-purple-600 text-white rounded-lg hover:opacity-90 transition-all hover:scale-105 text-center font-semibold shadow-md"
           >
             Retake Exam
           </Link>
           <Link
             href="/dashboard"
-            className="flex-1 px-6 py-3 border border-border rounded-md hover:bg-accent text-center font-medium"
+            className="flex-1 px-6 py-4 border-2 border-primary/20 rounded-lg hover:border-primary hover:bg-primary/5 text-center font-semibold transition-all"
           >
             Back to Dashboard
           </Link>

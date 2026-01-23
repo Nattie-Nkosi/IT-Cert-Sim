@@ -58,25 +58,31 @@ export default function ExamsPage() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2">Available Exams</h1>
-        <p className="text-muted-foreground">
+      <div className="mb-10">
+        <h1 className="text-4xl font-bold mb-3 bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
+          Available Exams
+        </h1>
+        <p className="text-lg text-muted-foreground">
           Choose an exam to test your knowledge
         </p>
       </div>
 
       {error && (
-        <div className="p-4 mb-6 bg-red-100 text-red-700 rounded-md">
+        <div className="p-4 mb-6 bg-red-50 text-red-700 rounded-lg border border-red-200">
           {error}
         </div>
       )}
 
       {loading ? (
         <div className="text-center py-12">
-          <p className="text-muted-foreground">Loading exams...</p>
+          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+          <p className="text-muted-foreground mt-4">Loading exams...</p>
         </div>
       ) : exams.length === 0 ? (
-        <div className="text-center py-12 bg-white rounded-lg shadow-sm border">
+        <div className="text-center py-12 bg-gradient-to-br from-primary/5 to-purple-500/5 rounded-xl shadow-sm border border-primary/10">
+          <div className="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-4">
+            <span className="text-3xl">🎯</span>
+          </div>
           <p className="text-muted-foreground mb-4">
             No exams available yet.
           </p>
@@ -91,16 +97,21 @@ export default function ExamsPage() {
           {exams.map((exam) => (
             <div
               key={exam.id}
-              className="bg-white p-6 rounded-lg shadow-sm border hover:shadow-md transition-shadow"
+              className="group bg-white p-6 rounded-xl shadow-sm border hover:shadow-lg hover:scale-105 transition-all duration-200"
             >
               <div className="mb-4">
-                <div className="text-xs text-muted-foreground mb-2">
-                  {exam.certification.vendor} • {exam.certification.code}
+                <div className="flex items-center justify-between mb-2">
+                  <div className="text-xs font-medium text-primary/80">
+                    {exam.certification.vendor} • {exam.certification.code}
+                  </div>
+                  <div className="w-10 h-10 bg-gradient-to-br from-primary/20 to-purple-500/20 rounded-lg flex items-center justify-center">
+                    <span className="text-lg">⏱️</span>
+                  </div>
                 </div>
-                <h2 className="text-xl font-bold mb-2">{exam.name}</h2>
+                <h2 className="text-xl font-bold mb-2 group-hover:text-primary transition-colors">{exam.name}</h2>
                 <Link
                   href={`/certifications/${exam.certification.id}`}
-                  className="text-sm text-primary hover:underline"
+                  className="text-sm text-primary hover:underline font-medium"
                 >
                   {exam.certification.name}
                 </Link>
@@ -112,24 +123,30 @@ export default function ExamsPage() {
                 </p>
               )}
 
-              <div className="space-y-2 mb-4 text-sm">
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Questions:</span>
-                  <span className="font-medium">{exam._count.questions}</span>
+              <div className="space-y-2 mb-4 text-sm bg-primary/5 p-4 rounded-lg">
+                <div className="flex justify-between items-center">
+                  <span className="text-muted-foreground flex items-center gap-2">
+                    <span>📝</span> Questions:
+                  </span>
+                  <span className="font-semibold text-primary">{exam._count.questions}</span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Duration:</span>
-                  <span className="font-medium">{exam.duration} minutes</span>
+                <div className="flex justify-between items-center">
+                  <span className="text-muted-foreground flex items-center gap-2">
+                    <span>⏰</span> Duration:
+                  </span>
+                  <span className="font-semibold text-primary">{exam.duration} minutes</span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Passing Score:</span>
-                  <span className="font-medium">{exam.passingScore}%</span>
+                <div className="flex justify-between items-center">
+                  <span className="text-muted-foreground flex items-center gap-2">
+                    <span>🎯</span> Passing Score:
+                  </span>
+                  <span className="font-semibold text-primary">{exam.passingScore}%</span>
                 </div>
               </div>
 
               <Link
                 href={`/exam/${exam.id}`}
-                className="block w-full px-4 py-2 bg-primary text-primary-foreground rounded-md hover:opacity-90 transition-opacity text-center font-medium"
+                className="block w-full px-4 py-3 bg-gradient-to-r from-primary to-purple-600 text-white rounded-lg hover:opacity-90 transition-all hover:scale-105 text-center font-semibold shadow-md"
               >
                 Start Exam
               </Link>

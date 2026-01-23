@@ -64,7 +64,10 @@ export default function CertificationDetailPage() {
   if (loading) {
     return (
       <div className="container mx-auto px-4 py-8">
-        <p className="text-center text-muted-foreground">Loading...</p>
+        <div className="text-center py-12">
+          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+          <p className="text-muted-foreground mt-4">Loading certification...</p>
+        </div>
       </div>
     );
   }
@@ -72,10 +75,10 @@ export default function CertificationDetailPage() {
   if (error || !certification) {
     return (
       <div className="container mx-auto px-4 py-8">
-        <div className="p-4 bg-red-100 text-red-700 rounded-md mb-4">
+        <div className="p-4 bg-red-50 text-red-700 rounded-lg border border-red-200 mb-4">
           {error || 'Certification not found'}
         </div>
-        <Link href="/certifications" className="text-primary hover:underline">
+        <Link href="/certifications" className="text-primary hover:underline font-semibold">
           ← Back to Certifications
         </Link>
       </div>
@@ -86,38 +89,47 @@ export default function CertificationDetailPage() {
     <div className="container mx-auto px-4 py-8">
       <Link
         href="/certifications"
-        className="text-sm text-muted-foreground hover:text-primary mb-4 inline-block"
+        className="text-sm text-muted-foreground hover:text-primary mb-6 inline-flex items-center gap-2 font-medium"
       >
-        ← Back to Certifications
+        <span>←</span> Back to Certifications
       </Link>
 
-      <div className="bg-white p-8 rounded-lg shadow-sm border mb-8">
-        <div className="mb-4">
-          <div className="text-sm text-muted-foreground mb-2">
-            {certification.vendor}
+      <div className="bg-gradient-to-br from-primary/5 to-purple-500/5 p-8 rounded-xl shadow-sm border border-primary/10 mb-8">
+        <div className="flex items-start justify-between mb-4">
+          <div className="flex-1">
+            <div className="text-sm font-semibold text-primary/80 mb-2">
+              {certification.vendor}
+            </div>
+            <h1 className="text-4xl font-bold mb-3 bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
+              {certification.name}
+            </h1>
+            <div className="inline-block px-4 py-1.5 bg-gradient-to-r from-primary/10 to-purple-500/10 text-primary text-sm font-bold rounded-full border border-primary/20">
+              {certification.code}
+            </div>
           </div>
-          <h1 className="text-3xl font-bold mb-3">{certification.name}</h1>
-          <div className="inline-block px-3 py-1 bg-blue-100 text-blue-700 text-sm font-medium rounded">
-            {certification.code}
+          <div className="w-16 h-16 bg-gradient-to-br from-primary/20 to-purple-500/20 rounded-2xl flex items-center justify-center">
+            <span className="text-3xl">🎓</span>
           </div>
         </div>
 
         {certification.description && (
-          <p className="text-muted-foreground mb-6">
+          <p className="text-muted-foreground mb-6 text-lg">
             {certification.description}
           </p>
         )}
 
         <div className="flex gap-6 text-sm">
-          <div>
-            <span className="font-medium">Questions:</span>{' '}
-            <span className="text-muted-foreground">
+          <div className="flex items-center gap-2 px-4 py-2 bg-white/80 rounded-lg">
+            <span className="text-lg">📝</span>
+            <span className="font-semibold">Questions:</span>
+            <span className="text-primary font-bold">
               {certification.questions.length}
             </span>
           </div>
-          <div>
-            <span className="font-medium">Exams:</span>{' '}
-            <span className="text-muted-foreground">
+          <div className="flex items-center gap-2 px-4 py-2 bg-white/80 rounded-lg">
+            <span className="text-lg">🎯</span>
+            <span className="font-semibold">Exams:</span>
+            <span className="text-primary font-bold">
               {certification.exams.length}
             </span>
           </div>
@@ -125,10 +137,15 @@ export default function CertificationDetailPage() {
       </div>
 
       <div>
-        <h2 className="text-2xl font-bold mb-4">Available Exams</h2>
+        <h2 className="text-3xl font-bold mb-6 bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
+          Available Exams
+        </h2>
 
         {certification.exams.length === 0 ? (
-          <div className="bg-white p-8 rounded-lg shadow-sm border text-center">
+          <div className="bg-gradient-to-br from-primary/5 to-purple-500/5 p-8 rounded-xl shadow-sm border border-primary/10 text-center">
+            <div className="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-4">
+              <span className="text-3xl">🎯</span>
+            </div>
             <p className="text-muted-foreground">
               No exams available for this certification yet.
             </p>
@@ -140,28 +157,39 @@ export default function CertificationDetailPage() {
               .map((exam) => (
                 <div
                   key={exam.id}
-                  className="bg-white p-6 rounded-lg shadow-sm border hover:shadow-md transition-shadow"
+                  className="group bg-white p-6 rounded-xl shadow-sm border hover:shadow-lg hover:scale-105 transition-all duration-200"
                 >
-                  <h3 className="text-xl font-bold mb-2">{exam.name}</h3>
+                  <div className="flex items-start justify-between mb-3">
+                    <h3 className="text-xl font-bold flex-1 group-hover:text-primary transition-colors">{exam.name}</h3>
+                    <div className="w-10 h-10 bg-gradient-to-br from-primary/20 to-purple-500/20 rounded-lg flex items-center justify-center ml-3">
+                      <span className="text-lg">⏱️</span>
+                    </div>
+                  </div>
                   {exam.description && (
                     <p className="text-sm text-muted-foreground mb-4">
                       {exam.description}
                     </p>
                   )}
 
-                  <div className="space-y-2 mb-4 text-sm">
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">Duration:</span>
-                      <span className="font-medium">{exam.duration} minutes</span>
+                  <div className="space-y-2 mb-4 text-sm bg-primary/5 p-4 rounded-lg">
+                    <div className="flex justify-between items-center">
+                      <span className="text-muted-foreground flex items-center gap-2">
+                        <span>⏰</span> Duration:
+                      </span>
+                      <span className="font-semibold text-primary">{exam.duration} minutes</span>
                     </div>
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">Passing Score:</span>
-                      <span className="font-medium">{exam.passingScore}%</span>
+                    <div className="flex justify-between items-center">
+                      <span className="text-muted-foreground flex items-center gap-2">
+                        <span>🎯</span> Passing Score:
+                      </span>
+                      <span className="font-semibold text-primary">{exam.passingScore}%</span>
                     </div>
                     {exam._count && (
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Questions:</span>
-                        <span className="font-medium">
+                      <div className="flex justify-between items-center">
+                        <span className="text-muted-foreground flex items-center gap-2">
+                          <span>📝</span> Questions:
+                        </span>
+                        <span className="font-semibold text-primary">
                           {exam._count.questions}
                         </span>
                       </div>
@@ -170,7 +198,7 @@ export default function CertificationDetailPage() {
 
                   <Link
                     href={`/exam/${exam.id}`}
-                    className="block w-full px-4 py-2 bg-primary text-primary-foreground rounded-md hover:opacity-90 transition-opacity text-center font-medium"
+                    className="block w-full px-4 py-3 bg-gradient-to-r from-primary to-purple-600 text-white rounded-lg hover:opacity-90 transition-all hover:scale-105 text-center font-semibold shadow-md"
                   >
                     Start Exam
                   </Link>
