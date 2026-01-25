@@ -11,9 +11,11 @@ interface ProtectedRouteProps {
 
 export default function ProtectedRoute({ children, requireAdmin = false }: ProtectedRouteProps) {
   const router = useRouter();
-  const { user, token } = useAuthStore();
+  const { user, token, hasHydrated } = useAuthStore();
 
   useEffect(() => {
+    if (!hasHydrated) return;
+
     if (!token || !user) {
       router.push('/login');
       return;
@@ -23,7 +25,15 @@ export default function ProtectedRoute({ children, requireAdmin = false }: Prote
       router.push('/dashboard');
       return;
     }
-  }, [token, user, requireAdmin, router]);
+  }, [token, user, requireAdmin, router, hasHydrated]);
+
+  if (!hasHydrated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
 
   if (!token || !user) {
     return null;

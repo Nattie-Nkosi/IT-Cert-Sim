@@ -41,7 +41,7 @@ export default function ExamResultsPage() {
   const router = useRouter();
   const params = useParams();
   const searchParams = useSearchParams();
-  const { user, token } = useAuthStore();
+  const { user, token, hasHydrated } = useAuthStore();
 
   const [attempt, setAttempt] = useState<ExamAttempt | null>(null);
   const [loading, setLoading] = useState(true);
@@ -49,6 +49,8 @@ export default function ExamResultsPage() {
   const [showAnswers, setShowAnswers] = useState(false);
 
   useEffect(() => {
+    if (!hasHydrated) return;
+
     if (!token || !user) {
       router.push('/login');
       return;
@@ -74,7 +76,15 @@ export default function ExamResultsPage() {
     };
 
     fetchResults();
-  }, [token, user, router, searchParams]);
+  }, [token, user, router, searchParams, hasHydrated]);
+
+  if (!hasHydrated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
 
   if (!user) return null;
 

@@ -16,11 +16,13 @@ interface Stats {
 
 export default function DashboardPage() {
   const router = useRouter();
-  const { user, token } = useAuthStore();
+  const { user, token, hasHydrated } = useAuthStore();
   const [stats, setStats] = useState<Stats | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!hasHydrated) return;
+
     if (!token || !user) {
       router.push('/login');
       return;
@@ -55,7 +57,15 @@ export default function DashboardPage() {
     };
 
     fetchStats();
-  }, [token, user, router]);
+  }, [token, user, router, hasHydrated]);
+
+  if (!hasHydrated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
 
   if (!user) {
     return null;

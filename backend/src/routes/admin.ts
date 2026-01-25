@@ -38,8 +38,6 @@ export const adminRoutes = new Elysia({ prefix: '/api/admin' })
       try {
         const { answers, ...questionData } = body;
 
-        console.log('Creating question with data:', { questionData, answers });
-
         const question = await prisma.question.create({
           data: {
             ...questionData,
@@ -52,7 +50,22 @@ export const adminRoutes = new Elysia({ prefix: '/api/admin' })
           },
         });
 
-        console.log('Question created successfully:', question.id);
+        // Auto-add question to all existing exams for this certification
+        const exams = await prisma.exam.findMany({
+          where: { certificationId: questionData.certificationId },
+          include: { questions: { orderBy: { order: 'desc' }, take: 1 } },
+        });
+
+        if (exams.length > 0) {
+          await prisma.examQuestion.createMany({
+            data: exams.map((exam) => ({
+              examId: exam.id,
+              questionId: question.id,
+              order: (exam.questions[0]?.order ?? -1) + 1,
+            })),
+          });
+        }
+
         return question;
       } catch (error: any) {
         console.error('Error creating question:', error);
@@ -92,6 +105,7 @@ export const adminRoutes = new Elysia({ prefix: '/api/admin' })
     '/questions/bulk',
     async ({ body }) => {
       const results = [];
+      const certificationIds = new Set<string>();
 
       for (const questionData of body.questions) {
         const { answers, ...question } = questionData;
@@ -109,6 +123,30 @@ export const adminRoutes = new Elysia({ prefix: '/api/admin' })
         });
 
         results.push(created);
+        certificationIds.add(question.certificationId);
+      }
+
+      // Auto-add all new questions to existing exams for their certifications
+      for (const certificationId of certificationIds) {
+        const exams = await prisma.exam.findMany({
+          where: { certificationId },
+          include: { questions: { orderBy: { order: 'desc' }, take: 1 } },
+        });
+
+        const questionsForCert = results.filter(
+          (q) => q.certificationId === certificationId
+        );
+
+        for (const exam of exams) {
+          let nextOrder = (exam.questions[0]?.order ?? -1) + 1;
+          await prisma.examQuestion.createMany({
+            data: questionsForCert.map((q) => ({
+              examId: exam.id,
+              questionId: q.id,
+              order: nextOrder++,
+            })),
+          });
+        }
       }
 
       return { count: results.length, questions: results };

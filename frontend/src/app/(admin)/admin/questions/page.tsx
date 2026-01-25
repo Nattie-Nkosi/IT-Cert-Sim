@@ -49,7 +49,7 @@ interface ParsedQuestion {
 
 export default function AdminQuestionsPage() {
   const router = useRouter();
-  const { user, token } = useAuthStore();
+  const { user, token, hasHydrated } = useAuthStore();
 
   const [questions, setQuestions] = useState<Question[]>([]);
   const [certifications, setCertifications] = useState<Certification[]>([]);
@@ -69,6 +69,8 @@ export default function AdminQuestionsPage() {
   const [showEditModal, setShowEditModal] = useState(false);
 
   useEffect(() => {
+    if (!hasHydrated) return;
+
     if (!token || !user || user.role !== 'ADMIN') {
       router.push('/login');
       return;
@@ -76,7 +78,7 @@ export default function AdminQuestionsPage() {
 
     fetchCertifications();
     fetchQuestions();
-  }, [token, user, router]);
+  }, [token, user, router, hasHydrated]);
 
   const fetchCertifications = async () => {
     try {
@@ -223,6 +225,14 @@ export default function AdminQuestionsPage() {
       setError('Failed to update question: ' + (err.response?.data?.message || err.message));
     }
   };
+
+  if (!hasHydrated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
 
   if (!user || user.role !== 'ADMIN') return null;
 

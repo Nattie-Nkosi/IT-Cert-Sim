@@ -14,7 +14,7 @@ interface Certification {
 
 export default function UploadQuestionPage() {
   const router = useRouter();
-  const { user, token } = useAuthStore();
+  const { user, token, hasHydrated } = useAuthStore();
 
   const [certifications, setCertifications] = useState<Certification[]>([]);
   const [questionText, setQuestionText] = useState('');
@@ -30,13 +30,15 @@ export default function UploadQuestionPage() {
   const [message, setMessage] = useState('');
 
   useEffect(() => {
+    if (!hasHydrated) return;
+
     if (!token || !user || user.role !== 'ADMIN') {
       router.push('/login');
       return;
     }
 
     fetchCertifications();
-  }, [token, user, router]);
+  }, [token, user, router, hasHydrated]);
 
   const fetchCertifications = async () => {
     try {
@@ -92,6 +94,14 @@ export default function UploadQuestionPage() {
       setLoading(false);
     }
   };
+
+  if (!hasHydrated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
 
   if (!user || user.role !== 'ADMIN') return null;
 

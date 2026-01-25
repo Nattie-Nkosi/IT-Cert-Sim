@@ -43,7 +43,7 @@ interface Exam {
 export default function ExamTakingPage() {
   const router = useRouter();
   const params = useParams();
-  const { user, token } = useAuthStore();
+  const { user, token, hasHydrated } = useAuthStore();
 
   const [exam, setExam] = useState<Exam | null>(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -54,6 +54,8 @@ export default function ExamTakingPage() {
   const [error, setError] = useState('');
 
   useEffect(() => {
+    if (!hasHydrated) return;
+
     if (!token || !user) {
       router.push('/login');
       return;
@@ -75,7 +77,7 @@ export default function ExamTakingPage() {
     if (params.id) {
       fetchExam();
     }
-  }, [token, user, router, params.id]);
+  }, [token, user, router, params.id, hasHydrated]);
 
   // Timer countdown
   useEffect(() => {
@@ -117,6 +119,14 @@ export default function ExamTakingPage() {
       setSubmitting(false);
     }
   };
+
+  if (!hasHydrated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
 
   if (!user) return null;
 

@@ -29,12 +29,14 @@ interface Certification {
 export default function CertificationDetailPage() {
   const router = useRouter();
   const params = useParams();
-  const { user, token } = useAuthStore();
+  const { user, token, hasHydrated } = useAuthStore();
   const [certification, setCertification] = useState<Certification | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
   useEffect(() => {
+    if (!hasHydrated) return;
+
     if (!token || !user) {
       router.push('/login');
       return;
@@ -55,7 +57,15 @@ export default function CertificationDetailPage() {
     if (params.id) {
       fetchCertification();
     }
-  }, [token, user, router, params.id]);
+  }, [token, user, router, params.id, hasHydrated]);
+
+  if (!hasHydrated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
 
   if (!user) {
     return null;
