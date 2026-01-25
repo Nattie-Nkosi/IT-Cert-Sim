@@ -151,7 +151,7 @@ export default function HistoryPage() {
       </div>
 
       {/* Filter */}
-      <div className="bg-white p-4 rounded-xl shadow-sm border mb-6">
+      <div className="bg-card p-4 rounded-xl shadow-sm border mb-6">
         <div className="flex gap-2 flex-wrap">
           <button
             onClick={() => setFilter('all')}
@@ -216,7 +216,7 @@ export default function HistoryPage() {
           {filteredAttempts.map((attempt) => (
             <div
               key={attempt.id}
-              className="group bg-white p-6 rounded-xl shadow-sm border hover:shadow-lg transition-all duration-200"
+              className="group bg-card p-6 rounded-xl shadow-sm border hover:shadow-lg transition-all duration-200"
             >
               <div className="flex items-start justify-between">
                 <div className="flex-1">

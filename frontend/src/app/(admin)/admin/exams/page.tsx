@@ -265,7 +265,7 @@ export default function AdminExamsPage() {
           {exams.map((exam) => (
             <div
               key={exam.id}
-              className="bg-white p-6 rounded-xl shadow-sm border hover:shadow-lg transition-all"
+              className="bg-card p-6 rounded-xl shadow-sm border hover:shadow-lg transition-all"
             >
               <div className="flex items-start justify-between mb-4">
                 <h3 className="text-xl font-bold flex-1">{exam.name}</h3>
@@ -273,7 +273,7 @@ export default function AdminExamsPage() {
                   className={`px-3 py-1 text-xs font-bold rounded-full ${
                     exam.isActive
                       ? 'bg-green-100 text-green-700'
-                      : 'bg-gray-100 text-gray-700'
+                      : 'bg-muted text-muted-foreground'
                   }`}
                 >
                   {exam.isActive ? 'Active' : 'Inactive'}
@@ -317,8 +317,8 @@ export default function AdminExamsPage() {
       {/* Create Exam Modal */}
       {showCreateModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-auto">
-            <div className="p-6 border-b sticky top-0 bg-white z-10">
+          <div className="bg-card rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-auto">
+            <div className="p-6 border-b sticky top-0 bg-card z-10">
               <div className="flex items-center justify-between">
                 <h2 className="text-2xl font-bold">Create New Exam</h2>
                 <button
@@ -326,7 +326,7 @@ export default function AdminExamsPage() {
                     setShowCreateModal(false);
                     resetForm();
                   }}
-                  className="text-gray-500 hover:text-gray-700"
+                  className="text-muted-foreground hover:text-foreground"
                 >
                   ✕
                 </button>
@@ -406,7 +406,7 @@ export default function AdminExamsPage() {
                       Select Questions ({selectedQuestions.length} selected)
                     </label>
                     {questions.length === 0 ? (
-                      <p className="text-sm text-muted-foreground p-4 bg-gray-50 rounded-lg">
+                      <p className="text-sm text-muted-foreground p-4 bg-muted rounded-lg">
                         No questions available for this certification. Please upload questions first.
                       </p>
                     ) : (
@@ -417,7 +417,7 @@ export default function AdminExamsPage() {
                             className={`flex items-start gap-3 p-3 rounded-lg cursor-pointer transition-all ${
                               selectedQuestions.includes(question.id)
                                 ? 'bg-primary/10 border-2 border-primary'
-                                : 'bg-gray-50 border-2 border-transparent hover:border-gray-300'
+                                : 'bg-muted border-2 border-transparent hover:border-border'
                             }`}
                           >
                             <input
@@ -466,8 +466,8 @@ export default function AdminExamsPage() {
       {/* Edit Exam Modal */}
       {showEditModal && editingExam && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-auto">
-            <div className="p-6 border-b sticky top-0 bg-white z-10">
+          <div className="bg-card rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-auto">
+            <div className="p-6 border-b sticky top-0 bg-card z-10">
               <div className="flex items-center justify-between">
                 <h2 className="text-2xl font-bold">Edit Exam: {editingExam.name}</h2>
                 <button
@@ -476,7 +476,7 @@ export default function AdminExamsPage() {
                     setEditingExam(null);
                     setSelectedQuestions([]);
                   }}
-                  className="text-gray-500 hover:text-gray-700"
+                  className="text-muted-foreground hover:text-foreground"
                 >
                   ✕
                 </button>
@@ -502,7 +502,7 @@ export default function AdminExamsPage() {
                   Select Questions ({selectedQuestions.length} selected)
                 </label>
                 {questions.length === 0 ? (
-                  <p className="text-sm text-muted-foreground p-4 bg-gray-50 rounded-lg">
+                  <p className="text-sm text-muted-foreground p-4 bg-muted rounded-lg">
                     No questions available for this certification.
                   </p>
                 ) : (
@@ -513,7 +513,7 @@ export default function AdminExamsPage() {
                         className={`flex items-start gap-3 p-3 rounded-lg cursor-pointer transition-all ${
                           selectedQuestions.includes(question.id)
                             ? 'bg-primary/10 border-2 border-primary'
-                            : 'bg-gray-50 border-2 border-transparent hover:border-gray-300'
+                            : 'bg-muted border-2 border-transparent hover:border-border'
                         }`}
                       >
                         <input

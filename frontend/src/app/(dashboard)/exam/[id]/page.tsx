@@ -159,7 +159,7 @@ export default function ExamTakingPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-primary/5 to-background">
       {/* Header with timer */}
-      <div className="bg-white/95 backdrop-blur-lg border-b shadow-md sticky top-0 z-10">
+      <div className="bg-card/95 backdrop-blur-lg border-b shadow-md sticky top-0 z-10">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div>
@@ -195,7 +195,7 @@ export default function ExamTakingPage() {
               </span>
               <span className="text-muted-foreground">{Math.round(progress)}% Complete</span>
             </div>
-            <div className="w-full bg-gray-200 rounded-full h-3 shadow-inner">
+            <div className="w-full bg-muted rounded-full h-3 shadow-inner">
               <div
                 className="bg-gradient-to-r from-primary to-sky-600 h-3 rounded-full transition-all duration-300 shadow-md"
                 style={{ width: `${progress}%` }}
@@ -209,7 +209,7 @@ export default function ExamTakingPage() {
       <div className="container mx-auto px-4 py-8">
         {currentQuestion && (
           <div className="max-w-3xl mx-auto">
-            <div className="bg-white p-8 rounded-xl shadow-lg border mb-6">
+            <div className="bg-card p-8 rounded-xl shadow-lg border mb-6">
               <div className="flex items-center justify-between mb-6">
                 <span className="text-sm font-semibold px-4 py-2 bg-gradient-to-r from-primary/10 to-sky-500/10 text-primary rounded-full border border-primary/20">
                   {currentQuestion.questionType.replace('_', ' ')}
@@ -225,7 +225,7 @@ export default function ExamTakingPage() {
                 </span>
               </div>
 
-              <h2 className="text-2xl font-bold mb-8 text-gray-800">
+              <h2 className="text-2xl font-bold mb-8 text-foreground">
                 {currentQuestion.questionText}
               </h2>
 
@@ -241,7 +241,7 @@ export default function ExamTakingPage() {
                       className={`flex items-start p-5 border-2 rounded-xl cursor-pointer transition-all ${
                         isSelected
                           ? 'border-primary bg-gradient-to-r from-primary/10 to-sky-500/10 shadow-md scale-[1.02]'
-                          : 'border-gray-200 hover:border-primary/50 hover:bg-primary/5 hover:shadow-sm'
+                          : 'border-border hover:border-primary/50 hover:bg-primary/5 hover:shadow-sm'
                       }`}
                     >
                       <input

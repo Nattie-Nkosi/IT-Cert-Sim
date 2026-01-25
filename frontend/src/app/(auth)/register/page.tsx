@@ -32,18 +32,18 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50">
-      <div className="w-full max-w-md space-y-8 p-8 bg-white rounded-lg shadow">
+    <div className="flex min-h-screen items-center justify-center">
+      <div className="w-full max-w-md space-y-8 p-8 bg-card rounded-lg shadow border">
         <div>
           <h2 className="text-3xl font-bold text-center">Register</h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
+          <p className="mt-2 text-center text-sm text-muted-foreground">
             Create your account to start practicing
           </p>
         </div>
 
         <form onSubmit={handleSubmit} className="mt-8 space-y-6">
           {error && (
-            <div className="p-3 bg-red-100 text-red-700 rounded-md text-sm">
+            <div className="p-3 bg-destructive/10 text-destructive rounded-md text-sm">
               {error}
             </div>
           )}
@@ -58,7 +58,7 @@ export default function RegisterPage() {
               required
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
+              className="mt-1 block w-full px-3 py-2 border border-input rounded-md bg-background text-foreground"
             />
           </div>
 
@@ -72,7 +72,7 @@ export default function RegisterPage() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
+              className="mt-1 block w-full px-3 py-2 border border-input rounded-md bg-background text-foreground"
             />
           </div>
 
@@ -87,7 +87,7 @@ export default function RegisterPage() {
               minLength={6}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
+              className="mt-1 block w-full px-3 py-2 border border-input rounded-md bg-background text-foreground"
             />
           </div>
 

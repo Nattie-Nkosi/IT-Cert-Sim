@@ -129,14 +129,14 @@ export default function CertificationDetailPage() {
         )}
 
         <div className="flex gap-6 text-sm">
-          <div className="flex items-center gap-2 px-4 py-2 bg-white/80 rounded-lg">
+          <div className="flex items-center gap-2 px-4 py-2 bg-card/80 rounded-lg">
             <span className="text-lg">📝</span>
             <span className="font-semibold">Questions:</span>
             <span className="text-primary font-bold">
               {certification.questions.length}
             </span>
           </div>
-          <div className="flex items-center gap-2 px-4 py-2 bg-white/80 rounded-lg">
+          <div className="flex items-center gap-2 px-4 py-2 bg-card/80 rounded-lg">
             <span className="text-lg">🎯</span>
             <span className="font-semibold">Exams:</span>
             <span className="text-primary font-bold">
@@ -167,7 +167,7 @@ export default function CertificationDetailPage() {
               .map((exam) => (
                 <div
                   key={exam.id}
-                  className="group bg-white p-6 rounded-xl shadow-sm border hover:shadow-lg hover:scale-105 transition-all duration-200"
+                  className="group bg-card p-6 rounded-xl shadow-sm border hover:shadow-lg hover:scale-105 transition-all duration-200"
                 >
                   <div className="flex items-start justify-between mb-3">
                     <h3 className="text-xl font-bold flex-1 group-hover:text-primary transition-colors">{exam.name}</h3>

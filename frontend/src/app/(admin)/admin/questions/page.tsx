@@ -267,7 +267,7 @@ export default function AdminQuestionsPage() {
         </div>
       )}
 
-      <div className="bg-white p-4 rounded-xl shadow-sm border mb-6">
+      <div className="bg-card p-4 rounded-xl shadow-sm border mb-6">
         <div className="flex gap-4 items-center">
           <label className="text-sm font-semibold text-muted-foreground">Filter by Certification:</label>
           <select
@@ -308,7 +308,7 @@ export default function AdminQuestionsPage() {
           {questions.map((question, index) => (
             <div
               key={question.id}
-              className="bg-white p-6 rounded-xl shadow-sm border hover:shadow-md transition-all"
+              className="bg-card p-6 rounded-xl shadow-sm border hover:shadow-md transition-all"
             >
               <div className="flex items-start justify-between mb-4">
                 <div className="flex-1">
@@ -357,7 +357,7 @@ export default function AdminQuestionsPage() {
                     className={`p-3 rounded border-2 ${
                       answer.isCorrect
                         ? 'border-green-500 bg-green-50'
-                        : 'border-gray-200'
+                        : 'border-border'
                     }`}
                   >
                     <div className="flex items-center">
@@ -382,8 +382,8 @@ export default function AdminQuestionsPage() {
 
       {showUploadModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-auto">
-            <div className="p-6 border-b sticky top-0 bg-white z-10">
+          <div className="bg-card rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-auto">
+            <div className="p-6 border-b sticky top-0 bg-card z-10">
               <div className="flex items-center justify-between">
                 <h2 className="text-2xl font-bold">Upload Questions from PDF</h2>
                 <button
@@ -392,7 +392,7 @@ export default function AdminQuestionsPage() {
                     setParsedQuestions([]);
                     setUploadFile(null);
                   }}
-                  className="text-gray-500 hover:text-gray-700"
+                  className="text-muted-foreground hover:text-foreground"
                 >
                   ✕
                 </button>
@@ -476,7 +476,7 @@ export default function AdminQuestionsPage() {
                               className={`text-sm p-2 rounded ${
                                 answer.isCorrect
                                   ? 'bg-green-50 text-green-700 font-semibold'
-                                  : 'bg-gray-50'
+                                  : 'bg-muted'
                               }`}
                             >
                               {answer.isCorrect && '✓ '}{answer.answerText}
@@ -503,8 +503,8 @@ export default function AdminQuestionsPage() {
 
       {showEditModal && editingQuestion && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-auto">
-            <div className="p-6 border-b sticky top-0 bg-white z-10">
+          <div className="bg-card rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-auto">
+            <div className="p-6 border-b sticky top-0 bg-card z-10">
               <div className="flex items-center justify-between">
                 <h2 className="text-2xl font-bold">Edit Question</h2>
                 <button
@@ -512,7 +512,7 @@ export default function AdminQuestionsPage() {
                     setShowEditModal(false);
                     setEditingQuestion(null);
                   }}
-                  className="text-gray-500 hover:text-gray-700"
+                  className="text-muted-foreground hover:text-foreground"
                 >
                   ✕
                 </button>

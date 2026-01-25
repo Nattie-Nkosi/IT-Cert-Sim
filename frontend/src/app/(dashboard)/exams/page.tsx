@@ -107,7 +107,7 @@ export default function ExamsPage() {
           {exams.map((exam) => (
             <div
               key={exam.id}
-              className="group bg-white p-6 rounded-xl shadow-sm border hover:shadow-lg hover:scale-105 transition-all duration-200"
+              className="group bg-card p-6 rounded-xl shadow-sm border hover:shadow-lg hover:scale-105 transition-all duration-200"
             >
               <div className="mb-4">
                 <div className="flex items-center justify-between mb-2">

@@ -153,7 +153,7 @@ export default function ExamResultsPage() {
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="text-center p-5 bg-white/80 rounded-xl shadow-sm border hover:shadow-md transition-shadow">
+            <div className="text-center p-5 bg-card/80 rounded-xl shadow-sm border hover:shadow-md transition-shadow">
               <div className="w-10 h-10 bg-primary/20 rounded-lg flex items-center justify-center mx-auto mb-2">
                 <span className="text-lg">📊</span>
               </div>
@@ -161,7 +161,7 @@ export default function ExamResultsPage() {
               <div className="text-sm text-muted-foreground mt-1 font-medium">Your Score</div>
             </div>
 
-            <div className="text-center p-5 bg-white/80 rounded-xl shadow-sm border hover:shadow-md transition-shadow">
+            <div className="text-center p-5 bg-card/80 rounded-xl shadow-sm border hover:shadow-md transition-shadow">
               <div className="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center mx-auto mb-2">
                 <span className="text-lg">🎯</span>
               </div>
@@ -169,7 +169,7 @@ export default function ExamResultsPage() {
               <div className="text-sm text-muted-foreground mt-1 font-medium">Passing Score</div>
             </div>
 
-            <div className="text-center p-5 bg-white/80 rounded-xl shadow-sm border hover:shadow-md transition-shadow">
+            <div className="text-center p-5 bg-card/80 rounded-xl shadow-sm border hover:shadow-md transition-shadow">
               <div className="w-10 h-10 bg-green-500/20 rounded-lg flex items-center justify-center mx-auto mb-2">
                 <span className="text-lg">✅</span>
               </div>
@@ -179,7 +179,7 @@ export default function ExamResultsPage() {
               <div className="text-sm text-muted-foreground mt-1 font-medium">Correct</div>
             </div>
 
-            <div className="text-center p-5 bg-white/80 rounded-xl shadow-sm border hover:shadow-md transition-shadow">
+            <div className="text-center p-5 bg-card/80 rounded-xl shadow-sm border hover:shadow-md transition-shadow">
               <div className="w-10 h-10 bg-sky-500/20 rounded-lg flex items-center justify-center mx-auto mb-2">
                 <span className="text-lg">📅</span>
               </div>
@@ -192,7 +192,7 @@ export default function ExamResultsPage() {
         </div>
 
         {/* Exam Info */}
-        <div className="bg-white p-6 rounded-xl shadow-sm border mb-6">
+        <div className="bg-card p-6 rounded-xl shadow-sm border mb-6">
           <div className="flex items-start justify-between">
             <div>
               <h2 className="text-2xl font-bold mb-2 bg-gradient-to-r from-primary to-sky-600 bg-clip-text text-transparent">
@@ -209,7 +209,7 @@ export default function ExamResultsPage() {
         </div>
 
         {/* Review Answers */}
-        <div className="bg-white p-6 rounded-xl shadow-sm border mb-6">
+        <div className="bg-card p-6 rounded-xl shadow-sm border mb-6">
           <button
             onClick={() => setShowAnswers(!showAnswers)}
             className="w-full flex items-center justify-between text-left font-bold text-lg hover:text-primary transition-colors"
@@ -264,7 +264,7 @@ export default function ExamResultsPage() {
                                 ? 'border-green-500 bg-green-50'
                                 : isUserAnswer
                                 ? 'border-red-500 bg-red-50'
-                                : 'border-gray-200'
+                                : 'border-border'
                             }`}
                           >
                             <div className="flex items-center">

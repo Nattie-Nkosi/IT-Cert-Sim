@@ -179,7 +179,7 @@ export default function DashboardPage() {
           )}
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-white p-8 rounded-xl shadow-sm border hover:shadow-md transition-shadow">
+            <div className="bg-card p-8 rounded-xl shadow-sm border hover:shadow-md transition-shadow">
               <h2 className="text-2xl font-bold mb-6 flex items-center">
                 <span className="mr-2">⚡</span>
                 Quick Actions

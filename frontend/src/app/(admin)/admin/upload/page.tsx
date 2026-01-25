@@ -121,7 +121,7 @@ export default function UploadQuestionPage() {
           </div>
         )}
 
-        <div className="bg-white p-8 rounded-xl shadow-sm border">
+        <div className="bg-card p-8 rounded-xl shadow-sm border">
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
@@ -216,7 +216,7 @@ export default function UploadQuestionPage() {
                   className="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                   placeholder={`Answer ${index + 1}`}
                 />
-                <label className="flex items-center gap-2 px-4 py-2 border rounded-lg cursor-pointer hover:bg-gray-50">
+                <label className="flex items-center gap-2 px-4 py-2 border rounded-lg cursor-pointer hover:bg-muted">
                   <input
                     type="checkbox"
                     checked={answer.isCorrect}
