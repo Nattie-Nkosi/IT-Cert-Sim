@@ -38,3 +38,17 @@ prisma/migrations/
 # claude
 .claude/
 CLAUDE.md
+
+# tauri
+src-tauri/target/
+src-tauri/sidecars/desktop-backend*
+*.exe
+*.dmg
+*.app
+*.AppImage
+*.deb
+*.msi
+
+# sqlite
+*.db
+*.db-journal

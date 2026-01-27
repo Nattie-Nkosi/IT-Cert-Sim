@@ -1,0 +1,22 @@
+{
+  "name": "it-cert-simulator",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev:backend": "cd backend && bun run dev",
+    "dev:frontend": "cd frontend && bun run dev",
+    "dev:desktop-backend": "cd desktop && DATABASE_URL=\"file:./dev.db\" bun run dev",
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:desktop": "concurrently \"npm run dev:desktop-backend\" \"npm run dev:frontend\"",
+    "build:frontend": "cd frontend && bun run build",
+    "build:desktop-backend": "cd desktop && bun run build",
+    "tauri:dev": "npx tauri dev",
+    "tauri:build": "npx tauri build",
+    "desktop:setup": "cd desktop && bun install && bunx prisma generate",
+    "desktop:db:push": "cd desktop && DATABASE_URL=\"file:./dev.db\" bunx prisma db push",
+    "desktop:seed": "cd desktop && DATABASE_URL=\"file:./dev.db\" bun run db:seed"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

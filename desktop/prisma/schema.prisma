@@ -1,0 +1,130 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String
+  role      Role     @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  examAttempts ExamAttempt[]
+
+  @@map("users")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model Certification {
+  id          String   @id @default(cuid())
+  name        String
+  code        String   @unique
+  description String?
+  vendor      String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  questions Question[]
+  exams     Exam[]
+
+  @@map("certifications")
+}
+
+model Question {
+  id               String   @id @default(cuid())
+  questionText     String
+  questionType     QuestionType
+  explanation      String?
+  certificationId  String
+  difficulty       Difficulty @default(MEDIUM)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  certification Certification @relation(fields: [certificationId], references: [id], onDelete: Cascade)
+  answers       Answer[]
+  examQuestions ExamQuestion[]
+
+  @@map("questions")
+}
+
+enum QuestionType {
+  SINGLE_CHOICE
+  MULTIPLE_CHOICE
+  TRUE_FALSE
+}
+
+enum Difficulty {
+  EASY
+  MEDIUM
+  HARD
+}
+
+model Answer {
+  id         String   @id @default(cuid())
+  answerText String
+  isCorrect  Boolean
+  questionId String
+  createdAt  DateTime @default(now())
+
+  question Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@map("answers")
+}
+
+model Exam {
+  id              String   @id @default(cuid())
+  name            String
+  description     String?
+  duration        Int
+  passingScore    Int
+  certificationId String
+  isActive        Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  certification Certification @relation(fields: [certificationId], references: [id], onDelete: Cascade)
+  questions     ExamQuestion[]
+  attempts      ExamAttempt[]
+
+  @@map("exams")
+}
+
+model ExamQuestion {
+  id         String   @id @default(cuid())
+  examId     String
+  questionId String
+  order      Int
+
+  exam     Exam     @relation(fields: [examId], references: [id], onDelete: Cascade)
+  question Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@unique([examId, questionId])
+  @@map("exam_questions")
+}
+
+model ExamAttempt {
+  id          String   @id @default(cuid())
+  userId      String
+  examId      String
+  score       Float
+  passed      Boolean
+  startedAt   DateTime @default(now())
+  completedAt DateTime?
+  answers     String
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  exam Exam @relation(fields: [examId], references: [id], onDelete: Cascade)
+
+  @@map("exam_attempts")
+}
