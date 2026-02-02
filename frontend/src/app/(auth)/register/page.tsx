@@ -1,10 +1,18 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import api from '@/lib/api';
 import { useAuthStore } from '@/lib/store';
+
+const passwordRequirements = [
+  { label: '8+ characters', test: (p: string) => p.length >= 8 },
+  { label: 'Uppercase letter', test: (p: string) => /[A-Z]/.test(p) },
+  { label: 'Lowercase letter', test: (p: string) => /[a-z]/.test(p) },
+  { label: 'Number', test: (p: string) => /\d/.test(p) },
+  { label: 'Special character (@$!%*?&)', test: (p: string) => /[@$!%*?&]/.test(p) },
+];
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -15,17 +23,38 @@ export default function RegisterPage() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
+  const passwordChecks = useMemo(() => {
+    return passwordRequirements.map((req) => ({
+      ...req,
+      passed: req.test(password),
+    }));
+  }, [password]);
+
+  const isPasswordValid = passwordChecks.every((c) => c.passed);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+
+    if (!isPasswordValid) {
+      setError('Please meet all password requirements');
+      return;
+    }
+
     setLoading(true);
 
     try {
       const response = await api.post('/auth/register', { name, email, password });
-      setAuth(response.data.user, response.data.token);
+      const { user, token, refreshToken, expiresIn } = response.data;
+      setAuth(user, token, refreshToken, expiresIn);
       router.push('/dashboard');
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Registration failed');
+      const data = err.response?.data;
+      if (data?.requirements) {
+        setError(`${data.error}: ${data.requirements.join(', ')}`);
+      } else {
+        setError(data?.error || 'Registration failed');
+      }
     } finally {
       setLoading(false);
     }
@@ -78,22 +107,40 @@ export default function RegisterPage() {
 
           <div>
             <label htmlFor="password" className="block text-sm font-medium">
-              Password (min 6 characters)
+              Password
             </label>
             <input
               id="password"
               type="password"
               required
-              minLength={6}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="mt-1 block w-full px-3 py-2 border border-input rounded-md bg-background text-foreground"
             />
+
+            {password && (
+              <div className="mt-3 p-3 bg-muted rounded-lg">
+                <p className="text-xs font-medium mb-2">Password requirements:</p>
+                <div className="grid grid-cols-2 gap-1">
+                  {passwordChecks.map((check) => (
+                    <div
+                      key={check.label}
+                      className={`text-xs flex items-center gap-1 ${
+                        check.passed ? 'text-green-600' : 'text-muted-foreground'
+                      }`}
+                    >
+                      <span>{check.passed ? '✓' : '○'}</span>
+                      {check.label}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
 
           <button
             type="submit"
-            disabled={loading}
+            disabled={loading || !isPasswordValid}
             className="w-full py-2 px-4 bg-primary text-primary-foreground rounded-md hover:opacity-90 disabled:opacity-50"
           >
             {loading ? 'Creating account...' : 'Register'}

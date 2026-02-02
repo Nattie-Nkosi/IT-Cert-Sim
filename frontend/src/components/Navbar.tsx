@@ -3,11 +3,12 @@
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
 import { useAuthStore } from '@/lib/store';
+import api from '@/lib/api';
 
 export default function Navbar() {
   const router = useRouter();
   const pathname = usePathname();
-  const { user, logout, theme, setTheme } = useAuthStore();
+  const { user, logout, theme, setTheme, refreshToken } = useAuthStore();
 
   const toggleTheme = () => {
     if (theme === 'light') setTheme('dark');
@@ -15,7 +16,14 @@ export default function Navbar() {
     else setTheme('light');
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    if (refreshToken) {
+      try {
+        await api.post('/auth/logout', { refreshToken });
+      } catch {
+        // Continue with logout even if API call fails
+      }
+    }
     logout();
     router.push('/');
   };

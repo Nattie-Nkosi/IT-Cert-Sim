@@ -16,6 +16,12 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  // Security fields
+  failedLoginAttempts Int       @default(0)
+  lockedUntil         DateTime?
+  lastLoginAt         DateTime?
+  refreshToken        String?
+
   examAttempts ExamAttempt[]
 
   @@map("users")
