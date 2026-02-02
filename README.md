@@ -2,7 +2,7 @@
 
 Practice IT certification exams with realistic test environments.
 
-<!-- ![Dashboard](docs/images/dashboard.png) -->
+![Dashboard](docs/images/dashboard.png)
 
 ## Features
 
@@ -13,15 +13,15 @@ Practice IT certification exams with realistic test environments.
 - **Admin Dashboard** - Manage certifications, questions, and exams
 - **Progress Tracking** - View exam history and scores
 
-<!-- ![Exam Taking](docs/images/exam.png) -->
+![Exam Taking](docs/images/exam.png)
 
 ## Tech Stack
 
-| Backend | Frontend |
-|---------|----------|
-| Bun + Elysia | Next.js 14 |
-| PostgreSQL + Prisma | TypeScript |
-| JWT Auth | Tailwind + ShadCN UI |
+| Backend             | Frontend             |
+| ------------------- | -------------------- |
+| Bun + Elysia        | Next.js 14           |
+| PostgreSQL + Prisma | TypeScript           |
+| JWT Auth            | Tailwind + ShadCN UI |
 
 ## Quick Start
 
@@ -44,12 +44,14 @@ Open http://localhost:3000
 ## Environment Variables
 
 **Backend** (`backend/.env`)
+
 ```env
 DATABASE_URL="postgresql://user:pass@localhost:5432/itcert"
 JWT_SECRET="your-secret-key"
 ```
 
 **Frontend** (`frontend/.env.local`)
+
 ```env
 NEXT_PUBLIC_API_URL=http://localhost:3001/api
 ```
