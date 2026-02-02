@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { useAuthStore } from '@/lib/store';
 import api from '@/lib/api';
@@ -46,12 +46,48 @@ export default function ExamTakingClient() {
   const { user, token, hasHydrated } = useAuthStore();
 
   const [exam, setExam] = useState<Exam | null>(null);
+  const [attemptId, setAttemptId] = useState<string | null>(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [userAnswers, setUserAnswers] = useState<Record<string, string | string[]>>({});
   const [timeRemaining, setTimeRemaining] = useState(0);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
+
+  // Anti-cheating state
+  const [tabSwitchCount, setTabSwitchCount] = useState(0);
+  const [showTabWarning, setShowTabWarning] = useState(false);
+  const isSubmittingRef = useRef(false);
+
+  // Start exam and create attempt
+  const startExam = useCallback(async () => {
+    if (!params.id) return;
+
+    try {
+      const startResponse = await api.post(`/exams/${params.id}/start`);
+      setAttemptId(startResponse.data.attemptId);
+      setTabSwitchCount(startResponse.data.tabSwitchCount || 0);
+
+      const examResponse = await api.get(`/exams/${params.id}`);
+      setExam(examResponse.data);
+
+      // Calculate remaining time based on server start time
+      if (startResponse.data.resuming && startResponse.data.serverStartTime) {
+        const serverStart = new Date(startResponse.data.serverStartTime).getTime();
+        const now = Date.now();
+        const elapsedSeconds = Math.floor((now - serverStart) / 1000);
+        const remaining = Math.max(0, examResponse.data.duration * 60 - elapsedSeconds);
+        setTimeRemaining(remaining);
+      } else {
+        setTimeRemaining(examResponse.data.duration * 60);
+      }
+    } catch (err: any) {
+      setError('Failed to load exam');
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  }, [params.id]);
 
   useEffect(() => {
     if (!hasHydrated) return;
@@ -61,24 +97,60 @@ export default function ExamTakingClient() {
       return;
     }
 
-    const fetchExam = async () => {
-      try {
-        const response = await api.get(`/exams/${params.id}`);
-        setExam(response.data);
-        setTimeRemaining(response.data.duration * 60);
-      } catch (err: any) {
-        setError('Failed to load exam');
-        console.error(err);
-      } finally {
-        setLoading(false);
+    startExam();
+  }, [token, user, router, hasHydrated, startExam]);
+
+  // Tab switch detection
+  useEffect(() => {
+    if (!attemptId || isSubmittingRef.current) return;
+
+    const handleVisibilityChange = async () => {
+      if (document.hidden && attemptId) {
+        try {
+          const response = await api.post(`/exams/attempts/${attemptId}/tab-switch`);
+          setTabSwitchCount(response.data.tabSwitchCount);
+          if (response.data.warning) {
+            setShowTabWarning(true);
+            setTimeout(() => setShowTabWarning(false), 5000);
+          }
+        } catch (err) {
+          console.error('Failed to track tab switch:', err);
+        }
       }
     };
 
-    if (params.id) {
-      fetchExam();
-    }
-  }, [token, user, router, params.id, hasHydrated]);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+  }, [attemptId]);
 
+  // Prevent copy/paste and right-click
+  useEffect(() => {
+    const preventCopy = (e: ClipboardEvent) => {
+      e.preventDefault();
+    };
+
+    const preventContextMenu = (e: MouseEvent) => {
+      e.preventDefault();
+    };
+
+    const preventKeyboardShortcuts = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && (e.key === 'c' || e.key === 'C' || e.key === 'p' || e.key === 'P')) {
+        e.preventDefault();
+      }
+    };
+
+    document.addEventListener('copy', preventCopy);
+    document.addEventListener('contextmenu', preventContextMenu);
+    document.addEventListener('keydown', preventKeyboardShortcuts);
+
+    return () => {
+      document.removeEventListener('copy', preventCopy);
+      document.removeEventListener('contextmenu', preventContextMenu);
+      document.removeEventListener('keydown', preventKeyboardShortcuts);
+    };
+  }, []);
+
+  // Timer
   useEffect(() => {
     if (timeRemaining <= 0 || !exam) return;
 
@@ -103,8 +175,9 @@ export default function ExamTakingClient() {
   };
 
   const handleSubmitExam = async () => {
-    if (!exam || submitting) return;
+    if (!exam || submitting || isSubmittingRef.current) return;
 
+    isSubmittingRef.current = true;
     setSubmitting(true);
 
     try {
@@ -116,6 +189,7 @@ export default function ExamTakingClient() {
     } catch (err: any) {
       setError('Failed to submit exam: ' + (err.response?.data?.message || err.message));
       setSubmitting(false);
+      isSubmittingRef.current = false;
     }
   };
 
@@ -180,7 +254,31 @@ export default function ExamTakingClient() {
   const seconds = timeRemaining % 60;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-primary/5 to-background">
+    <div className="min-h-screen bg-gradient-to-b from-primary/5 to-background select-none">
+      {/* Tab Switch Warning */}
+      {showTabWarning && (
+        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 animate-pulse">
+          <div className="bg-red-600 text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-3">
+            <span className="text-xl">⚠️</span>
+            <div>
+              <p className="font-bold">Warning: Tab Switch Detected!</p>
+              <p className="text-sm">Switching tabs during the exam is being monitored.</p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Tab Switch Counter */}
+      {tabSwitchCount > 0 && (
+        <div className="fixed top-4 right-4 z-50">
+          <div className={`px-3 py-2 rounded-lg text-sm font-semibold ${
+            tabSwitchCount >= 3 ? 'bg-red-100 text-red-700 border border-red-300' : 'bg-yellow-100 text-yellow-700 border border-yellow-300'
+          }`}>
+            Tab Switches: {tabSwitchCount}
+          </div>
+        </div>
+      )}
+
       <div className="bg-card/95 backdrop-blur-lg border-b shadow-md sticky top-0 z-10">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">

@@ -506,6 +506,49 @@ export const adminRoutes = new Elysia({ prefix: '/api/admin' })
     });
   })
 
+  // Get audit logs
+  .get('/audit-logs', async ({ query }) => {
+    const page = parseInt(query.page || '1');
+    const limit = Math.min(parseInt(query.limit || '50'), 100);
+    const action = query.action;
+
+    const where = action ? { action } : {};
+
+    const [logs, total] = await Promise.all([
+      prisma.auditLog.findMany({
+        where,
+        orderBy: { createdAt: 'desc' },
+        skip: (page - 1) * limit,
+        take: limit,
+      }),
+      prisma.auditLog.count({ where }),
+    ]);
+
+    return {
+      logs,
+      total,
+      page,
+      limit,
+      hasMore: page * limit < total,
+    };
+  })
+
+  // Get flagged exam attempts
+  .get('/flagged-attempts', async () => {
+    return await prisma.examAttempt.findMany({
+      where: { flagged: true },
+      include: {
+        user: {
+          select: { id: true, email: true, name: true },
+        },
+        exam: {
+          select: { id: true, name: true },
+        },
+      },
+      orderBy: { startedAt: 'desc' },
+    });
+  })
+
   // Sync all certification questions to exam
   .post('/exams/:id/sync-questions', async ({ params }) => {
     const exam = await prisma.exam.findUnique({

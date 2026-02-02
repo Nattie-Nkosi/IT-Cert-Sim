@@ -99,6 +99,22 @@ export default function AdminDashboard() {
       color: 'from-amber-500/10 to-amber-600/5',
       borderColor: 'border-amber-500/20',
     },
+    {
+      title: 'Audit Logs',
+      description: 'Monitor user activity, login attempts, and security events',
+      href: '/admin/audit-logs',
+      icon: '📋',
+      color: 'from-slate-500/10 to-slate-600/5',
+      borderColor: 'border-slate-500/20',
+    },
+    {
+      title: 'Flagged Attempts',
+      description: 'Review exam attempts flagged for suspicious activity',
+      href: '/admin/flagged-attempts',
+      icon: '🚩',
+      color: 'from-red-500/10 to-red-600/5',
+      borderColor: 'border-red-500/20',
+    },
   ];
 
   return (

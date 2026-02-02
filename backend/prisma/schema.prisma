@@ -114,17 +114,43 @@ model ExamQuestion {
 }
 
 model ExamAttempt {
-  id          String   @id @default(cuid())
-  userId      String
-  examId      String
-  score       Float
-  passed      Boolean
-  startedAt   DateTime @default(now())
-  completedAt DateTime?
-  answers     Json     // Store user answers as JSON
+  id            String    @id @default(cuid())
+  userId        String
+  examId        String
+  score         Float
+  passed        Boolean
+  startedAt     DateTime  @default(now())
+  completedAt   DateTime?
+  answers       Json      // Store user answers as JSON
+
+  // Anti-cheating fields
+  tabSwitchCount  Int       @default(0)
+  ipAddress       String?
+  userAgent       String?
+  serverStartTime DateTime  @default(now())
+  flagged         Boolean   @default(false)
+  flagReason      String?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   exam Exam @relation(fields: [examId], references: [id], onDelete: Cascade)
 
   @@map("exam_attempts")
+}
+
+// Audit Log for tracking all important actions
+model AuditLog {
+  id         String   @id @default(cuid())
+  userId     String?
+  action     String   // LOGIN, LOGOUT, LOGIN_FAILED, EXAM_START, EXAM_SUBMIT, ADMIN_ACTION, SECURITY_EVENT
+  entity     String?  // exam, question, certification, user
+  entityId   String?
+  details    Json?    // Additional details
+  ipAddress  String?
+  userAgent  String?
+  createdAt  DateTime @default(now())
+
+  @@index([userId])
+  @@index([action])
+  @@index([createdAt])
+  @@map("audit_logs")
 }

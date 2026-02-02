@@ -2,6 +2,7 @@ import { Elysia, t } from 'elysia';
 import { jwt } from '@elysiajs/jwt';
 import bcrypt from 'bcryptjs';
 import { prisma } from '../lib/prisma';
+import { logAudit, getClientInfo } from '../lib/auditLog';
 
 export const authRoutes = new Elysia({ prefix: '/api/auth' })
   .use(
@@ -12,14 +13,20 @@ export const authRoutes = new Elysia({ prefix: '/api/auth' })
   )
   .post(
     '/register',
-    async ({ body, jwt }) => {
+    async ({ body, jwt, headers }) => {
       const { email, password, name } = body;
+      const clientInfo = getClientInfo(headers as Record<string, string>);
 
       const existingUser = await prisma.user.findUnique({
         where: { email },
       });
 
       if (existingUser) {
+        await logAudit({
+          action: 'REGISTER',
+          details: { email, success: false, reason: 'User already exists' },
+          ...clientInfo,
+        });
         throw new Error('User already exists');
       }
 
@@ -31,6 +38,15 @@ export const authRoutes = new Elysia({ prefix: '/api/auth' })
           password: hashedPassword,
           name,
         },
+      });
+
+      await logAudit({
+        userId: user.id,
+        action: 'REGISTER',
+        entity: 'user',
+        entityId: user.id,
+        details: { email, success: true },
+        ...clientInfo,
       });
 
       const token = await jwt.sign({
@@ -59,22 +75,43 @@ export const authRoutes = new Elysia({ prefix: '/api/auth' })
   )
   .post(
     '/login',
-    async ({ body, jwt }) => {
+    async ({ body, jwt, headers }) => {
       const { email, password } = body;
+      const clientInfo = getClientInfo(headers as Record<string, string>);
 
       const user = await prisma.user.findUnique({
         where: { email },
       });
 
       if (!user) {
+        await logAudit({
+          action: 'LOGIN_FAILED',
+          details: { email, reason: 'User not found' },
+          ...clientInfo,
+        });
         throw new Error('Invalid credentials');
       }
 
       const validPassword = await bcrypt.compare(password, user.password);
 
       if (!validPassword) {
+        await logAudit({
+          userId: user.id,
+          action: 'LOGIN_FAILED',
+          details: { email, reason: 'Invalid password' },
+          ...clientInfo,
+        });
         throw new Error('Invalid credentials');
       }
+
+      await logAudit({
+        userId: user.id,
+        action: 'LOGIN',
+        entity: 'user',
+        entityId: user.id,
+        details: { email, success: true },
+        ...clientInfo,
+      });
 
       const token = await jwt.sign({
         id: user.id,
