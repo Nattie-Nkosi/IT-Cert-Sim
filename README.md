@@ -12,18 +12,21 @@ Practice IT certification exams with realistic test environments.
 - **Audit Logging** - Track login attempts, exam activity, and security events
 - **Admin Dashboard** - Manage certifications, questions, and exams
 - **Progress Tracking** - View exam history and scores
+- **Desktop App** - Native Windows/macOS/Linux app with Tauri
 
 ![Exam Taking](docs/images/exam.png)
 
 ## Tech Stack
 
-| Backend             | Frontend             |
-| ------------------- | -------------------- |
-| Bun + Elysia        | Next.js 14           |
-| PostgreSQL + Prisma | TypeScript           |
-| JWT Auth            | Tailwind + ShadCN UI |
+| Backend             | Frontend             | Desktop      |
+| ------------------- | -------------------- | ------------ |
+| Bun + Elysia        | Next.js 14           | Tauri 2      |
+| PostgreSQL + Prisma | TypeScript           | Rust         |
+| JWT Auth            | Tailwind + ShadCN UI |              |
 
 ## Quick Start
+
+### Web App
 
 ```bash
 # Backend
@@ -40,6 +43,18 @@ bun run dev
 ```
 
 Open http://localhost:3000
+
+### Desktop App
+
+```bash
+# One command to start everything
+.\start-desktop.bat
+
+# Or with PowerShell
+.\start-desktop.ps1
+```
+
+The script starts backend, frontend, and launches the desktop app automatically.
 
 ## Environment Variables
 
@@ -60,8 +75,6 @@ NEXT_PUBLIC_API_URL=http://localhost:3001/api
 
 - **USER** - Take exams, view results
 - **ADMIN** - Manage certifications, questions, exams, view audit logs
-
-<!-- ![Admin Dashboard](docs/images/admin.png) -->
 
 ## API Docs
 
