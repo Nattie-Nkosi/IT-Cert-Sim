@@ -1,10 +1,7 @@
 import axios, { AxiosError } from 'axios';
 import { useAuthStore } from './store';
 
-const isTauri = typeof window !== 'undefined' && '__TAURI__' in window;
-const API_URL = isTauri
-  ? 'http://localhost:3002/api'
-  : (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api');
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
 
 export const api = axios.create({
   baseURL: API_URL,
