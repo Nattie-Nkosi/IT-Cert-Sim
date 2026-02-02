@@ -63,6 +63,13 @@ export default function AdminExamsPage() {
   const [examCertificationId, setExamCertificationId] = useState('');
   const [selectedQuestions, setSelectedQuestions] = useState<string[]>([]);
 
+  const [showNewCertForm, setShowNewCertForm] = useState(false);
+  const [newCertName, setNewCertName] = useState('');
+  const [newCertCode, setNewCertCode] = useState('');
+  const [newCertVendor, setNewCertVendor] = useState('');
+  const [newCertDescription, setNewCertDescription] = useState('');
+  const [creatingCert, setCreatingCert] = useState(false);
+
   useEffect(() => {
     if (!hasHydrated) return;
 
@@ -152,6 +159,41 @@ export default function AdminExamsPage() {
     setExamCertificationId('');
     setSelectedQuestions([]);
     setQuestions([]);
+    setShowNewCertForm(false);
+    setNewCertName('');
+    setNewCertCode('');
+    setNewCertVendor('');
+    setNewCertDescription('');
+  };
+
+  const handleCreateCertification = async () => {
+    if (!newCertName || !newCertCode || !newCertVendor) {
+      setError('Please fill in all required certification fields');
+      return;
+    }
+
+    setCreatingCert(true);
+    try {
+      const response = await api.post('/admin/certifications', {
+        name: newCertName,
+        code: newCertCode,
+        vendor: newCertVendor,
+        description: newCertDescription || undefined,
+      });
+
+      setCertifications((prev) => [...prev, response.data]);
+      setExamCertificationId(response.data.id);
+      setShowNewCertForm(false);
+      setNewCertName('');
+      setNewCertCode('');
+      setNewCertVendor('');
+      setNewCertDescription('');
+      setSuccess('Certification created! Now add questions.');
+    } catch (err: any) {
+      setError('Failed to create certification: ' + (err.response?.data?.error || err.message));
+    } finally {
+      setCreatingCert(false);
+    }
   };
 
   const handleEditExam = async (examId: string) => {
@@ -190,6 +232,17 @@ export default function AdminExamsPage() {
       fetchData();
     } catch (err: any) {
       setError('Failed to update exam: ' + (err.response?.data?.message || err.message));
+    }
+  };
+
+  const handleSyncQuestions = async (examId: string) => {
+    try {
+      setError('');
+      const response = await api.post(`/admin/exams/${examId}/sync-questions`);
+      setSuccess(response.data.message);
+      fetchData();
+    } catch (err: any) {
+      setError('Failed to sync questions: ' + (err.response?.data?.message || err.message));
     }
   };
 
@@ -303,12 +356,21 @@ export default function AdminExamsPage() {
                 </div>
               </div>
 
-              <button
-                onClick={() => handleEditExam(exam.id)}
-                className="w-full px-4 py-2 border-2 border-primary/20 rounded-lg hover:border-primary hover:bg-primary/5 text-primary font-semibold transition-all"
-              >
-                Edit Questions
-              </button>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => handleEditExam(exam.id)}
+                  className="flex-1 px-4 py-2 border-2 border-primary/20 rounded-lg hover:border-primary hover:bg-primary/5 text-primary font-semibold transition-all"
+                >
+                  Edit Questions
+                </button>
+                <button
+                  onClick={() => handleSyncQuestions(exam.id)}
+                  className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 font-semibold transition-all"
+                  title="Add all certification questions to this exam"
+                >
+                  Sync All
+                </button>
+              </div>
             </div>
           ))}
         </div>
@@ -354,18 +416,80 @@ export default function AdminExamsPage() {
 
                 <div>
                   <label className="block text-sm font-semibold mb-2">Certification</label>
-                  <select
-                    value={examCertificationId}
-                    onChange={(e) => handleCertificationChange(e.target.value)}
-                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-                  >
-                    <option value="">Select certification...</option>
-                    {certifications.map((cert) => (
-                      <option key={cert.id} value={cert.id}>
-                        {cert.vendor} - {cert.name} ({cert.code})
-                      </option>
-                    ))}
-                  </select>
+                  {!showNewCertForm ? (
+                    <div className="space-y-2">
+                      <select
+                        value={examCertificationId}
+                        onChange={(e) => handleCertificationChange(e.target.value)}
+                        className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                      >
+                        <option value="">Select certification...</option>
+                        {certifications.map((cert) => (
+                          <option key={cert.id} value={cert.id}>
+                            {cert.vendor} - {cert.name} ({cert.code})
+                          </option>
+                        ))}
+                      </select>
+                      <button
+                        type="button"
+                        onClick={() => setShowNewCertForm(true)}
+                        className="text-sm text-primary hover:underline font-medium"
+                      >
+                        + Create New Certification
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="p-4 border-2 border-dashed border-primary/30 rounded-lg bg-primary/5 space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm font-semibold text-primary">New Certification</span>
+                        <button
+                          type="button"
+                          onClick={() => setShowNewCertForm(false)}
+                          className="text-sm text-muted-foreground hover:text-foreground"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                      <div className="grid grid-cols-2 gap-3">
+                        <input
+                          type="text"
+                          value={newCertVendor}
+                          onChange={(e) => setNewCertVendor(e.target.value)}
+                          className="px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                          placeholder="Vendor (e.g., Microsoft)"
+                        />
+                        <input
+                          type="text"
+                          value={newCertCode}
+                          onChange={(e) => setNewCertCode(e.target.value)}
+                          className="px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                          placeholder="Code (e.g., MD-102)"
+                        />
+                      </div>
+                      <input
+                        type="text"
+                        value={newCertName}
+                        onChange={(e) => setNewCertName(e.target.value)}
+                        className="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                        placeholder="Name (e.g., Microsoft 365 Endpoint Administrator)"
+                      />
+                      <textarea
+                        value={newCertDescription}
+                        onChange={(e) => setNewCertDescription(e.target.value)}
+                        rows={2}
+                        className="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                        placeholder="Description (optional)"
+                      />
+                      <button
+                        type="button"
+                        onClick={handleCreateCertification}
+                        disabled={creatingCert || !newCertName || !newCertCode || !newCertVendor}
+                        className="w-full px-4 py-2 bg-primary text-white rounded-lg text-sm font-semibold hover:opacity-90 disabled:opacity-50 transition-all"
+                      >
+                        {creatingCert ? 'Creating...' : 'Create Certification'}
+                      </button>
+                    </div>
+                  )}
                 </div>
 
                 <div>
@@ -406,11 +530,36 @@ export default function AdminExamsPage() {
                       Select Questions ({selectedQuestions.length} selected)
                     </label>
                     {questions.length === 0 ? (
-                      <p className="text-sm text-muted-foreground p-4 bg-muted rounded-lg">
-                        No questions available for this certification. Please upload questions first.
-                      </p>
+                      <div className="p-6 bg-muted rounded-lg text-center">
+                        <p className="text-sm text-muted-foreground mb-4">
+                          No questions available for this certification yet.
+                        </p>
+                        <Link
+                          href={`/admin/questions?certificationId=${examCertificationId}&action=add`}
+                          className="inline-block px-4 py-2 bg-primary text-white rounded-lg text-sm font-semibold hover:opacity-90 transition-all"
+                        >
+                          Add Questions
+                        </Link>
+                      </div>
                     ) : (
-                      <div className="max-h-96 overflow-auto border rounded-lg p-4 space-y-2">
+                      <>
+                        <div className="flex gap-2 mb-2">
+                          <button
+                            type="button"
+                            onClick={() => setSelectedQuestions(questions.map(q => q.id))}
+                            className="px-3 py-1 text-sm bg-primary text-white rounded hover:opacity-90"
+                          >
+                            Select All
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setSelectedQuestions([])}
+                            className="px-3 py-1 text-sm border border-primary/20 rounded hover:bg-primary/5"
+                          >
+                            Clear All
+                          </button>
+                        </div>
+                        <div className="max-h-96 overflow-auto border rounded-lg p-4 space-y-2">
                         {questions.map((question) => (
                           <label
                             key={question.id}
@@ -445,7 +594,8 @@ export default function AdminExamsPage() {
                             </div>
                           </label>
                         ))}
-                      </div>
+                        </div>
+                      </>
                     )}
                   </div>
                 )}

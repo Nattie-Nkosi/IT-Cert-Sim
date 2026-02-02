@@ -5,6 +5,16 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuthStore } from '@/lib/store';
 import api from '@/lib/api';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 
 interface ExamAttempt {
   id: string;
@@ -32,6 +42,9 @@ export default function HistoryPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [filter, setFilter] = useState<'all' | 'passed' | 'failed'>('all');
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [attemptToDelete, setAttemptToDelete] = useState<ExamAttempt | null>(null);
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     if (!hasHydrated) return;
@@ -55,6 +68,28 @@ export default function HistoryPage() {
 
     fetchHistory();
   }, [token, user, router, hasHydrated]);
+
+  const handleDeleteClick = (attempt: ExamAttempt) => {
+    setAttemptToDelete(attempt);
+    setDeleteDialogOpen(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!attemptToDelete) return;
+
+    setDeleting(true);
+    try {
+      await api.delete(`/exams/attempts/${attemptToDelete.id}`);
+      setAttempts((prev) => prev.filter((a) => a.id !== attemptToDelete.id));
+      setDeleteDialogOpen(false);
+      setAttemptToDelete(null);
+    } catch (err: any) {
+      setError('Failed to delete exam attempt');
+      console.error(err);
+    } finally {
+      setDeleting(false);
+    }
+  };
 
   if (!hasHydrated) {
     return (
@@ -270,12 +305,41 @@ export default function HistoryPage() {
                   >
                     Retake
                   </Link>
+                  <button
+                    onClick={() => handleDeleteClick(attempt)}
+                    className="px-4 py-2 border-2 border-red-200 text-red-600 rounded-lg hover:bg-red-50 hover:border-red-300 text-center text-sm font-semibold whitespace-nowrap transition-all"
+                  >
+                    Delete
+                  </button>
                 </div>
               </div>
             </div>
           ))}
         </div>
       )}
+
+      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Exam Attempt</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete this exam attempt for{' '}
+              <span className="font-semibold">{attemptToDelete?.exam.name}</span>?
+              This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={deleting}>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDeleteConfirm}
+              disabled={deleting}
+              className="bg-red-600 hover:bg-red-700 focus:ring-red-600"
+            >
+              {deleting ? 'Deleting...' : 'Delete'}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

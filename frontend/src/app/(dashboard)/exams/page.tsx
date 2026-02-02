@@ -54,6 +54,18 @@ export default function ExamsPage() {
     fetchExams();
   }, [token, user, router, hasHydrated]);
 
+  const handleRefresh = async () => {
+    setLoading(true);
+    try {
+      const response = await api.get('/exams');
+      setExams(response.data);
+    } catch (err: any) {
+      setError('Failed to load exams');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   if (!hasHydrated) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -68,13 +80,22 @@ export default function ExamsPage() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="mb-10">
-        <h1 className="text-4xl font-bold mb-3 bg-gradient-to-r from-primary to-sky-600 bg-clip-text text-transparent">
-          Available Exams
-        </h1>
-        <p className="text-lg text-muted-foreground">
-          Choose an exam to test your knowledge
-        </p>
+      <div className="mb-10 flex items-start justify-between">
+        <div>
+          <h1 className="text-4xl font-bold mb-3 bg-gradient-to-r from-primary to-sky-600 bg-clip-text text-transparent">
+            Available Exams
+          </h1>
+          <p className="text-lg text-muted-foreground">
+            Choose an exam to test your knowledge
+          </p>
+        </div>
+        <button
+          onClick={handleRefresh}
+          disabled={loading}
+          className="px-4 py-2 border-2 border-primary/20 rounded-lg hover:border-primary hover:bg-primary/5 font-semibold transition-all disabled:opacity-50"
+        >
+          {loading ? 'Loading...' : 'Refresh'}
+        </button>
       </div>
 
       {error && (

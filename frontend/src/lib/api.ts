@@ -7,6 +7,10 @@ const API_URL = isTauri
 
 export const api = axios.create({
   baseURL: API_URL,
+  headers: {
+    'Cache-Control': 'no-cache',
+    'Pragma': 'no-cache',
+  },
 });
 
 // Add auth token to requests

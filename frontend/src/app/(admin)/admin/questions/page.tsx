@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { Suspense, useEffect, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { useAuthStore } from '@/lib/store';
 import api from '@/lib/api';
@@ -47,8 +47,9 @@ interface ParsedQuestion {
   }[];
 }
 
-export default function AdminQuestionsPage() {
+function AdminQuestionsContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { user, token, hasHydrated } = useAuthStore();
 
   const [questions, setQuestions] = useState<Question[]>([]);
@@ -68,6 +69,22 @@ export default function AdminQuestionsPage() {
   const [editingQuestion, setEditingQuestion] = useState<Question | null>(null);
   const [showEditModal, setShowEditModal] = useState(false);
 
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [newQuestion, setNewQuestion] = useState({
+    questionText: '',
+    questionType: 'SINGLE_CHOICE',
+    difficulty: 'MEDIUM',
+    explanation: '',
+    certificationId: '',
+    answers: [
+      { answerText: '', isCorrect: false },
+      { answerText: '', isCorrect: false },
+      { answerText: '', isCorrect: false },
+      { answerText: '', isCorrect: false },
+    ],
+  });
+  const [addingQuestion, setAddingQuestion] = useState(false);
+
   useEffect(() => {
     if (!hasHydrated) return;
 
@@ -79,6 +96,21 @@ export default function AdminQuestionsPage() {
     fetchCertifications();
     fetchQuestions();
   }, [token, user, router, hasHydrated]);
+
+  useEffect(() => {
+    const certId = searchParams.get('certificationId');
+    const action = searchParams.get('action');
+
+    if (certId) {
+      setSelectedCertification(certId);
+      setNewQuestion(prev => ({ ...prev, certificationId: certId }));
+      fetchQuestions(certId);
+    }
+
+    if (action === 'add' && certId) {
+      setShowAddModal(true);
+    }
+  }, [searchParams]);
 
   const fetchCertifications = async () => {
     try {
@@ -226,6 +258,69 @@ export default function AdminQuestionsPage() {
     }
   };
 
+  const handleAddQuestion = async () => {
+    if (!newQuestion.questionText || !newQuestion.certificationId) {
+      setError('Please fill in all required fields');
+      return;
+    }
+
+    const validAnswers = newQuestion.answers.filter(a => a.answerText.trim());
+    if (validAnswers.length < 2) {
+      setError('Please provide at least 2 answers');
+      return;
+    }
+
+    if (!validAnswers.some(a => a.isCorrect)) {
+      setError('Please mark at least one answer as correct');
+      return;
+    }
+
+    setAddingQuestion(true);
+    setError('');
+
+    try {
+      await api.post('/admin/questions', {
+        questionText: newQuestion.questionText,
+        questionType: newQuestion.questionType,
+        difficulty: newQuestion.difficulty,
+        explanation: newQuestion.explanation || undefined,
+        certificationId: newQuestion.certificationId,
+        answers: validAnswers,
+      });
+
+      setSuccess('Question added successfully!');
+      setShowAddModal(false);
+      setNewQuestion({
+        questionText: '',
+        questionType: 'SINGLE_CHOICE',
+        difficulty: 'MEDIUM',
+        explanation: '',
+        certificationId: selectedCertification,
+        answers: [
+          { answerText: '', isCorrect: false },
+          { answerText: '', isCorrect: false },
+          { answerText: '', isCorrect: false },
+          { answerText: '', isCorrect: false },
+        ],
+      });
+      fetchQuestions(selectedCertification || undefined);
+    } catch (err: any) {
+      setError('Failed to add question: ' + (err.response?.data?.message || err.message));
+    } finally {
+      setAddingQuestion(false);
+    }
+  };
+
+  const openAddModal = () => {
+    setNewQuestion({
+      ...newQuestion,
+      certificationId: selectedCertification,
+    });
+    setShowAddModal(true);
+    setError('');
+    setSuccess('');
+  };
+
   if (!hasHydrated) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -247,12 +342,20 @@ export default function AdminQuestionsPage() {
             Manage exam questions and upload from PDF
           </p>
         </div>
-        <button
-          onClick={() => setShowUploadModal(true)}
-          className="px-6 py-3 bg-gradient-to-r from-primary to-sky-600 text-white rounded-lg hover:opacity-90 font-semibold shadow-lg transition-all hover:scale-105"
-        >
-          Upload from PDF
-        </button>
+        <div className="flex gap-3">
+          <button
+            onClick={openAddModal}
+            className="px-6 py-3 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-lg hover:opacity-90 font-semibold shadow-lg transition-all hover:scale-105"
+          >
+            Add Question
+          </button>
+          <button
+            onClick={() => setShowUploadModal(true)}
+            className="px-6 py-3 bg-gradient-to-r from-primary to-sky-600 text-white rounded-lg hover:opacity-90 font-semibold shadow-lg transition-all hover:scale-105"
+          >
+            Upload from PDF
+          </button>
+        </div>
       </div>
 
       {error && (
@@ -296,12 +399,20 @@ export default function AdminQuestionsPage() {
             <span className="text-3xl">📝</span>
           </div>
           <p className="text-muted-foreground mb-4">No questions found</p>
-          <button
-            onClick={() => setShowUploadModal(true)}
-            className="inline-block px-6 py-3 bg-gradient-to-r from-primary to-sky-600 text-white rounded-lg hover:opacity-90 transition-all hover:scale-105 shadow-md font-semibold"
-          >
-            Upload Questions from PDF
-          </button>
+          <div className="flex gap-3 justify-center">
+            <button
+              onClick={openAddModal}
+              className="px-6 py-3 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-lg hover:opacity-90 transition-all hover:scale-105 shadow-md font-semibold"
+            >
+              Add Question
+            </button>
+            <button
+              onClick={() => setShowUploadModal(true)}
+              className="px-6 py-3 bg-gradient-to-r from-primary to-sky-600 text-white rounded-lg hover:opacity-90 transition-all hover:scale-105 shadow-md font-semibold"
+            >
+              Upload from PDF
+            </button>
+          </div>
         </div>
       ) : (
         <div className="space-y-4">
@@ -614,6 +725,165 @@ export default function AdminQuestionsPage() {
           </div>
         </div>
       )}
+
+      {showAddModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-card rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-auto">
+            <div className="p-6 border-b sticky top-0 bg-card z-10">
+              <div className="flex items-center justify-between">
+                <h2 className="text-2xl font-bold">Add New Question</h2>
+                <button
+                  onClick={() => setShowAddModal(false)}
+                  className="text-muted-foreground hover:text-foreground text-xl"
+                >
+                  ✕
+                </button>
+              </div>
+            </div>
+
+            <div className="p-6">
+              {error && (
+                <div className="p-4 mb-4 bg-red-50 text-red-700 rounded-lg border border-red-200 text-sm">
+                  {error}
+                </div>
+              )}
+
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-semibold mb-2">
+                    Certification <span className="text-red-500">*</span>
+                  </label>
+                  <select
+                    value={newQuestion.certificationId}
+                    onChange={(e) => setNewQuestion({ ...newQuestion, certificationId: e.target.value })}
+                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                  >
+                    <option value="">Select certification...</option>
+                    {certifications.map((cert) => (
+                      <option key={cert.id} value={cert.id}>
+                        {cert.vendor} - {cert.name} ({cert.code})
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold mb-2">
+                    Question Text <span className="text-red-500">*</span>
+                  </label>
+                  <textarea
+                    value={newQuestion.questionText}
+                    onChange={(e) => setNewQuestion({ ...newQuestion, questionText: e.target.value })}
+                    rows={4}
+                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                    placeholder="Enter the question..."
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-semibold mb-2">Question Type</label>
+                    <select
+                      value={newQuestion.questionType}
+                      onChange={(e) => setNewQuestion({ ...newQuestion, questionType: e.target.value })}
+                      className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                    >
+                      <option value="SINGLE_CHOICE">Single Choice</option>
+                      <option value="MULTIPLE_CHOICE">Multiple Choice</option>
+                      <option value="TRUE_FALSE">True/False</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold mb-2">Difficulty</label>
+                    <select
+                      value={newQuestion.difficulty}
+                      onChange={(e) => setNewQuestion({ ...newQuestion, difficulty: e.target.value })}
+                      className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                    >
+                      <option value="EASY">Easy</option>
+                      <option value="MEDIUM">Medium</option>
+                      <option value="HARD">Hard</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold mb-2">
+                    Answers <span className="text-red-500">*</span>
+                    <span className="text-muted-foreground font-normal ml-2">(check correct answers)</span>
+                  </label>
+                  {newQuestion.answers.map((answer, index) => (
+                    <div key={index} className="flex gap-2 mb-2">
+                      <input
+                        type="checkbox"
+                        checked={answer.isCorrect}
+                        onChange={(e) => {
+                          const newAnswers = [...newQuestion.answers];
+                          newAnswers[index].isCorrect = e.target.checked;
+                          setNewQuestion({ ...newQuestion, answers: newAnswers });
+                        }}
+                        className="w-5 h-5 accent-green-600 mt-2"
+                      />
+                      <input
+                        type="text"
+                        value={answer.answerText}
+                        onChange={(e) => {
+                          const newAnswers = [...newQuestion.answers];
+                          newAnswers[index].answerText = e.target.value;
+                          setNewQuestion({ ...newQuestion, answers: newAnswers });
+                        }}
+                        className="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                        placeholder={`Answer ${index + 1}`}
+                      />
+                    </div>
+                  ))}
+                  <button
+                    type="button"
+                    onClick={() => setNewQuestion({
+                      ...newQuestion,
+                      answers: [...newQuestion.answers, { answerText: '', isCorrect: false }]
+                    })}
+                    className="text-sm text-primary hover:underline font-medium"
+                  >
+                    + Add Another Answer
+                  </button>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold mb-2">Explanation (Optional)</label>
+                  <textarea
+                    value={newQuestion.explanation}
+                    onChange={(e) => setNewQuestion({ ...newQuestion, explanation: e.target.value })}
+                    rows={3}
+                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                    placeholder="Explain why the correct answer is correct..."
+                  />
+                </div>
+
+                <button
+                  onClick={handleAddQuestion}
+                  disabled={addingQuestion || !newQuestion.questionText || !newQuestion.certificationId}
+                  className="w-full px-6 py-3 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-lg hover:opacity-90 disabled:opacity-50 font-semibold shadow-lg transition-all"
+                >
+                  {addingQuestion ? 'Adding...' : 'Add Question'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
+  );
+}
+
+export default function AdminQuestionsPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+      </div>
+    }>
+      <AdminQuestionsContent />
+    </Suspense>
   );
 }

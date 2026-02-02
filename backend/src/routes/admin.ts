@@ -31,6 +31,19 @@ export const adminRoutes = new Elysia({ prefix: '/api/admin' })
     }
   )
 
+  // Delete certification
+  .delete('/certifications/:id', async ({ params, set }) => {
+    try {
+      await prisma.certification.delete({
+        where: { id: params.id },
+      });
+      return { success: true };
+    } catch (error: any) {
+      set.status = 400;
+      return { error: 'Failed to delete certification. It may have associated data.' };
+    }
+  })
+
   // Create question with answers
   .post(
     '/questions',
@@ -56,14 +69,17 @@ export const adminRoutes = new Elysia({ prefix: '/api/admin' })
           include: { questions: { orderBy: { order: 'desc' }, take: 1 } },
         });
 
+        console.log('Auto-adding question to', exams.length, 'existing exams');
+
         if (exams.length > 0) {
-          await prisma.examQuestion.createMany({
+          const result = await prisma.examQuestion.createMany({
             data: exams.map((exam) => ({
               examId: exam.id,
               questionId: question.id,
               order: (exam.questions[0]?.order ?? -1) + 1,
             })),
           });
+          console.log('Added question to', result.count, 'exams');
         }
 
         return question;
@@ -185,29 +201,61 @@ export const adminRoutes = new Elysia({ prefix: '/api/admin' })
   // Create exam
   .post(
     '/exams',
-    async ({ body }) => {
+    async ({ body, set }) => {
       const { questionIds, ...examData } = body;
 
-      const exam = await prisma.exam.create({
-        data: {
-          ...examData,
-          questions: {
-            create: questionIds.map((questionId: string, index: number) => ({
-              questionId,
-              order: index,
-            })),
-          },
-        },
-        include: {
-          questions: {
-            include: {
-              question: true,
+      console.log('Creating exam with data:', examData);
+      console.log('Question IDs to add:', questionIds);
+
+      try {
+        // Verify all question IDs exist
+        const existingQuestions = await prisma.question.findMany({
+          where: { id: { in: questionIds } },
+          select: { id: true },
+        });
+
+        console.log('Found', existingQuestions.length, 'valid questions out of', questionIds.length);
+
+        if (existingQuestions.length !== questionIds.length) {
+          const foundIds = existingQuestions.map(q => q.id);
+          const missingIds = questionIds.filter((id: string) => !foundIds.includes(id));
+          console.error('Missing question IDs:', missingIds);
+          set.status = 400;
+          return { error: 'Some question IDs are invalid', missingIds };
+        }
+
+        const exam = await prisma.exam.create({
+          data: {
+            ...examData,
+            questions: {
+              create: questionIds.map((questionId: string, index: number) => ({
+                questionId,
+                order: index,
+              })),
             },
           },
-        },
-      });
+          include: {
+            certification: true,
+            questions: {
+              include: {
+                question: true,
+              },
+            },
+            _count: {
+              select: { questions: true },
+            },
+          },
+        });
 
-      return exam;
+        console.log('Created exam:', exam.id, 'with', exam.questions.length, 'questions');
+        console.log('Exam _count.questions:', exam._count.questions);
+
+        return exam;
+      } catch (error: any) {
+        console.error('Error creating exam:', error);
+        set.status = 500;
+        return { error: error.message };
+      }
     },
     {
       body: t.Object({
@@ -413,19 +461,24 @@ export const adminRoutes = new Elysia({ prefix: '/api/admin' })
   .put(
     '/exams/:id/questions',
     async ({ params, body }) => {
+      console.log('Updating exam questions for exam:', params.id);
+      console.log('New question IDs:', body.questionIds);
+
       // Delete all existing exam questions
-      await prisma.examQuestion.deleteMany({
+      const deleted = await prisma.examQuestion.deleteMany({
         where: { examId: params.id },
       });
+      console.log('Deleted', deleted.count, 'existing exam questions');
 
       // Create new exam questions
-      await prisma.examQuestion.createMany({
+      const created = await prisma.examQuestion.createMany({
         data: body.questionIds.map((questionId: string, index: number) => ({
           examId: params.id,
           questionId,
           order: index,
         })),
       });
+      console.log('Created', created.count, 'new exam questions');
 
       return { success: true };
     },
@@ -451,4 +504,46 @@ export const adminRoutes = new Elysia({ prefix: '/api/admin' })
         createdAt: 'desc',
       },
     });
+  })
+
+  // Sync all certification questions to exam
+  .post('/exams/:id/sync-questions', async ({ params }) => {
+    const exam = await prisma.exam.findUnique({
+      where: { id: params.id },
+      include: { questions: true },
+    });
+
+    if (!exam) {
+      throw new Error('Exam not found');
+    }
+
+    // Get all questions for this certification
+    const allQuestions = await prisma.question.findMany({
+      where: { certificationId: exam.certificationId },
+      select: { id: true },
+    });
+
+    // Get existing question IDs in exam
+    const existingQuestionIds = new Set(exam.questions.map(eq => eq.questionId));
+
+    // Find questions not yet in exam
+    const newQuestions = allQuestions.filter(q => !existingQuestionIds.has(q.id));
+
+    if (newQuestions.length === 0) {
+      return { message: 'All questions already in exam', added: 0 };
+    }
+
+    // Get highest order
+    const maxOrder = exam.questions.reduce((max, eq) => Math.max(max, eq.order), -1);
+
+    // Add missing questions
+    await prisma.examQuestion.createMany({
+      data: newQuestions.map((q, index) => ({
+        examId: exam.id,
+        questionId: q.id,
+        order: maxOrder + 1 + index,
+      })),
+    });
+
+    return { message: `Added ${newQuestions.length} questions to exam`, added: newQuestions.length };
   });

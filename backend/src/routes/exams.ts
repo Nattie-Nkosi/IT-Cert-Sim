@@ -11,7 +11,7 @@ export const examRoutes = new Elysia({ prefix: '/api/exams' })
   )
   // Get all active exams
   .get('/', async () => {
-    return await prisma.exam.findMany({
+    const exams = await prisma.exam.findMany({
       where: { isActive: true },
       include: {
         certification: true,
@@ -25,10 +25,17 @@ export const examRoutes = new Elysia({ prefix: '/api/exams' })
         createdAt: 'desc',
       },
     });
+
+    console.log('Returning', exams.length, 'active exams');
+    exams.forEach(e => console.log(`- ${e.name}: ${e._count.questions} questions`));
+
+    return exams;
   })
 
   // Get exam by ID (with questions for taking the exam)
   .get('/:id', async ({ params }) => {
+    console.log('Fetching exam:', params.id);
+
     const exam = await prisma.exam.findUnique({
       where: { id: params.id },
       include: {
@@ -52,8 +59,12 @@ export const examRoutes = new Elysia({ prefix: '/api/exams' })
       throw new Error('Exam not found');
     }
 
+    console.log('Found exam:', exam.name, 'with', exam.questions.length, 'ExamQuestion records');
+
     // Filter out any exam questions where the question was deleted
     const validQuestions = exam.questions.filter((eq: any) => eq.question !== null);
+
+    console.log('Valid questions after filter:', validQuestions.length);
 
     return {
       ...exam,
@@ -232,4 +243,40 @@ export const examRoutes = new Elysia({ prefix: '/api/exams' })
     }
 
     return attempt;
+  })
+
+  // Delete exam attempt
+  .delete('/attempts/:id', async (context: any) => {
+    const { params, headers, jwt } = context;
+    const auth = headers.authorization;
+    if (!auth || !auth.startsWith('Bearer ')) {
+      throw new Error('Unauthorized');
+    }
+
+    const token = auth.slice(7);
+    const payload = await jwt.verify(token);
+
+    if (!payload) {
+      throw new Error('Invalid token');
+    }
+
+    const user = payload as { id: string; email: string; role: string };
+
+    const attempt = await prisma.examAttempt.findUnique({
+      where: { id: params.id },
+    });
+
+    if (!attempt) {
+      throw new Error('Attempt not found');
+    }
+
+    if (attempt.userId !== user.id) {
+      throw new Error('Unauthorized');
+    }
+
+    await prisma.examAttempt.delete({
+      where: { id: params.id },
+    });
+
+    return { success: true, message: 'Exam attempt deleted' };
   });

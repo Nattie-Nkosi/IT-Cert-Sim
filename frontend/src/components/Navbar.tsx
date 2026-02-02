@@ -78,7 +78,7 @@ export default function Navbar() {
                 </Link>
                 {user.role === 'ADMIN' && (
                   <Link
-                    href="/admin/upload"
+                    href="/admin"
                     className={`px-3 py-2 text-sm font-medium rounded-md transition-colors ${
                       pathname?.startsWith('/admin')
                         ? 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400'

@@ -150,6 +150,30 @@ export default function ExamTakingClient() {
     );
   }
 
+  if (exam.questions.length === 0) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="max-w-2xl mx-auto text-center">
+          <div className="bg-yellow-50 border-2 border-yellow-200 rounded-xl p-8">
+            <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <span className="text-3xl">⚠️</span>
+            </div>
+            <h2 className="text-2xl font-bold text-yellow-800 mb-2">No Questions Available</h2>
+            <p className="text-yellow-700 mb-4">
+              This exam doesn&apos;t have any questions yet. Please contact the administrator.
+            </p>
+            <button
+              onClick={() => router.push('/exams')}
+              className="px-6 py-3 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 font-semibold transition-all"
+            >
+              Back to Exams
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   const currentQuestion = exam.questions[currentQuestionIndex]?.question;
   const progress = ((currentQuestionIndex + 1) / exam.questions.length) * 100;
   const minutes = Math.floor(timeRemaining / 60);
