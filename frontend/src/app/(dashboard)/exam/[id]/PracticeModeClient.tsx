@@ -199,13 +199,13 @@ export function PracticeModeClient({ examId }: PracticeModeClientProps) {
                     className={`flex items-start space-x-3 p-4 rounded-lg border-2 transition-colors ${
                       currentFeedback
                         ? isCorrect
-                          ? 'border-green-500 bg-green-50'
+                          ? 'border-green-500 bg-green-500/10 dark:bg-green-500/20'
                           : isSelected
-                            ? 'border-red-500 bg-red-50'
-                            : 'border-gray-200'
+                            ? 'border-red-500 bg-red-500/10 dark:bg-red-500/20'
+                            : 'border-border'
                         : isSelected
                           ? 'border-primary bg-primary/5'
-                          : 'border-gray-200 hover:border-gray-300'
+                          : 'border-border hover:border-border/80'
                     }`}
                   >
                     <Checkbox
@@ -229,10 +229,10 @@ export function PracticeModeClient({ examId }: PracticeModeClientProps) {
                       <div className="flex items-center justify-between">
                         <span>{answer.answerText}</span>
                         {currentFeedback && isCorrect && (
-                          <CheckCircle2 className="w-5 h-5 text-green-600 ml-2" />
+                          <CheckCircle2 className="w-5 h-5 text-green-600 dark:text-green-400 ml-2" />
                         )}
                         {showFeedback && !isCorrect && (
-                          <XCircle className="w-5 h-5 text-red-600 ml-2" />
+                          <XCircle className="w-5 h-5 text-red-600 dark:text-red-400 ml-2" />
                         )}
                       </div>
                     </Label>
@@ -257,13 +257,13 @@ export function PracticeModeClient({ examId }: PracticeModeClientProps) {
                     className={`flex items-start space-x-3 p-4 rounded-lg border-2 transition-colors ${
                       showFeedback
                         ? isCorrect
-                          ? 'border-green-500 bg-green-50'
+                          ? 'border-green-500 bg-green-500/10 dark:bg-green-500/20'
                           : isSelected
-                            ? 'border-red-500 bg-red-50'
-                            : 'border-gray-200'
+                            ? 'border-red-500 bg-red-500/10 dark:bg-red-500/20'
+                            : 'border-border'
                         : isSelected
                           ? 'border-primary bg-primary/5'
-                          : 'border-gray-200 hover:border-gray-300'
+                          : 'border-border hover:border-border/80'
                     }`}
                   >
                     <RadioGroupItem value={answer.id} id={answer.id} />
@@ -271,10 +271,10 @@ export function PracticeModeClient({ examId }: PracticeModeClientProps) {
                       <div className="flex items-center justify-between">
                         <span>{answer.answerText}</span>
                         {showFeedback && isCorrect && (
-                          <CheckCircle2 className="w-5 h-5 text-green-600 ml-2" />
+                          <CheckCircle2 className="w-5 h-5 text-green-600 dark:text-green-400 ml-2" />
                         )}
                         {showFeedback && isSelected && !isCorrect && (
-                          <XCircle className="w-5 h-5 text-red-600 ml-2" />
+                          <XCircle className="w-5 h-5 text-red-600 dark:text-red-400 ml-2" />
                         )}
                       </div>
                     </Label>
@@ -291,12 +291,12 @@ export function PracticeModeClient({ examId }: PracticeModeClientProps) {
           )}
 
           {currentFeedback && (
-            <Alert className={currentFeedback.correct ? 'border-green-500' : 'border-red-500'}>
+            <Alert className={currentFeedback.correct ? 'border-green-500 bg-green-500/10 dark:bg-green-500/20' : 'border-red-500 bg-red-500/10 dark:bg-red-500/20'}>
               <div className="flex items-start gap-2">
                 {currentFeedback.correct ? (
-                  <CheckCircle2 className="w-5 h-5 text-green-600 mt-0.5" />
+                  <CheckCircle2 className="w-5 h-5 text-green-600 dark:text-green-400 mt-0.5" />
                 ) : (
-                  <XCircle className="w-5 h-5 text-red-600 mt-0.5" />
+                  <XCircle className="w-5 h-5 text-red-600 dark:text-red-400 mt-0.5" />
                 )}
                 <div className="flex-1">
                   <div className="font-semibold mb-1">

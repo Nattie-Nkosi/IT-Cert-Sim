@@ -147,52 +147,52 @@ export default function HistoryPage() {
 
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <div className="group bg-gradient-to-br from-primary/10 to-primary/5 p-6 rounded-xl shadow-sm border border-primary/20 hover:shadow-md hover:scale-105 transition-all duration-200">
+        <div className="group bg-card p-6 rounded-xl shadow-sm border hover:shadow-md hover:border-primary/50 transition-all duration-200">
           <div className="flex items-center justify-between mb-3">
-            <div className="text-sm font-medium text-primary/80">
+            <div className="text-sm font-medium text-muted-foreground">
               Total Attempts
             </div>
-            <div className="w-10 h-10 bg-primary/20 rounded-lg flex items-center justify-center">
+            <div className="w-10 h-10 bg-muted rounded-lg flex items-center justify-center">
               <span className="text-lg">📝</span>
             </div>
           </div>
-          <div className="text-4xl font-bold text-primary">{stats.total}</div>
+          <div className="text-4xl font-bold">{stats.total}</div>
         </div>
 
-        <div className="group bg-gradient-to-br from-green-500/10 to-green-500/5 p-6 rounded-xl shadow-sm border border-green-500/20 hover:shadow-md hover:scale-105 transition-all duration-200">
+        <div className="group bg-card p-6 rounded-xl shadow-sm border hover:shadow-md hover:border-primary/50 transition-all duration-200">
           <div className="flex items-center justify-between mb-3">
-            <div className="text-sm font-medium text-green-700/80">
+            <div className="text-sm font-medium text-muted-foreground">
               Passed
             </div>
-            <div className="w-10 h-10 bg-green-500/20 rounded-lg flex items-center justify-center">
+            <div className="w-10 h-10 bg-muted rounded-lg flex items-center justify-center">
               <span className="text-lg">✅</span>
             </div>
           </div>
-          <div className="text-4xl font-bold text-green-600">{stats.passed}</div>
+          <div className="text-4xl font-bold">{stats.passed}</div>
         </div>
 
-        <div className="group bg-gradient-to-br from-red-500/10 to-red-500/5 p-6 rounded-xl shadow-sm border border-red-500/20 hover:shadow-md hover:scale-105 transition-all duration-200">
+        <div className="group bg-card p-6 rounded-xl shadow-sm border hover:shadow-md hover:border-primary/50 transition-all duration-200">
           <div className="flex items-center justify-between mb-3">
-            <div className="text-sm font-medium text-red-700/80">
+            <div className="text-sm font-medium text-muted-foreground">
               Failed
             </div>
-            <div className="w-10 h-10 bg-red-500/20 rounded-lg flex items-center justify-center">
+            <div className="w-10 h-10 bg-muted rounded-lg flex items-center justify-center">
               <span className="text-lg">❌</span>
             </div>
           </div>
-          <div className="text-4xl font-bold text-red-600">{stats.failed}</div>
+          <div className="text-4xl font-bold">{stats.failed}</div>
         </div>
 
-        <div className="group bg-gradient-to-br from-blue-500/10 to-blue-500/5 p-6 rounded-xl shadow-sm border border-blue-500/20 hover:shadow-md hover:scale-105 transition-all duration-200">
+        <div className="group bg-card p-6 rounded-xl shadow-sm border hover:shadow-md hover:border-primary/50 transition-all duration-200">
           <div className="flex items-center justify-between mb-3">
-            <div className="text-sm font-medium text-blue-700/80">
+            <div className="text-sm font-medium text-muted-foreground">
               Average Score
             </div>
-            <div className="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center">
+            <div className="w-10 h-10 bg-muted rounded-lg flex items-center justify-center">
               <span className="text-lg">📊</span>
             </div>
           </div>
-          <div className="text-4xl font-bold text-blue-600">{stats.averageScore}%</div>
+          <div className="text-4xl font-bold">{stats.averageScore}%</div>
         </div>
       </div>
 
@@ -208,8 +208,8 @@ export default function HistoryPage() {
                 onClick={() => setFilter('all')}
                 className={`px-5 py-2.5 rounded-lg text-sm font-semibold transition-all ${
                   filter === 'all'
-                    ? 'bg-gradient-to-r from-primary to-sky-600 text-white shadow-md'
-                    : 'bg-primary/5 hover:bg-primary/10 text-primary'
+                    ? 'bg-primary text-primary-foreground'
+                    : 'border hover:bg-accent'
                 }`}
               >
                 All ({attempts.length})
@@ -218,8 +218,8 @@ export default function HistoryPage() {
                 onClick={() => setFilter('passed')}
                 className={`px-5 py-2.5 rounded-lg text-sm font-semibold transition-all ${
                   filter === 'passed'
-                    ? 'bg-green-600 text-white shadow-md'
-                    : 'bg-green-50 hover:bg-green-100 text-green-700'
+                    ? 'bg-primary text-primary-foreground'
+                    : 'border hover:bg-accent'
                 }`}
               >
                 Passed ({stats.passed})
@@ -228,8 +228,8 @@ export default function HistoryPage() {
                 onClick={() => setFilter('failed')}
                 className={`px-5 py-2.5 rounded-lg text-sm font-semibold transition-all ${
                   filter === 'failed'
-                    ? 'bg-red-600 text-white shadow-md'
-                    : 'bg-red-50 hover:bg-red-100 text-red-700'
+                    ? 'bg-primary text-primary-foreground'
+                    : 'border hover:bg-accent'
                 }`}
               >
                 Failed ({stats.failed})
@@ -246,8 +246,8 @@ export default function HistoryPage() {
                 onClick={() => setModeFilter('all')}
                 className={`px-5 py-2.5 rounded-lg text-sm font-semibold transition-all ${
                   modeFilter === 'all'
-                    ? 'bg-gradient-to-r from-primary to-sky-600 text-white shadow-md'
-                    : 'bg-primary/5 hover:bg-primary/10 text-primary'
+                    ? 'bg-primary text-primary-foreground'
+                    : 'border hover:bg-accent'
                 }`}
               >
                 All ({attempts.length})
@@ -256,8 +256,8 @@ export default function HistoryPage() {
                 onClick={() => setModeFilter('EXAM')}
                 className={`px-5 py-2.5 rounded-lg text-sm font-semibold transition-all ${
                   modeFilter === 'EXAM'
-                    ? 'bg-purple-600 text-white shadow-md'
-                    : 'bg-purple-50 hover:bg-purple-100 text-purple-700'
+                    ? 'bg-primary text-primary-foreground'
+                    : 'border hover:bg-accent'
                 }`}
               >
                 Exam ({stats.exams})
@@ -266,8 +266,8 @@ export default function HistoryPage() {
                 onClick={() => setModeFilter('PRACTICE')}
                 className={`px-5 py-2.5 rounded-lg text-sm font-semibold transition-all ${
                   modeFilter === 'PRACTICE'
-                    ? 'bg-green-600 text-white shadow-md'
-                    : 'bg-green-50 hover:bg-green-100 text-green-700'
+                    ? 'bg-primary text-primary-foreground'
+                    : 'border hover:bg-accent'
                 }`}
               >
                 Practice ({stats.practice})
@@ -284,8 +284,8 @@ export default function HistoryPage() {
           <p className="text-muted-foreground mt-4">Loading history...</p>
         </div>
       ) : filteredAttempts.length === 0 ? (
-        <div className="text-center py-12 bg-gradient-to-br from-primary/5 to-sky-500/5 rounded-xl shadow-sm border border-primary/10">
-          <div className="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-4">
+        <div className="text-center py-12 bg-card rounded-xl shadow-sm border">
+          <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
             <span className="text-3xl">📈</span>
           </div>
           <p className="text-muted-foreground mb-4">
@@ -296,7 +296,7 @@ export default function HistoryPage() {
           {filter === 'all' && (
             <Link
               href="/exams"
-              className="inline-block px-6 py-3 bg-gradient-to-r from-primary to-sky-600 text-white rounded-lg hover:opacity-90 transition-all hover:scale-105 shadow-md font-semibold"
+              className="inline-block px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-all font-semibold"
             >
               Browse Exams
             </Link>

@@ -110,8 +110,8 @@ export default function ExamsPage() {
           <p className="text-muted-foreground mt-4">Loading exams...</p>
         </div>
       ) : exams.length === 0 ? (
-        <div className="text-center py-12 bg-gradient-to-br from-primary/5 to-sky-500/5 rounded-xl shadow-sm border border-primary/10">
-          <div className="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-4">
+        <div className="text-center py-12 bg-card rounded-xl shadow-sm border">
+          <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
             <span className="text-3xl">🎯</span>
           </div>
           <p className="text-muted-foreground mb-4">
@@ -132,10 +132,10 @@ export default function ExamsPage() {
             >
               <div className="mb-4">
                 <div className="flex items-center justify-between mb-2">
-                  <div className="text-xs font-medium text-primary/80">
+                  <div className="text-xs font-medium text-muted-foreground">
                     {exam.certification.vendor} • {exam.certification.code}
                   </div>
-                  <div className="w-10 h-10 bg-gradient-to-br from-primary/20 to-sky-500/20 rounded-lg flex items-center justify-center">
+                  <div className="w-10 h-10 bg-muted rounded-lg flex items-center justify-center">
                     <span className="text-lg">⏱️</span>
                   </div>
                 </div>
@@ -154,39 +154,39 @@ export default function ExamsPage() {
                 </p>
               )}
 
-              <div className="space-y-2 mb-4 text-sm bg-primary/5 p-4 rounded-lg">
+              <div className="space-y-2 mb-4 text-sm bg-muted/50 p-4 rounded-lg">
                 <div className="flex justify-between items-center">
                   <span className="text-muted-foreground flex items-center gap-2">
                     <span>📝</span> Questions:
                   </span>
-                  <span className="font-semibold text-primary">{exam._count.questions}</span>
+                  <span className="font-semibold">{exam._count.questions}</span>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-muted-foreground flex items-center gap-2">
                     <span>⏰</span> Duration:
                   </span>
-                  <span className="font-semibold text-primary">{exam.duration} minutes</span>
+                  <span className="font-semibold">{exam.duration} minutes</span>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-muted-foreground flex items-center gap-2">
                     <span>🎯</span> Passing Score:
                   </span>
-                  <span className="font-semibold text-primary">{exam.passingScore}%</span>
+                  <span className="font-semibold">{exam.passingScore}%</span>
                 </div>
               </div>
 
               <div className="flex gap-2">
                 <Link
                   href={`/exam/${exam.id}/practice`}
-                  className="flex-1 px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-all text-center font-semibold"
+                  className="flex-1 px-4 py-3 border-2 rounded-lg hover:border-primary hover:bg-accent transition-all text-center font-semibold"
                 >
-                  Practice
+                  📚 Practice
                 </Link>
                 <Link
                   href={`/exam/${exam.id}`}
-                  className="flex-1 px-4 py-3 bg-gradient-to-r from-primary to-sky-600 text-white rounded-lg hover:opacity-90 transition-all text-center font-semibold shadow-md"
+                  className="flex-1 px-4 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-all text-center font-semibold"
                 >
-                  Start Exam
+                  🎯 Start Exam
                 </Link>
               </div>
             </div>

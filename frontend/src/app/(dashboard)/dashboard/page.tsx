@@ -96,87 +96,87 @@ export default function DashboardPage() {
       ) : (
         <>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
-            <div className="group bg-gradient-to-br from-purple-500/10 to-purple-500/5 p-6 rounded-xl shadow-sm border border-purple-500/20 hover:shadow-md hover:scale-105 transition-all duration-200">
+            <div className="group bg-card p-6 rounded-xl shadow-sm border hover:shadow-md hover:border-primary/50 transition-all duration-200">
               <div className="flex items-center justify-between mb-3">
-                <div className="text-sm font-medium text-purple-700/80">
+                <div className="text-sm font-medium text-muted-foreground">
                   Exam Attempts
                 </div>
-                <div className="w-10 h-10 bg-purple-500/20 rounded-lg flex items-center justify-center">
+                <div className="w-10 h-10 bg-muted rounded-lg flex items-center justify-center">
                   <span className="text-lg">🎯</span>
                 </div>
               </div>
-              <div className="text-4xl font-bold text-purple-600">{stats?.examAttempts || 0}</div>
+              <div className="text-4xl font-bold">{stats?.examAttempts || 0}</div>
             </div>
 
-            <div className="group bg-gradient-to-br from-green-500/10 to-green-500/5 p-6 rounded-xl shadow-sm border border-green-500/20 hover:shadow-md hover:scale-105 transition-all duration-200">
+            <div className="group bg-card p-6 rounded-xl shadow-sm border hover:shadow-md hover:border-primary/50 transition-all duration-200">
               <div className="flex items-center justify-between mb-3">
-                <div className="text-sm font-medium text-green-700/80">
+                <div className="text-sm font-medium text-muted-foreground">
                   Practice Sessions
                 </div>
-                <div className="w-10 h-10 bg-green-500/20 rounded-lg flex items-center justify-center">
+                <div className="w-10 h-10 bg-muted rounded-lg flex items-center justify-center">
                   <span className="text-lg">📚</span>
                 </div>
               </div>
-              <div className="text-4xl font-bold text-green-600">
+              <div className="text-4xl font-bold">
                 {stats?.practiceAttempts || 0}
               </div>
             </div>
 
-            <div className="group bg-gradient-to-br from-blue-500/10 to-blue-500/5 p-6 rounded-xl shadow-sm border border-blue-500/20 hover:shadow-md hover:scale-105 transition-all duration-200">
+            <div className="group bg-card p-6 rounded-xl shadow-sm border hover:shadow-md hover:border-primary/50 transition-all duration-200">
               <div className="flex items-center justify-between mb-3">
-                <div className="text-sm font-medium text-blue-700/80">
+                <div className="text-sm font-medium text-muted-foreground">
                   Passed Exams
                 </div>
-                <div className="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center">
+                <div className="w-10 h-10 bg-muted rounded-lg flex items-center justify-center">
                   <span className="text-lg">✅</span>
                 </div>
               </div>
-              <div className="text-4xl font-bold text-blue-600">
+              <div className="text-4xl font-bold">
                 {stats?.passedExams || 0}
               </div>
             </div>
 
-            <div className="group bg-gradient-to-br from-sky-500/10 to-sky-500/5 p-6 rounded-xl shadow-sm border border-sky-500/20 hover:shadow-md hover:scale-105 transition-all duration-200">
+            <div className="group bg-card p-6 rounded-xl shadow-sm border hover:shadow-md hover:border-primary/50 transition-all duration-200">
               <div className="flex items-center justify-between mb-3">
-                <div className="text-sm font-medium text-sky-700/80">
+                <div className="text-sm font-medium text-muted-foreground">
                   Average Score
                 </div>
-                <div className="w-10 h-10 bg-sky-500/20 rounded-lg flex items-center justify-center">
+                <div className="w-10 h-10 bg-muted rounded-lg flex items-center justify-center">
                   <span className="text-lg">📊</span>
                 </div>
               </div>
-              <div className="text-4xl font-bold text-sky-600">{stats?.averageScore || 0}%</div>
+              <div className="text-4xl font-bold">{stats?.averageScore || 0}%</div>
             </div>
 
-            <div className="group bg-gradient-to-br from-primary/10 to-primary/5 p-6 rounded-xl shadow-sm border border-primary/20 hover:shadow-md hover:scale-105 transition-all duration-200">
+            <div className="group bg-card p-6 rounded-xl shadow-sm border hover:shadow-md hover:border-primary/50 transition-all duration-200">
               <div className="flex items-center justify-between mb-3">
-                <div className="text-sm font-medium text-primary/80">
+                <div className="text-sm font-medium text-muted-foreground">
                   Total Attempts
                 </div>
-                <div className="w-10 h-10 bg-primary/20 rounded-lg flex items-center justify-center">
+                <div className="w-10 h-10 bg-muted rounded-lg flex items-center justify-center">
                   <span className="text-lg">📝</span>
                 </div>
               </div>
-              <div className="text-4xl font-bold text-primary">{stats?.totalAttempts || 0}</div>
+              <div className="text-4xl font-bold">{stats?.totalAttempts || 0}</div>
             </div>
 
-            <div className="group bg-gradient-to-br from-amber-500/10 to-amber-500/5 p-6 rounded-xl shadow-sm border border-amber-500/20 hover:shadow-md hover:scale-105 transition-all duration-200">
+            <div className="group bg-card p-6 rounded-xl shadow-sm border hover:shadow-md hover:border-primary/50 transition-all duration-200">
               <div className="flex items-center justify-between mb-3">
-                <div className="text-sm font-medium text-amber-700/80">
+                <div className="text-sm font-medium text-muted-foreground">
                   Available Exams
                 </div>
-                <div className="w-10 h-10 bg-amber-500/20 rounded-lg flex items-center justify-center">
+                <div className="w-10 h-10 bg-muted rounded-lg flex items-center justify-center">
                   <span className="text-lg">🎓</span>
                 </div>
               </div>
-              <div className="text-4xl font-bold text-amber-600">
+              <div className="text-4xl font-bold">
                 {stats?.exams || 0}
               </div>
             </div>
           </div>
 
           {user.role === 'ADMIN' && (
-            <div className="mb-6 bg-gradient-to-r from-amber-500/10 to-orange-500/10 p-6 rounded-xl shadow-sm border border-amber-500/20">
+            <div className="mb-6 bg-card p-6 rounded-xl shadow-sm border">
               <h2 className="text-2xl font-bold mb-4 flex items-center">
                 <span className="mr-2">🛠️</span>
                 Admin Panel
@@ -184,25 +184,25 @@ export default function DashboardPage() {
               <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
                 <Link
                   href="/admin/questions"
-                  className="block w-full px-4 py-3 bg-gradient-to-r from-amber-600 to-orange-600 text-white rounded-lg hover:opacity-90 transition-all hover:scale-105 text-center font-semibold shadow-md"
+                  className="block w-full px-4 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-all text-center font-semibold"
                 >
                   📝 Manage Questions
                 </Link>
                 <Link
                   href="/admin/exams"
-                  className="block w-full px-4 py-3 border-2 border-amber-500/30 rounded-lg hover:border-amber-500 hover:bg-amber-50 transition-all text-center font-semibold"
+                  className="block w-full px-4 py-3 border-2 rounded-lg hover:border-primary hover:bg-accent transition-all text-center font-semibold"
                 >
                   🎯 Manage Exams
                 </Link>
                 <Link
                   href="/admin/upload"
-                  className="block w-full px-4 py-3 border-2 border-amber-500/30 rounded-lg hover:border-amber-500 hover:bg-amber-50 transition-all text-center font-semibold"
+                  className="block w-full px-4 py-3 border-2 rounded-lg hover:border-primary hover:bg-accent transition-all text-center font-semibold"
                 >
                   📤 Upload Question
                 </Link>
                 <Link
                   href="/certifications"
-                  className="block w-full px-4 py-3 border-2 border-amber-500/30 rounded-lg hover:border-amber-500 hover:bg-amber-50 transition-all text-center font-semibold"
+                  className="block w-full px-4 py-3 border-2 rounded-lg hover:border-primary hover:bg-accent transition-all text-center font-semibold"
                 >
                   🎓 Manage Certs
                 </Link>
@@ -219,33 +219,33 @@ export default function DashboardPage() {
               <div className="space-y-3">
                 <Link
                   href="/exams"
-                  className="block w-full px-6 py-4 bg-gradient-to-r from-primary to-sky-600 text-white rounded-lg hover:opacity-90 transition-all hover:scale-105 text-center font-semibold shadow-md"
+                  className="block w-full px-6 py-4 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-all text-center font-semibold"
                 >
                   🎯 Browse Exams
                 </Link>
                 <Link
                   href="/certifications"
-                  className="block w-full px-6 py-4 border-2 border-primary/20 rounded-lg hover:border-primary hover:bg-primary/5 transition-all text-center font-semibold"
+                  className="block w-full px-6 py-4 border-2 rounded-lg hover:border-primary hover:bg-accent transition-all text-center font-semibold"
                 >
                   📚 View Certifications
                 </Link>
                 <Link
                   href="/history"
-                  className="block w-full px-6 py-4 border-2 border-primary/20 rounded-lg hover:border-primary hover:bg-primary/5 transition-all text-center font-semibold"
+                  className="block w-full px-6 py-4 border-2 rounded-lg hover:border-primary hover:bg-accent transition-all text-center font-semibold"
                 >
                   📈 View My History
                 </Link>
               </div>
             </div>
 
-            <div className="bg-gradient-to-br from-primary/5 to-sky-500/5 p-8 rounded-xl shadow-sm border border-primary/10 hover:shadow-md transition-shadow">
+            <div className="bg-card p-8 rounded-xl shadow-sm border hover:shadow-md transition-shadow">
               <h2 className="text-2xl font-bold mb-6 flex items-center">
                 <span className="mr-2">🚀</span>
                 Getting Started
               </h2>
               <div className="space-y-5">
                 <div className="flex items-start">
-                  <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-primary to-sky-600 text-white rounded-lg flex items-center justify-center font-bold mr-4 shadow-sm">
+                  <div className="flex-shrink-0 w-10 h-10 bg-primary text-primary-foreground rounded-lg flex items-center justify-center font-bold mr-4">
                     1
                   </div>
                   <div>
@@ -257,7 +257,7 @@ export default function DashboardPage() {
                 </div>
 
                 <div className="flex items-start">
-                  <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-primary to-sky-600 text-white rounded-lg flex items-center justify-center font-bold mr-4 shadow-sm">
+                  <div className="flex-shrink-0 w-10 h-10 bg-primary text-primary-foreground rounded-lg flex items-center justify-center font-bold mr-4">
                     2
                   </div>
                   <div>
@@ -269,7 +269,7 @@ export default function DashboardPage() {
                 </div>
 
                 <div className="flex items-start">
-                  <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-primary to-sky-600 text-white rounded-lg flex items-center justify-center font-bold mr-4 shadow-sm">
+                  <div className="flex-shrink-0 w-10 h-10 bg-primary text-primary-foreground rounded-lg flex items-center justify-center font-bold mr-4">
                     3
                   </div>
                   <div>
