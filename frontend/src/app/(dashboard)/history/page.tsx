@@ -22,6 +22,7 @@ interface ExamAttempt {
   passed: boolean;
   startedAt: string;
   completedAt: string;
+  mode: 'EXAM' | 'PRACTICE';
   exam: {
     id: string;
     name: string;
@@ -42,6 +43,7 @@ export default function HistoryPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [filter, setFilter] = useState<'all' | 'passed' | 'failed'>('all');
+  const [modeFilter, setModeFilter] = useState<'all' | 'EXAM' | 'PRACTICE'>('all');
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [attemptToDelete, setAttemptToDelete] = useState<ExamAttempt | null>(null);
   const [deleting, setDeleting] = useState(false);
@@ -102,10 +104,17 @@ export default function HistoryPage() {
   if (!user) return null;
 
   const filteredAttempts = attempts.filter((attempt) => {
-    if (filter === 'passed') return attempt.passed;
-    if (filter === 'failed') return !attempt.passed;
-    return true;
+    const statusMatch =
+      filter === 'all' ||
+      (filter === 'passed' && attempt.passed) ||
+      (filter === 'failed' && !attempt.passed);
+    const modeMatch =
+      modeFilter === 'all' || attempt.mode === modeFilter;
+    return statusMatch && modeMatch;
   });
+
+  const examAttempts = attempts.filter((a) => a.mode === 'EXAM');
+  const practiceAttempts = attempts.filter((a) => a.mode === 'PRACTICE');
 
   const stats = {
     total: attempts.length,
@@ -115,6 +124,8 @@ export default function HistoryPage() {
       attempts.length > 0
         ? Math.round(attempts.reduce((acc, a) => acc + a.score, 0) / attempts.length)
         : 0,
+    exams: examAttempts.length,
+    practice: practiceAttempts.length,
   };
 
   return (
@@ -187,37 +198,82 @@ export default function HistoryPage() {
 
       {/* Filter */}
       <div className="bg-card p-4 rounded-xl shadow-sm border mb-6">
-        <div className="flex gap-2 flex-wrap">
-          <button
-            onClick={() => setFilter('all')}
-            className={`px-5 py-2.5 rounded-lg text-sm font-semibold transition-all ${
-              filter === 'all'
-                ? 'bg-gradient-to-r from-primary to-sky-600 text-white shadow-md'
-                : 'bg-primary/5 hover:bg-primary/10 text-primary'
-            }`}
-          >
-            All ({attempts.length})
-          </button>
-          <button
-            onClick={() => setFilter('passed')}
-            className={`px-5 py-2.5 rounded-lg text-sm font-semibold transition-all ${
-              filter === 'passed'
-                ? 'bg-green-600 text-white shadow-md'
-                : 'bg-green-50 hover:bg-green-100 text-green-700'
-            }`}
-          >
-            Passed ({stats.passed})
-          </button>
-          <button
-            onClick={() => setFilter('failed')}
-            className={`px-5 py-2.5 rounded-lg text-sm font-semibold transition-all ${
-              filter === 'failed'
-                ? 'bg-red-600 text-white shadow-md'
-                : 'bg-red-50 hover:bg-red-100 text-red-700'
-            }`}
-          >
-            Failed ({stats.failed})
-          </button>
+        <div className="space-y-3">
+          <div>
+            <label className="text-sm font-medium text-muted-foreground mb-2 block">
+              Status
+            </label>
+            <div className="flex gap-2 flex-wrap">
+              <button
+                onClick={() => setFilter('all')}
+                className={`px-5 py-2.5 rounded-lg text-sm font-semibold transition-all ${
+                  filter === 'all'
+                    ? 'bg-gradient-to-r from-primary to-sky-600 text-white shadow-md'
+                    : 'bg-primary/5 hover:bg-primary/10 text-primary'
+                }`}
+              >
+                All ({attempts.length})
+              </button>
+              <button
+                onClick={() => setFilter('passed')}
+                className={`px-5 py-2.5 rounded-lg text-sm font-semibold transition-all ${
+                  filter === 'passed'
+                    ? 'bg-green-600 text-white shadow-md'
+                    : 'bg-green-50 hover:bg-green-100 text-green-700'
+                }`}
+              >
+                Passed ({stats.passed})
+              </button>
+              <button
+                onClick={() => setFilter('failed')}
+                className={`px-5 py-2.5 rounded-lg text-sm font-semibold transition-all ${
+                  filter === 'failed'
+                    ? 'bg-red-600 text-white shadow-md'
+                    : 'bg-red-50 hover:bg-red-100 text-red-700'
+                }`}
+              >
+                Failed ({stats.failed})
+              </button>
+            </div>
+          </div>
+
+          <div>
+            <label className="text-sm font-medium text-muted-foreground mb-2 block">
+              Mode
+            </label>
+            <div className="flex gap-2 flex-wrap">
+              <button
+                onClick={() => setModeFilter('all')}
+                className={`px-5 py-2.5 rounded-lg text-sm font-semibold transition-all ${
+                  modeFilter === 'all'
+                    ? 'bg-gradient-to-r from-primary to-sky-600 text-white shadow-md'
+                    : 'bg-primary/5 hover:bg-primary/10 text-primary'
+                }`}
+              >
+                All ({attempts.length})
+              </button>
+              <button
+                onClick={() => setModeFilter('EXAM')}
+                className={`px-5 py-2.5 rounded-lg text-sm font-semibold transition-all ${
+                  modeFilter === 'EXAM'
+                    ? 'bg-purple-600 text-white shadow-md'
+                    : 'bg-purple-50 hover:bg-purple-100 text-purple-700'
+                }`}
+              >
+                Exam ({stats.exams})
+              </button>
+              <button
+                onClick={() => setModeFilter('PRACTICE')}
+                className={`px-5 py-2.5 rounded-lg text-sm font-semibold transition-all ${
+                  modeFilter === 'PRACTICE'
+                    ? 'bg-green-600 text-white shadow-md'
+                    : 'bg-green-50 hover:bg-green-100 text-green-700'
+                }`}
+              >
+                Practice ({stats.practice})
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -255,8 +311,17 @@ export default function HistoryPage() {
             >
               <div className="flex items-start justify-between">
                 <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-2">
+                  <div className="flex items-center gap-3 mb-2 flex-wrap">
                     <h3 className="text-lg font-bold group-hover:text-primary transition-colors">{attempt.exam.name}</h3>
+                    <span
+                      className={`px-3 py-1 text-xs font-bold rounded-full ${
+                        attempt.mode === 'PRACTICE'
+                          ? 'bg-green-100 text-green-700 border border-green-200'
+                          : 'bg-purple-100 text-purple-700 border border-purple-200'
+                      }`}
+                    >
+                      {attempt.mode === 'PRACTICE' ? '📚 PRACTICE' : '🎯 EXAM'}
+                    </span>
                     <span
                       className={`px-3 py-1 text-xs font-bold rounded-full ${
                         attempt.passed

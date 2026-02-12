@@ -76,6 +76,11 @@ enum Difficulty {
   HARD
 }
 
+enum AttemptMode {
+  EXAM
+  PRACTICE
+}
+
 model Answer {
   id         String   @id @default(cuid())
   answerText String   @db.Text
@@ -128,6 +133,8 @@ model ExamAttempt {
   startedAt     DateTime  @default(now())
   completedAt   DateTime?
   answers       Json      // Store user answers as JSON
+  mode          AttemptMode @default(EXAM)
+  questionFeedback Json?
 
   // Anti-cheating fields
   tabSwitchCount  Int       @default(0)

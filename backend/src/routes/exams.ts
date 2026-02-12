@@ -79,7 +79,7 @@ export const examRoutes = new Elysia({ prefix: '/api/exams' })
   .post(
     '/:id/start',
     async (context: any) => {
-      const { params, headers, jwt } = context;
+      const { params, headers, jwt, query } = context;
       const auth = headers.authorization;
       if (!auth || !auth.startsWith('Bearer ')) {
         throw new Error('Unauthorized');
@@ -93,13 +93,15 @@ export const examRoutes = new Elysia({ prefix: '/api/exams' })
 
       const user = payload as { id: string; email: string; role: string };
       const clientInfo = getClientInfo(headers as Record<string, string>);
+      const mode = query?.mode === 'PRACTICE' ? 'PRACTICE' : 'EXAM';
 
-      // Check for existing in-progress attempt
+      // Check for existing in-progress attempt with same mode
       const existingAttempt = await prisma.examAttempt.findFirst({
         where: {
           userId: user.id,
           examId: params.id,
           completedAt: null,
+          mode: mode,
         },
       });
 
@@ -109,6 +111,7 @@ export const examRoutes = new Elysia({ prefix: '/api/exams' })
           resuming: true,
           serverStartTime: existingAttempt.serverStartTime,
           tabSwitchCount: existingAttempt.tabSwitchCount,
+          mode: existingAttempt.mode,
         };
       }
 
@@ -128,6 +131,7 @@ export const examRoutes = new Elysia({ prefix: '/api/exams' })
           score: 0,
           passed: false,
           answers: {},
+          mode: mode,
           ipAddress: clientInfo.ipAddress,
           userAgent: clientInfo.userAgent,
           serverStartTime: new Date(),
@@ -136,10 +140,10 @@ export const examRoutes = new Elysia({ prefix: '/api/exams' })
 
       await logAudit({
         userId: user.id,
-        action: 'EXAM_START',
+        action: mode === 'PRACTICE' ? 'PRACTICE_START' : 'EXAM_START',
         entity: 'exam',
         entityId: params.id,
-        details: { attemptId: attempt.id, examName: exam.name },
+        details: { attemptId: attempt.id, examName: exam.name, mode },
         ...clientInfo,
       });
 
@@ -148,6 +152,7 @@ export const examRoutes = new Elysia({ prefix: '/api/exams' })
         resuming: false,
         serverStartTime: attempt.serverStartTime,
         tabSwitchCount: 0,
+        mode: attempt.mode,
       };
     }
   )
@@ -183,6 +188,11 @@ export const examRoutes = new Elysia({ prefix: '/api/exams' })
         throw new Error('Attempt already completed');
       }
 
+      // Skip tracking for practice mode
+      if (attempt.mode === 'PRACTICE') {
+        return { tabSwitchCount: 0, warning: false };
+      }
+
       const newCount = attempt.tabSwitchCount + 1;
       const shouldFlag = newCount >= 3;
 
@@ -205,6 +215,74 @@ export const examRoutes = new Elysia({ prefix: '/api/exams' })
       });
 
       return { tabSwitchCount: newCount, warning: newCount >= 2 };
+    }
+  )
+
+  // Check answer for practice mode (immediate feedback)
+  .post(
+    '/attempts/:id/check-answer',
+    async (context: any) => {
+      const { params, body, headers, jwt } = context;
+      const auth = headers.authorization;
+      if (!auth || !auth.startsWith('Bearer ')) {
+        throw new Error('Unauthorized');
+      }
+
+      const token = auth.slice(7);
+      const payload = await jwt.verify(token);
+      if (!payload) {
+        throw new Error('Invalid token');
+      }
+
+      const user = payload as { id: string; email: string; role: string };
+
+      const attempt = await prisma.examAttempt.findUnique({
+        where: { id: params.id },
+      });
+
+      if (!attempt || attempt.userId !== user.id) {
+        throw new Error('Attempt not found');
+      }
+
+      if (attempt.mode !== 'PRACTICE') {
+        throw new Error('Answer checking only available in practice mode');
+      }
+
+      const question = await prisma.question.findUnique({
+        where: { id: body.questionId },
+        include: {
+          answers: true,
+        },
+      });
+
+      if (!question) {
+        throw new Error('Question not found');
+      }
+
+      const correctAnswerIds = question.answers
+        .filter((a) => a.isCorrect)
+        .map((a) => a.id);
+
+      let isCorrect = false;
+      if (Array.isArray(body.answer)) {
+        isCorrect =
+          body.answer.length === correctAnswerIds.length &&
+          body.answer.every((id: string) => correctAnswerIds.includes(id));
+      } else {
+        isCorrect = correctAnswerIds.includes(body.answer);
+      }
+
+      return {
+        correct: isCorrect,
+        correctAnswerIds,
+        explanation: question.explanation,
+      };
+    },
+    {
+      body: t.Object({
+        questionId: t.String(),
+        answer: t.Union([t.String(), t.Array(t.String())]),
+      }),
     }
   )
 
@@ -279,9 +357,9 @@ export const examRoutes = new Elysia({ prefix: '/api/exams' })
       const passed = score >= exam.passingScore;
       const now = new Date();
 
-      // Check for time manipulation if we have a start time
+      // Check for time manipulation if we have a start time (skip for practice mode)
       let timeViolation = false;
-      if (attempt?.serverStartTime) {
+      if (attempt?.serverStartTime && attempt.mode !== 'PRACTICE') {
         const elapsedMinutes = (now.getTime() - attempt.serverStartTime.getTime()) / 60000;
         const allowedMinutes = exam.duration + 1; // 1 minute grace period
         if (elapsedMinutes > allowedMinutes) {
@@ -355,7 +433,7 @@ export const examRoutes = new Elysia({ prefix: '/api/exams' })
 
   // Get user's exam attempts
   .get('/attempts/my', async (context: any) => {
-    const { headers, jwt } = context;
+    const { headers, jwt, query } = context;
     // Manual auth check
     const auth = headers.authorization;
     if (!auth || !auth.startsWith('Bearer ')) {
@@ -371,8 +449,13 @@ export const examRoutes = new Elysia({ prefix: '/api/exams' })
 
     const user = payload as { id: string; email: string; role: string };
 
+    const whereClause: any = { userId: user.id };
+    if (query?.mode && (query.mode === 'EXAM' || query.mode === 'PRACTICE')) {
+      whereClause.mode = query.mode;
+    }
+
     return await prisma.examAttempt.findMany({
-      where: { userId: user.id },
+      where: whereClause,
       include: {
         exam: {
           include: {

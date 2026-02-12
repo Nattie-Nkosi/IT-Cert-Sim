@@ -175,12 +175,20 @@ export default function ExamsPage() {
                 </div>
               </div>
 
-              <Link
-                href={`/exam/${exam.id}`}
-                className="block w-full px-4 py-3 bg-gradient-to-r from-primary to-sky-600 text-white rounded-lg hover:opacity-90 transition-all hover:scale-105 text-center font-semibold shadow-md"
-              >
-                Start Exam
-              </Link>
+              <div className="flex gap-2">
+                <Link
+                  href={`/exam/${exam.id}/practice`}
+                  className="flex-1 px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-all text-center font-semibold"
+                >
+                  Practice
+                </Link>
+                <Link
+                  href={`/exam/${exam.id}`}
+                  className="flex-1 px-4 py-3 bg-gradient-to-r from-primary to-sky-600 text-white rounded-lg hover:opacity-90 transition-all text-center font-semibold shadow-md"
+                >
+                  Start Exam
+                </Link>
+              </div>
             </div>
           ))}
         </div>
