@@ -140,7 +140,7 @@ export default function HistoryPage() {
       </div>
 
       {error && (
-        <div className="p-4 mb-6 bg-red-50 text-red-700 rounded-lg border border-red-200">
+        <div className="p-4 mb-6 bg-red-500/10 dark:bg-red-500/20 text-red-700 dark:text-red-400 rounded-lg border border-red-500/30">
           {error}
         </div>
       )}
@@ -314,19 +314,19 @@ export default function HistoryPage() {
                   <div className="flex items-center gap-3 mb-2 flex-wrap">
                     <h3 className="text-lg font-bold group-hover:text-primary transition-colors">{attempt.exam.name}</h3>
                     <span
-                      className={`px-3 py-1 text-xs font-bold rounded-full ${
+                      className={`px-3 py-1 text-xs font-bold rounded-full border ${
                         attempt.mode === 'PRACTICE'
-                          ? 'bg-green-100 text-green-700 border border-green-200'
-                          : 'bg-purple-100 text-purple-700 border border-purple-200'
+                          ? 'bg-green-500/10 dark:bg-green-500/20 text-green-700 dark:text-green-400 border-green-500/30'
+                          : 'bg-purple-500/10 dark:bg-purple-500/20 text-purple-700 dark:text-purple-400 border-purple-500/30'
                       }`}
                     >
                       {attempt.mode === 'PRACTICE' ? '📚 PRACTICE' : '🎯 EXAM'}
                     </span>
                     <span
-                      className={`px-3 py-1 text-xs font-bold rounded-full ${
+                      className={`px-3 py-1 text-xs font-bold rounded-full border ${
                         attempt.passed
-                          ? 'bg-green-100 text-green-700 border border-green-200'
-                          : 'bg-red-100 text-red-700 border border-red-200'
+                          ? 'bg-green-500/10 dark:bg-green-500/20 text-green-700 dark:text-green-400 border-green-500/30'
+                          : 'bg-red-500/10 dark:bg-red-500/20 text-red-700 dark:text-red-400 border-red-500/30'
                       }`}
                     >
                       {attempt.passed ? '✅ PASSED' : '❌ FAILED'}
@@ -372,7 +372,7 @@ export default function HistoryPage() {
                   </Link>
                   <button
                     onClick={() => handleDeleteClick(attempt)}
-                    className="px-4 py-2 border-2 border-red-200 text-red-600 rounded-lg hover:bg-red-50 hover:border-red-300 text-center text-sm font-semibold whitespace-nowrap transition-all"
+                    className="px-4 py-2 border-2 border-red-500/30 text-red-600 dark:text-red-400 rounded-lg hover:bg-red-500/10 hover:border-red-500/50 text-center text-sm font-semibold whitespace-nowrap transition-all"
                   >
                     Delete
                   </button>

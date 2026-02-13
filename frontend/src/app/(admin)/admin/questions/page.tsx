@@ -345,13 +345,13 @@ function AdminQuestionsContent() {
         <div className="flex gap-3">
           <button
             onClick={openAddModal}
-            className="px-6 py-3 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-lg hover:opacity-90 font-semibold shadow-lg transition-all hover:scale-105"
+            className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 font-semibold shadow-lg transition-all"
           >
             Add Question
           </button>
           <button
             onClick={() => setShowUploadModal(true)}
-            className="px-6 py-3 bg-gradient-to-r from-primary to-sky-600 text-white rounded-lg hover:opacity-90 font-semibold shadow-lg transition-all hover:scale-105"
+            className="px-6 py-3 border-2 border-primary/20 rounded-lg hover:border-primary hover:bg-accent font-semibold transition-all"
           >
             Upload from PDF
           </button>
@@ -359,13 +359,13 @@ function AdminQuestionsContent() {
       </div>
 
       {error && (
-        <div className="p-4 mb-6 bg-red-50 text-red-700 rounded-lg border border-red-200">
+        <div className="p-4 mb-6 bg-red-500/10 dark:bg-red-500/20 text-red-700 dark:text-red-400 rounded-lg border border-red-500/30">
           {error}
         </div>
       )}
 
       {success && (
-        <div className="p-4 mb-6 bg-green-50 text-green-700 rounded-lg border border-green-200">
+        <div className="p-4 mb-6 bg-green-500/10 dark:bg-green-500/20 text-green-700 dark:text-green-400 rounded-lg border border-green-500/30">
           {success}
         </div>
       )}
@@ -394,21 +394,21 @@ function AdminQuestionsContent() {
           <p className="text-muted-foreground mt-4">Loading questions...</p>
         </div>
       ) : questions.length === 0 ? (
-        <div className="text-center py-12 bg-gradient-to-br from-primary/5 to-sky-500/5 rounded-xl shadow-sm border border-primary/10">
-          <div className="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-4">
+        <div className="text-center py-12 bg-card rounded-xl shadow-sm border">
+          <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
             <span className="text-3xl">📝</span>
           </div>
           <p className="text-muted-foreground mb-4">No questions found</p>
           <div className="flex gap-3 justify-center">
             <button
               onClick={openAddModal}
-              className="px-6 py-3 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-lg hover:opacity-90 transition-all hover:scale-105 shadow-md font-semibold"
+              className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-all shadow-md font-semibold"
             >
               Add Question
             </button>
             <button
               onClick={() => setShowUploadModal(true)}
-              className="px-6 py-3 bg-gradient-to-r from-primary to-sky-600 text-white rounded-lg hover:opacity-90 transition-all hover:scale-105 shadow-md font-semibold"
+              className="px-6 py-3 border-2 border-primary/20 rounded-lg hover:border-primary hover:bg-accent transition-all font-semibold"
             >
               Upload from PDF
             </button>
@@ -427,15 +427,15 @@ function AdminQuestionsContent() {
                     <span className="text-sm font-semibold px-3 py-1 bg-primary/10 text-primary rounded-full">
                       #{index + 1}
                     </span>
-                    <span className="text-sm font-semibold px-3 py-1 bg-blue-50 text-blue-700 rounded-full">
+                    <span className="text-sm font-semibold px-3 py-1 bg-blue-500/10 dark:bg-blue-500/20 text-blue-700 dark:text-blue-400 rounded-full">
                       {question.questionType.replace('_', ' ')}
                     </span>
                     <span className={`text-sm font-semibold px-3 py-1 rounded-full ${
                       question.difficulty === 'EASY'
-                        ? 'bg-green-50 text-green-700'
+                        ? 'bg-green-500/10 dark:bg-green-500/20 text-green-700 dark:text-green-400'
                         : question.difficulty === 'MEDIUM'
-                        ? 'bg-yellow-50 text-yellow-700'
-                        : 'bg-red-50 text-red-700'
+                        ? 'bg-yellow-500/10 dark:bg-yellow-500/20 text-yellow-700 dark:text-yellow-400'
+                        : 'bg-red-500/10 dark:bg-red-500/20 text-red-700 dark:text-red-400'
                     }`}>
                       {question.difficulty}
                     </span>
@@ -454,7 +454,7 @@ function AdminQuestionsContent() {
                   </button>
                   <button
                     onClick={() => handleDeleteQuestion(question.id)}
-                    className="px-4 py-2 border-2 border-red-200 rounded-lg hover:border-red-500 hover:bg-red-50 text-red-600 text-sm font-semibold transition-all"
+                    className="px-4 py-2 border-2 border-red-500/30 rounded-lg hover:border-red-500/50 hover:bg-red-500/10 text-red-600 dark:text-red-400 text-sm font-semibold transition-all"
                   >
                     Delete
                   </button>
@@ -467,13 +467,13 @@ function AdminQuestionsContent() {
                     key={answer.id}
                     className={`p-3 rounded border-2 ${
                       answer.isCorrect
-                        ? 'border-green-500 bg-green-50'
+                        ? 'border-green-500 bg-green-500/10 dark:bg-green-500/20'
                         : 'border-border'
                     }`}
                   >
                     <div className="flex items-center">
                       {answer.isCorrect && (
-                        <span className="mr-2 font-bold text-green-600">✓</span>
+                        <span className="mr-2 font-bold text-green-600 dark:text-green-400">✓</span>
                       )}
                       <span>{answer.answerText}</span>
                     </div>
@@ -482,7 +482,7 @@ function AdminQuestionsContent() {
               </div>
 
               {question.explanation && (
-                <div className="p-3 bg-blue-50 border-l-4 border-blue-500 text-sm">
+                <div className="p-3 bg-muted/50 border-l-4 border-primary text-sm">
                   <strong>Explanation:</strong> {question.explanation}
                 </div>
               )}
@@ -512,7 +512,7 @@ function AdminQuestionsContent() {
 
             <div className="p-6">
               {error && (
-                <div className="p-4 mb-4 bg-red-50 text-red-700 rounded-lg border border-red-200">
+                <div className="p-4 mb-4 bg-red-500/10 dark:bg-red-500/20 text-red-700 dark:text-red-400 rounded-lg border border-red-500/30">
                   {error}
                 </div>
               )}
@@ -575,7 +575,7 @@ function AdminQuestionsContent() {
                           <span className="text-xs font-semibold px-2 py-1 bg-primary/10 text-primary rounded">
                             Q{q.questionNumber}
                           </span>
-                          <span className="text-xs font-semibold px-2 py-1 bg-blue-50 text-blue-700 rounded">
+                          <span className="text-xs font-semibold px-2 py-1 bg-blue-500/10 dark:bg-blue-500/20 text-blue-700 dark:text-blue-400 rounded">
                             {q.questionType}
                           </span>
                         </div>
@@ -586,7 +586,7 @@ function AdminQuestionsContent() {
                               key={idx}
                               className={`text-sm p-2 rounded ${
                                 answer.isCorrect
-                                  ? 'bg-green-50 text-green-700 font-semibold'
+                                  ? 'bg-green-500/10 dark:bg-green-500/20 text-green-700 dark:text-green-400 font-semibold'
                                   : 'bg-muted'
                               }`}
                             >
@@ -601,7 +601,7 @@ function AdminQuestionsContent() {
                   <button
                     onClick={handleBulkUpload}
                     disabled={!uploadCertificationId || uploading}
-                    className="w-full px-6 py-3 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-lg hover:opacity-90 disabled:opacity-50 font-semibold shadow-lg transition-all"
+                    className="w-full px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 disabled:opacity-50 font-semibold shadow-lg transition-all"
                   >
                     {uploading ? 'Uploading...' : `Upload ${parsedQuestions.length} Questions`}
                   </button>
@@ -716,7 +716,7 @@ function AdminQuestionsContent() {
 
                 <button
                   onClick={handleUpdateQuestion}
-                  className="w-full px-6 py-3 bg-gradient-to-r from-primary to-sky-600 text-white rounded-lg hover:opacity-90 font-semibold shadow-lg transition-all"
+                  className="w-full px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 font-semibold shadow-lg transition-all"
                 >
                   Update Question
                 </button>
@@ -743,7 +743,7 @@ function AdminQuestionsContent() {
 
             <div className="p-6">
               {error && (
-                <div className="p-4 mb-4 bg-red-50 text-red-700 rounded-lg border border-red-200 text-sm">
+                <div className="p-4 mb-4 bg-red-500/10 dark:bg-red-500/20 text-red-700 dark:text-red-400 rounded-lg border border-red-500/30 text-sm">
                   {error}
                 </div>
               )}
@@ -863,7 +863,7 @@ function AdminQuestionsContent() {
                 <button
                   onClick={handleAddQuestion}
                   disabled={addingQuestion || !newQuestion.questionText || !newQuestion.certificationId}
-                  className="w-full px-6 py-3 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-lg hover:opacity-90 disabled:opacity-50 font-semibold shadow-lg transition-all"
+                  className="w-full px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 disabled:opacity-50 font-semibold shadow-lg transition-all"
                 >
                   {addingQuestion ? 'Adding...' : 'Add Question'}
                 </button>

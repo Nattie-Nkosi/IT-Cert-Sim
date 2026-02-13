@@ -66,8 +66,6 @@ export default function AdminDashboard() {
       description: 'Create and manage IT certifications (e.g., CompTIA A+, Microsoft MD-102)',
       href: '/admin/certifications',
       icon: '📜',
-      color: 'from-blue-500/10 to-blue-600/5',
-      borderColor: 'border-blue-500/20',
       count: stats.certifications,
       countLabel: 'certifications',
     },
@@ -76,8 +74,6 @@ export default function AdminDashboard() {
       description: 'Upload individual questions, bulk import from PDF, or edit existing questions',
       href: '/admin/questions',
       icon: '❓',
-      color: 'from-purple-500/10 to-purple-600/5',
-      borderColor: 'border-purple-500/20',
       count: stats.questions,
       countLabel: 'questions',
     },
@@ -86,8 +82,6 @@ export default function AdminDashboard() {
       description: 'Create exams by selecting questions, set duration and passing scores',
       href: '/admin/exams',
       icon: '📝',
-      color: 'from-green-500/10 to-green-600/5',
-      borderColor: 'border-green-500/20',
       count: stats.exams,
       countLabel: 'exams',
     },
@@ -96,24 +90,18 @@ export default function AdminDashboard() {
       description: 'Quickly add a single question with answers to a certification',
       href: '/admin/upload',
       icon: '⚡',
-      color: 'from-amber-500/10 to-amber-600/5',
-      borderColor: 'border-amber-500/20',
     },
     {
       title: 'Audit Logs',
       description: 'Monitor user activity, login attempts, and security events',
       href: '/admin/audit-logs',
       icon: '📋',
-      color: 'from-slate-500/10 to-slate-600/5',
-      borderColor: 'border-slate-500/20',
     },
     {
       title: 'Flagged Attempts',
       description: 'Review exam attempts flagged for suspicious activity',
       href: '/admin/flagged-attempts',
       icon: '🚩',
-      color: 'from-red-500/10 to-red-600/5',
-      borderColor: 'border-red-500/20',
     },
   ];
 
@@ -131,32 +119,32 @@ export default function AdminDashboard() {
       {/* Stats Overview */}
       {!loading && (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-          <div className="bg-gradient-to-br from-blue-500/10 to-blue-600/5 p-6 rounded-xl border border-blue-500/20">
-            <div className="text-3xl font-bold text-blue-600">{stats.certifications}</div>
+          <div className="bg-card p-6 rounded-xl border hover:shadow-md transition-all">
+            <div className="text-3xl font-bold text-blue-600 dark:text-blue-400">{stats.certifications}</div>
             <div className="text-sm text-muted-foreground">Certifications</div>
           </div>
-          <div className="bg-gradient-to-br from-purple-500/10 to-purple-600/5 p-6 rounded-xl border border-purple-500/20">
-            <div className="text-3xl font-bold text-purple-600">{stats.questions}</div>
+          <div className="bg-card p-6 rounded-xl border hover:shadow-md transition-all">
+            <div className="text-3xl font-bold text-purple-600 dark:text-purple-400">{stats.questions}</div>
             <div className="text-sm text-muted-foreground">Questions</div>
           </div>
-          <div className="bg-gradient-to-br from-green-500/10 to-green-600/5 p-6 rounded-xl border border-green-500/20">
-            <div className="text-3xl font-bold text-green-600">{stats.exams}</div>
+          <div className="bg-card p-6 rounded-xl border hover:shadow-md transition-all">
+            <div className="text-3xl font-bold text-green-600 dark:text-green-400">{stats.exams}</div>
             <div className="text-sm text-muted-foreground">Exams</div>
           </div>
         </div>
       )}
 
       {/* Workflow Guide */}
-      <div className="bg-gradient-to-r from-primary/5 to-sky-500/5 border border-primary/20 rounded-xl p-6 mb-10">
+      <div className="bg-card border rounded-xl p-6 mb-10">
         <h2 className="text-lg font-bold mb-3">Quick Start Guide</h2>
         <div className="flex flex-wrap gap-2 items-center text-sm">
-          <span className="px-3 py-1.5 bg-primary/10 rounded-lg font-medium">1. Create Certification</span>
+          <span className="px-3 py-1.5 bg-muted rounded-lg font-medium">1. Create Certification</span>
           <span className="text-muted-foreground">→</span>
-          <span className="px-3 py-1.5 bg-primary/10 rounded-lg font-medium">2. Add Questions</span>
+          <span className="px-3 py-1.5 bg-muted rounded-lg font-medium">2. Add Questions</span>
           <span className="text-muted-foreground">→</span>
-          <span className="px-3 py-1.5 bg-primary/10 rounded-lg font-medium">3. Create Exam</span>
+          <span className="px-3 py-1.5 bg-muted rounded-lg font-medium">3. Create Exam</span>
           <span className="text-muted-foreground">→</span>
-          <span className="px-3 py-1.5 bg-green-100 text-green-700 rounded-lg font-medium">Ready for Students!</span>
+          <span className="px-3 py-1.5 bg-green-500/10 dark:bg-green-500/20 text-green-700 dark:text-green-400 rounded-lg font-medium">Ready for Students!</span>
         </div>
       </div>
 
@@ -166,14 +154,14 @@ export default function AdminDashboard() {
           <Link
             key={section.href}
             href={section.href}
-            className={`group bg-gradient-to-br ${section.color} p-6 rounded-xl border ${section.borderColor} hover:shadow-lg transition-all hover:scale-[1.02]`}
+            className="group bg-card p-6 rounded-xl border hover:shadow-lg hover:border-primary/50 transition-all"
           >
             <div className="flex items-start justify-between mb-4">
-              <div className="w-12 h-12 bg-white/50 dark:bg-white/10 rounded-xl flex items-center justify-center text-2xl shadow-sm">
+              <div className="w-12 h-12 bg-muted rounded-xl flex items-center justify-center text-2xl">
                 {section.icon}
               </div>
               {section.count !== undefined && (
-                <span className="px-3 py-1 bg-white/50 dark:bg-white/10 rounded-lg text-sm font-bold">
+                <span className="px-3 py-1 bg-muted rounded-lg text-sm font-bold">
                   {section.count} {section.countLabel}
                 </span>
               )}

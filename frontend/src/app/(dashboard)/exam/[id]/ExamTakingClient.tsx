@@ -217,7 +217,7 @@ export default function ExamTakingClient() {
   if (error || !exam) {
     return (
       <div className="container mx-auto px-4 py-8">
-        <div className="p-4 bg-red-50 text-red-700 rounded-lg border border-red-200 mb-4">
+        <div className="p-4 bg-red-500/10 dark:bg-red-500/20 text-red-700 dark:text-red-400 rounded-lg border border-red-500/30 mb-4">
           {error || 'Exam not found'}
         </div>
       </div>
@@ -228,12 +228,12 @@ export default function ExamTakingClient() {
     return (
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-2xl mx-auto text-center">
-          <div className="bg-yellow-50 border-2 border-yellow-200 rounded-xl p-8">
-            <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <div className="bg-yellow-500/10 dark:bg-yellow-500/20 border-2 border-yellow-500/30 rounded-xl p-8">
+            <div className="w-16 h-16 bg-yellow-500/10 dark:bg-yellow-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
               <span className="text-3xl">⚠️</span>
             </div>
-            <h2 className="text-2xl font-bold text-yellow-800 mb-2">No Questions Available</h2>
-            <p className="text-yellow-700 mb-4">
+            <h2 className="text-2xl font-bold text-yellow-800 dark:text-yellow-300 mb-2">No Questions Available</h2>
+            <p className="text-yellow-700 dark:text-yellow-400 mb-4">
               This exam doesn&apos;t have any questions yet. Please contact the administrator.
             </p>
             <button
@@ -272,7 +272,7 @@ export default function ExamTakingClient() {
       {tabSwitchCount > 0 && (
         <div className="fixed top-4 right-4 z-50">
           <div className={`px-3 py-2 rounded-lg text-sm font-semibold ${
-            tabSwitchCount >= 3 ? 'bg-red-100 text-red-700 border border-red-300' : 'bg-yellow-100 text-yellow-700 border border-yellow-300'
+            tabSwitchCount >= 3 ? 'bg-red-500/10 dark:bg-red-500/20 text-red-700 dark:text-red-400 border border-red-500/30' : 'bg-yellow-500/10 dark:bg-yellow-500/20 text-yellow-700 dark:text-yellow-400 border border-yellow-500/30'
           }`}>
             Tab Switches: {tabSwitchCount}
           </div>
@@ -293,7 +293,7 @@ export default function ExamTakingClient() {
             <div className="text-right">
               <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg ${
                 timeRemaining < 300
-                  ? 'bg-red-50 border-2 border-red-500'
+                  ? 'bg-red-500/10 dark:bg-red-500/20 border-2 border-red-500'
                   : 'bg-gradient-to-br from-primary/10 to-sky-500/10 border-2 border-primary/20'
               }`}>
                 <span className="text-xl">{timeRemaining < 300 ? '⚠️' : '⏰'}</span>
@@ -334,10 +334,10 @@ export default function ExamTakingClient() {
                 </span>
                 <span className={`text-sm font-semibold px-4 py-2 rounded-full border ${
                   currentQuestion.difficulty === 'EASY'
-                    ? 'bg-green-50 text-green-700 border-green-200'
+                    ? 'bg-green-500/10 dark:bg-green-500/20 text-green-700 dark:text-green-400 border-green-500/30'
                     : currentQuestion.difficulty === 'MEDIUM'
-                    ? 'bg-blue-50 text-blue-700 border-blue-200'
-                    : 'bg-red-50 text-red-700 border-red-200'
+                    ? 'bg-blue-500/10 dark:bg-blue-500/20 text-blue-700 dark:text-blue-400 border-blue-500/30'
+                    : 'bg-red-500/10 dark:bg-red-500/20 text-red-700 dark:text-red-400 border-red-500/30'
                 }`}>
                   {currentQuestion.difficulty}
                 </span>

@@ -273,20 +273,20 @@ export default function AdminExamsPage() {
             setError('');
             setSuccess('');
           }}
-          className="px-6 py-3 bg-gradient-to-r from-primary to-sky-600 text-white rounded-lg hover:opacity-90 font-semibold shadow-lg transition-all hover:scale-105"
+          className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 font-semibold shadow-lg transition-all"
         >
           Create New Exam
         </button>
       </div>
 
       {error && (
-        <div className="p-4 mb-6 bg-red-50 text-red-700 rounded-lg border border-red-200">
+        <div className="p-4 mb-6 bg-red-500/10 dark:bg-red-500/20 text-red-700 dark:text-red-400 rounded-lg border border-red-500/30">
           {error}
         </div>
       )}
 
       {success && (
-        <div className="p-4 mb-6 bg-green-50 text-green-700 rounded-lg border border-green-200">
+        <div className="p-4 mb-6 bg-green-500/10 dark:bg-green-500/20 text-green-700 dark:text-green-400 rounded-lg border border-green-500/30">
           {success}
         </div>
       )}
@@ -297,8 +297,8 @@ export default function AdminExamsPage() {
           <p className="text-muted-foreground mt-4">Loading exams...</p>
         </div>
       ) : exams.length === 0 ? (
-        <div className="text-center py-12 bg-gradient-to-br from-primary/5 to-sky-500/5 rounded-xl shadow-sm border border-primary/10">
-          <div className="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-4">
+        <div className="text-center py-12 bg-card rounded-xl shadow-sm border">
+          <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
             <span className="text-3xl">🎯</span>
           </div>
           <p className="text-muted-foreground mb-4">No exams found</p>
@@ -308,7 +308,7 @@ export default function AdminExamsPage() {
               setError('');
               setSuccess('');
             }}
-            className="inline-block px-6 py-3 bg-gradient-to-r from-primary to-sky-600 text-white rounded-lg hover:opacity-90 transition-all hover:scale-105 shadow-md font-semibold"
+            className="inline-block px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-all shadow-md font-semibold"
           >
             Create First Exam
           </button>
@@ -325,7 +325,7 @@ export default function AdminExamsPage() {
                 <span
                   className={`px-3 py-1 text-xs font-bold rounded-full ${
                     exam.isActive
-                      ? 'bg-green-100 text-green-700'
+                      ? 'bg-green-500/10 dark:bg-green-500/20 text-green-700 dark:text-green-400'
                       : 'bg-muted text-muted-foreground'
                   }`}
                 >
@@ -397,7 +397,7 @@ export default function AdminExamsPage() {
 
             <div className="p-6">
               {error && (
-                <div className="p-4 mb-4 bg-red-50 text-red-700 rounded-lg border border-red-200">
+                <div className="p-4 mb-4 bg-red-500/10 dark:bg-red-500/20 text-red-700 dark:text-red-400 rounded-lg border border-red-500/30">
                   {error}
                 </div>
               )}
@@ -578,15 +578,15 @@ export default function AdminExamsPage() {
                             <div className="flex-1">
                               <p className="text-sm font-medium">{question.questionText}</p>
                               <div className="flex gap-2 mt-1">
-                                <span className="text-xs px-2 py-1 bg-blue-50 text-blue-700 rounded">
+                                <span className="text-xs px-2 py-1 bg-blue-500/10 dark:bg-blue-500/20 text-blue-700 dark:text-blue-400 rounded">
                                   {question.questionType}
                                 </span>
                                 <span className={`text-xs px-2 py-1 rounded ${
                                   question.difficulty === 'EASY'
-                                    ? 'bg-green-50 text-green-700'
+                                    ? 'bg-green-500/10 dark:bg-green-500/20 text-green-700 dark:text-green-400'
                                     : question.difficulty === 'MEDIUM'
-                                    ? 'bg-yellow-50 text-yellow-700'
-                                    : 'bg-red-50 text-red-700'
+                                    ? 'bg-yellow-500/10 dark:bg-yellow-500/20 text-yellow-700 dark:text-yellow-400'
+                                    : 'bg-red-500/10 dark:bg-red-500/20 text-red-700 dark:text-red-400'
                                 }`}>
                                   {question.difficulty}
                                 </span>
@@ -603,7 +603,7 @@ export default function AdminExamsPage() {
                 <button
                   onClick={handleCreateExam}
                   disabled={!examName || !examCertificationId || selectedQuestions.length === 0}
-                  className="w-full px-6 py-3 bg-gradient-to-r from-primary to-sky-600 text-white rounded-lg hover:opacity-90 disabled:opacity-50 font-semibold shadow-lg transition-all"
+                  className="w-full px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 disabled:opacity-50 font-semibold shadow-lg transition-all"
                 >
                   Create Exam with {selectedQuestions.length} Questions
                 </button>
@@ -635,13 +635,13 @@ export default function AdminExamsPage() {
 
             <div className="p-6">
               {error && (
-                <div className="p-4 mb-4 bg-red-50 text-red-700 rounded-lg border border-red-200">
+                <div className="p-4 mb-4 bg-red-500/10 dark:bg-red-500/20 text-red-700 dark:text-red-400 rounded-lg border border-red-500/30">
                   {error}
                 </div>
               )}
 
-              <div className="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                <p className="text-sm text-blue-800">
+              <div className="mb-4 p-4 bg-blue-500/10 dark:bg-blue-500/20 border border-blue-500/30 rounded-lg">
+                <p className="text-sm text-blue-800 dark:text-blue-300">
                   <strong>Note:</strong> Select which questions should be included in this exam.
                   Currently selected: {selectedQuestions.length} questions
                 </p>
@@ -675,15 +675,15 @@ export default function AdminExamsPage() {
                         <div className="flex-1">
                           <p className="text-sm font-medium">{question.questionText}</p>
                           <div className="flex gap-2 mt-1">
-                            <span className="text-xs px-2 py-1 bg-blue-50 text-blue-700 rounded">
+                            <span className="text-xs px-2 py-1 bg-blue-500/10 dark:bg-blue-500/20 text-blue-700 dark:text-blue-400 rounded">
                               {question.questionType}
                             </span>
                             <span className={`text-xs px-2 py-1 rounded ${
                               question.difficulty === 'EASY'
-                                ? 'bg-green-50 text-green-700'
+                                ? 'bg-green-500/10 dark:bg-green-500/20 text-green-700 dark:text-green-400'
                                 : question.difficulty === 'MEDIUM'
-                                ? 'bg-yellow-50 text-yellow-700'
-                                : 'bg-red-50 text-red-700'
+                                ? 'bg-yellow-500/10 dark:bg-yellow-500/20 text-yellow-700 dark:text-yellow-400'
+                                : 'bg-red-500/10 dark:bg-red-500/20 text-red-700 dark:text-red-400'
                             }`}>
                               {question.difficulty}
                             </span>
@@ -698,7 +698,7 @@ export default function AdminExamsPage() {
               <button
                 onClick={handleUpdateExamQuestions}
                 disabled={selectedQuestions.length === 0}
-                className="w-full mt-6 px-6 py-3 bg-gradient-to-r from-primary to-sky-600 text-white rounded-lg hover:opacity-90 disabled:opacity-50 font-semibold shadow-lg transition-all"
+                className="w-full mt-6 px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 disabled:opacity-50 font-semibold shadow-lg transition-all"
               >
                 Update Exam with {selectedQuestions.length} Questions
               </button>

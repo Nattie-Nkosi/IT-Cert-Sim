@@ -72,7 +72,7 @@ export default function CertificationsPage() {
       </div>
 
       {error && (
-        <div className="p-4 mb-6 bg-red-50 text-red-700 rounded-lg border border-red-200">
+        <div className="p-4 mb-6 bg-red-500/10 dark:bg-red-500/20 text-red-700 dark:text-red-400 rounded-lg border border-red-500/30">
           {error}
         </div>
       )}

@@ -61,7 +61,7 @@ export default function LoginPage() {
           {error && (
             <div className={`p-3 rounded-md text-sm ${
               isLocked
-                ? 'bg-orange-100 text-orange-700 border border-orange-200'
+                ? 'bg-orange-500/10 dark:bg-orange-500/20 text-orange-700 dark:text-orange-400 border border-orange-500/30'
                 : 'bg-destructive/10 text-destructive'
             }`}>
               {isLocked && <span className="font-bold">🔒 </span>}
@@ -70,7 +70,7 @@ export default function LoginPage() {
           )}
 
           {warning && !isLocked && (
-            <div className="p-3 bg-yellow-100 text-yellow-700 rounded-md text-sm border border-yellow-200">
+            <div className="p-3 bg-yellow-500/10 dark:bg-yellow-500/20 text-yellow-700 dark:text-yellow-400 rounded-md text-sm border border-yellow-500/30">
               ⚠️ {warning}
             </div>
           )}

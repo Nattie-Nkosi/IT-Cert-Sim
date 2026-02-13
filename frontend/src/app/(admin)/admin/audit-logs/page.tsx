@@ -18,18 +18,18 @@ interface AuditLog {
 }
 
 const actionColors: Record<string, string> = {
-  LOGIN: 'bg-green-100 text-green-700',
-  LOGOUT: 'bg-gray-100 text-gray-700',
-  LOGIN_FAILED: 'bg-red-100 text-red-700',
-  REGISTER: 'bg-blue-100 text-blue-700',
-  EXAM_START: 'bg-purple-100 text-purple-700',
-  EXAM_SUBMIT: 'bg-indigo-100 text-indigo-700',
-  EXAM_TAB_SWITCH: 'bg-yellow-100 text-yellow-700',
-  EXAM_FLAGGED: 'bg-red-100 text-red-700',
-  ADMIN_CREATE: 'bg-teal-100 text-teal-700',
-  ADMIN_UPDATE: 'bg-cyan-100 text-cyan-700',
-  ADMIN_DELETE: 'bg-orange-100 text-orange-700',
-  SECURITY_EVENT: 'bg-red-100 text-red-700',
+  LOGIN: 'bg-green-500/10 dark:bg-green-500/20 text-green-700 dark:text-green-400',
+  LOGOUT: 'bg-gray-500/10 dark:bg-gray-500/20 text-gray-700 dark:text-gray-400',
+  LOGIN_FAILED: 'bg-red-500/10 dark:bg-red-500/20 text-red-700 dark:text-red-400',
+  REGISTER: 'bg-blue-500/10 dark:bg-blue-500/20 text-blue-700 dark:text-blue-400',
+  EXAM_START: 'bg-purple-500/10 dark:bg-purple-500/20 text-purple-700 dark:text-purple-400',
+  EXAM_SUBMIT: 'bg-indigo-500/10 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-400',
+  EXAM_TAB_SWITCH: 'bg-yellow-500/10 dark:bg-yellow-500/20 text-yellow-700 dark:text-yellow-400',
+  EXAM_FLAGGED: 'bg-red-500/10 dark:bg-red-500/20 text-red-700 dark:text-red-400',
+  ADMIN_CREATE: 'bg-teal-500/10 dark:bg-teal-500/20 text-teal-700 dark:text-teal-400',
+  ADMIN_UPDATE: 'bg-cyan-500/10 dark:bg-cyan-500/20 text-cyan-700 dark:text-cyan-400',
+  ADMIN_DELETE: 'bg-orange-500/10 dark:bg-orange-500/20 text-orange-700 dark:text-orange-400',
+  SECURITY_EVENT: 'bg-red-500/10 dark:bg-red-500/20 text-red-700 dark:text-red-400',
 };
 
 export default function AuditLogsPage() {
@@ -128,7 +128,7 @@ export default function AuditLogsPage() {
       </div>
 
       {error && (
-        <div className="p-4 mb-6 bg-red-50 text-red-700 rounded-lg border border-red-200">
+        <div className="p-4 mb-6 bg-red-500/10 dark:bg-red-500/20 text-red-700 dark:text-red-400 rounded-lg border border-red-500/30">
           {error}
         </div>
       )}
@@ -142,8 +142,8 @@ export default function AuditLogsPage() {
               onClick={() => setFilter(option.value)}
               className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
                 filter === option.value
-                  ? 'bg-gradient-to-r from-primary to-sky-600 text-white shadow-md'
-                  : 'bg-primary/5 hover:bg-primary/10 text-primary'
+                  ? 'bg-primary text-primary-foreground shadow-md'
+                  : 'border hover:bg-accent'
               }`}
             >
               {option.label}
@@ -158,7 +158,7 @@ export default function AuditLogsPage() {
           <p className="text-muted-foreground mt-4">Loading logs...</p>
         </div>
       ) : logs.length === 0 ? (
-        <div className="text-center py-12 bg-gradient-to-br from-primary/5 to-sky-500/5 rounded-xl shadow-sm border border-primary/10">
+        <div className="text-center py-12 bg-card rounded-xl shadow-sm border">
           <p className="text-muted-foreground">No audit logs found</p>
         </div>
       ) : (

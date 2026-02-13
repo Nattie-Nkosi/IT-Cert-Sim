@@ -102,7 +102,7 @@ export default function ExamResultsClient() {
   if (error || !attempt) {
     return (
       <div className="container mx-auto px-4 py-8">
-        <div className="p-4 bg-red-50 text-red-700 rounded-lg border border-red-200 mb-4">
+        <div className="p-4 bg-red-500/10 dark:bg-red-500/20 text-red-700 dark:text-red-400 rounded-lg border border-red-500/30 mb-4">
           {error || 'Results not found'}
         </div>
         <Link href="/dashboard" className="text-primary hover:underline font-semibold">
@@ -128,20 +128,20 @@ export default function ExamResultsClient() {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-4xl mx-auto">
-        <div className="bg-gradient-to-br from-primary/5 to-sky-500/5 p-8 rounded-xl shadow-sm border border-primary/10 mb-8">
+        <div className="bg-card p-8 rounded-xl shadow-sm border mb-8">
           <div className="text-center mb-6">
             <div
-              className={`inline-flex items-center justify-center w-24 h-24 rounded-full mb-4 ${
+              className={`inline-flex items-center justify-center w-24 h-24 rounded-full mb-4 border-2 ${
                 attempt.passed
-                  ? 'bg-gradient-to-br from-green-400/20 to-green-600/20 border-2 border-green-500'
-                  : 'bg-gradient-to-br from-red-400/20 to-red-600/20 border-2 border-red-500'
+                  ? 'bg-green-500/10 dark:bg-green-500/20 border-green-500'
+                  : 'bg-red-500/10 dark:bg-red-500/20 border-red-500'
               }`}
             >
-              <span className={`text-5xl ${attempt.passed ? 'text-green-600' : 'text-red-600'}`}>
+              <span className={`text-5xl ${attempt.passed ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
                 {attempt.passed ? '✓' : '✗'}
               </span>
             </div>
-            <h1 className="text-4xl font-bold mb-3 bg-gradient-to-r from-primary to-sky-600 bg-clip-text text-transparent">
+            <h1 className="text-4xl font-bold mb-3">
               {attempt.passed ? 'Congratulations!' : 'Keep Practicing!'}
             </h1>
             <p className="text-lg text-muted-foreground">
@@ -152,37 +152,37 @@ export default function ExamResultsClient() {
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="text-center p-5 bg-card/80 rounded-xl shadow-sm border hover:shadow-md transition-shadow">
-              <div className="w-10 h-10 bg-primary/20 rounded-lg flex items-center justify-center mx-auto mb-2">
+            <div className="text-center p-5 bg-muted/50 rounded-xl border hover:shadow-md transition-shadow">
+              <div className="w-10 h-10 bg-muted rounded-lg flex items-center justify-center mx-auto mb-2">
                 <span className="text-lg">📊</span>
               </div>
-              <div className="text-3xl font-bold text-primary">{Math.round(attempt.score)}%</div>
+              <div className="text-3xl font-bold">{Math.round(attempt.score)}%</div>
               <div className="text-sm text-muted-foreground mt-1 font-medium">Your Score</div>
             </div>
 
-            <div className="text-center p-5 bg-card/80 rounded-xl shadow-sm border hover:shadow-md transition-shadow">
-              <div className="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center mx-auto mb-2">
+            <div className="text-center p-5 bg-muted/50 rounded-xl border hover:shadow-md transition-shadow">
+              <div className="w-10 h-10 bg-muted rounded-lg flex items-center justify-center mx-auto mb-2">
                 <span className="text-lg">🎯</span>
               </div>
-              <div className="text-3xl font-bold text-blue-600">{attempt.exam.passingScore}%</div>
+              <div className="text-3xl font-bold">{attempt.exam.passingScore}%</div>
               <div className="text-sm text-muted-foreground mt-1 font-medium">Passing Score</div>
             </div>
 
-            <div className="text-center p-5 bg-card/80 rounded-xl shadow-sm border hover:shadow-md transition-shadow">
-              <div className="w-10 h-10 bg-green-500/20 rounded-lg flex items-center justify-center mx-auto mb-2">
+            <div className="text-center p-5 bg-muted/50 rounded-xl border hover:shadow-md transition-shadow">
+              <div className="w-10 h-10 bg-muted rounded-lg flex items-center justify-center mx-auto mb-2">
                 <span className="text-lg">✅</span>
               </div>
-              <div className="text-3xl font-bold text-green-600">
+              <div className="text-3xl font-bold">
                 {correctAnswersCount}/{attempt.exam.questions.length}
               </div>
               <div className="text-sm text-muted-foreground mt-1 font-medium">Correct</div>
             </div>
 
-            <div className="text-center p-5 bg-card/80 rounded-xl shadow-sm border hover:shadow-md transition-shadow">
-              <div className="w-10 h-10 bg-sky-500/20 rounded-lg flex items-center justify-center mx-auto mb-2">
+            <div className="text-center p-5 bg-muted/50 rounded-xl border hover:shadow-md transition-shadow">
+              <div className="w-10 h-10 bg-muted rounded-lg flex items-center justify-center mx-auto mb-2">
                 <span className="text-lg">📅</span>
               </div>
-              <div className="text-2xl font-bold text-sky-600">
+              <div className="text-2xl font-bold">
                 {new Date(attempt.completedAt).toLocaleDateString()}
               </div>
               <div className="text-sm text-muted-foreground mt-1 font-medium">Date</div>
@@ -193,14 +193,14 @@ export default function ExamResultsClient() {
         <div className="bg-card p-6 rounded-xl shadow-sm border mb-6">
           <div className="flex items-start justify-between">
             <div>
-              <h2 className="text-2xl font-bold mb-2 bg-gradient-to-r from-primary to-sky-600 bg-clip-text text-transparent">
+              <h2 className="text-2xl font-bold mb-2">
                 {attempt.exam.name}
               </h2>
               <p className="text-sm text-muted-foreground font-medium">
                 {attempt.exam.certification.name} ({attempt.exam.certification.code})
               </p>
             </div>
-            <div className="w-12 h-12 bg-gradient-to-br from-primary/20 to-sky-500/20 rounded-lg flex items-center justify-center">
+            <div className="w-12 h-12 bg-muted rounded-lg flex items-center justify-center">
               <span className="text-2xl">🎓</span>
             </div>
           </div>
@@ -238,8 +238,10 @@ export default function ExamResultsClient() {
                         {index + 1}. {q.question.questionText}
                       </h3>
                       <span
-                        className={`ml-4 px-2 py-1 text-xs font-medium rounded ${
-                          isCorrect ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+                        className={`ml-4 px-2 py-1 text-xs font-medium rounded border ${
+                          isCorrect
+                            ? 'bg-green-500/10 dark:bg-green-500/20 text-green-700 dark:text-green-400 border-green-500/30'
+                            : 'bg-red-500/10 dark:bg-red-500/20 text-red-700 dark:text-red-400 border-red-500/30'
                         }`}
                       >
                         {isCorrect ? 'Correct' : 'Incorrect'}
@@ -258,20 +260,20 @@ export default function ExamResultsClient() {
                             key={answer.id}
                             className={`p-3 rounded border-2 ${
                               isCorrectAnswer
-                                ? 'border-green-500 bg-green-50'
+                                ? 'border-green-500 bg-green-500/10 dark:bg-green-500/20'
                                 : isUserAnswer
-                                ? 'border-red-500 bg-red-50'
+                                ? 'border-red-500 bg-red-500/10 dark:bg-red-500/20'
                                 : 'border-border'
                             }`}
                           >
                             <div className="flex items-center">
                               {isUserAnswer && (
-                                <span className="mr-2 font-bold">
+                                <span className={`mr-2 font-bold ${isCorrectAnswer ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
                                   {isCorrectAnswer ? '✓' : '✗'}
                                 </span>
                               )}
                               {!isUserAnswer && isCorrectAnswer && (
-                                <span className="mr-2 font-bold text-green-600">✓</span>
+                                <span className="mr-2 font-bold text-green-600 dark:text-green-400">✓</span>
                               )}
                               <span>{answer.answerText}</span>
                             </div>
@@ -281,7 +283,7 @@ export default function ExamResultsClient() {
                     </div>
 
                     {q.question.explanation && (
-                      <div className="p-3 bg-blue-50 border-l-4 border-blue-500 text-sm">
+                      <div className="p-3 bg-muted/50 border-l-4 border-primary text-sm">
                         <strong>Explanation:</strong> {q.question.explanation}
                       </div>
                     )}
@@ -295,13 +297,13 @@ export default function ExamResultsClient() {
         <div className="flex gap-4 flex-col sm:flex-row">
           <Link
             href={`/exam/${attempt.exam.id}`}
-            className="flex-1 px-6 py-4 bg-gradient-to-r from-primary to-sky-600 text-white rounded-lg hover:opacity-90 transition-all hover:scale-105 text-center font-semibold shadow-md"
+            className="flex-1 px-6 py-4 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-all text-center font-semibold"
           >
             Retake Exam
           </Link>
           <Link
             href="/dashboard"
-            className="flex-1 px-6 py-4 border-2 border-primary/20 rounded-lg hover:border-primary hover:bg-primary/5 text-center font-semibold transition-all"
+            className="flex-1 px-6 py-4 border-2 rounded-lg hover:border-primary hover:bg-accent text-center font-semibold transition-all"
           >
             Back to Dashboard
           </Link>

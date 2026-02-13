@@ -156,20 +156,20 @@ export default function AdminCertificationsPage() {
             setError('');
             setSuccess('');
           }}
-          className="px-6 py-3 bg-gradient-to-r from-primary to-sky-600 text-white rounded-lg hover:opacity-90 font-semibold shadow-lg transition-all hover:scale-105"
+          className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 font-semibold shadow-lg transition-all"
         >
           Add Certification
         </button>
       </div>
 
       {error && (
-        <div className="p-4 mb-6 bg-red-50 text-red-700 rounded-lg border border-red-200">
+        <div className="p-4 mb-6 bg-red-500/10 dark:bg-red-500/20 text-red-700 dark:text-red-400 rounded-lg border border-red-500/30">
           {error}
         </div>
       )}
 
       {success && (
-        <div className="p-4 mb-6 bg-green-50 text-green-700 rounded-lg border border-green-200">
+        <div className="p-4 mb-6 bg-green-500/10 dark:bg-green-500/20 text-green-700 dark:text-green-400 rounded-lg border border-green-500/30">
           {success}
         </div>
       )}
@@ -180,8 +180,8 @@ export default function AdminCertificationsPage() {
           <p className="text-muted-foreground mt-4">Loading certifications...</p>
         </div>
       ) : certifications.length === 0 ? (
-        <div className="text-center py-12 bg-gradient-to-br from-primary/5 to-sky-500/5 rounded-xl shadow-sm border border-primary/10">
-          <div className="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-4">
+        <div className="text-center py-12 bg-card rounded-xl shadow-sm border">
+          <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
             <span className="text-3xl">📜</span>
           </div>
           <p className="text-muted-foreground mb-4">No certifications found</p>
@@ -191,7 +191,7 @@ export default function AdminCertificationsPage() {
               setError('');
               setSuccess('');
             }}
-            className="inline-block px-6 py-3 bg-gradient-to-r from-primary to-sky-600 text-white rounded-lg hover:opacity-90 transition-all hover:scale-105 shadow-md font-semibold"
+            className="inline-block px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-all shadow-md font-semibold"
           >
             Create First Certification
           </button>
@@ -225,13 +225,13 @@ export default function AdminCertificationsPage() {
 
               <div className="flex gap-4 mb-4 text-sm">
                 <div className="flex items-center gap-2">
-                  <span className="w-8 h-8 bg-blue-100 text-blue-700 rounded-lg flex items-center justify-center font-bold">
+                  <span className="w-8 h-8 bg-blue-500/10 dark:bg-blue-500/20 text-blue-700 dark:text-blue-400 rounded-lg flex items-center justify-center font-bold">
                     {cert._count?.questions || 0}
                   </span>
                   <span className="text-muted-foreground">Questions</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="w-8 h-8 bg-green-100 text-green-700 rounded-lg flex items-center justify-center font-bold">
+                  <span className="w-8 h-8 bg-green-500/10 dark:bg-green-500/20 text-green-700 dark:text-green-400 rounded-lg flex items-center justify-center font-bold">
                     {cert._count?.exams || 0}
                   </span>
                   <span className="text-muted-foreground">Exams</span>
@@ -247,7 +247,7 @@ export default function AdminCertificationsPage() {
                 </Link>
                 <button
                   onClick={() => handleDeleteClick(cert)}
-                  className="px-4 py-2 border-2 border-red-200 text-red-600 rounded-lg hover:bg-red-50 hover:border-red-300 text-sm font-semibold transition-all"
+                  className="px-4 py-2 border-2 border-red-500/30 text-red-600 dark:text-red-400 rounded-lg hover:bg-red-500/10 hover:border-red-500/50 text-sm font-semibold transition-all"
                 >
                   Delete
                 </button>
@@ -278,7 +278,7 @@ export default function AdminCertificationsPage() {
 
             <div className="p-6">
               {error && (
-                <div className="p-4 mb-4 bg-red-50 text-red-700 rounded-lg border border-red-200 text-sm">
+                <div className="p-4 mb-4 bg-red-500/10 dark:bg-red-500/20 text-red-700 dark:text-red-400 rounded-lg border border-red-500/30 text-sm">
                   {error}
                 </div>
               )}
@@ -339,7 +339,7 @@ export default function AdminCertificationsPage() {
                 <button
                   onClick={handleCreate}
                   disabled={creating || !name || !code || !vendor}
-                  className="w-full px-6 py-3 bg-gradient-to-r from-primary to-sky-600 text-white rounded-lg hover:opacity-90 disabled:opacity-50 font-semibold shadow-lg transition-all"
+                  className="w-full px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 disabled:opacity-50 font-semibold shadow-lg transition-all"
                 >
                   {creating ? 'Creating...' : 'Create Certification'}
                 </button>

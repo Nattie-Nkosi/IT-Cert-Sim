@@ -116,7 +116,7 @@ export default function UploadQuestionPage() {
         </p>
 
         {message && (
-          <div className={`p-4 mb-6 rounded-lg border ${message.includes('success') ? 'bg-green-50 text-green-700 border-green-200' : 'bg-red-50 text-red-700 border-red-200'}`}>
+          <div className={`p-4 mb-6 rounded-lg border ${message.includes('success') ? 'bg-green-500/10 dark:bg-green-500/20 text-green-700 dark:text-green-400 border-green-500/30' : 'bg-red-500/10 dark:bg-red-500/20 text-red-700 dark:text-red-400 border-red-500/30'}`}>
             {message}
           </div>
         )}
@@ -248,7 +248,7 @@ export default function UploadQuestionPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 px-6 bg-gradient-to-r from-primary to-sky-600 text-white rounded-lg hover:opacity-90 disabled:opacity-50 font-semibold shadow-lg transition-all hover:scale-105"
+            className="w-full py-3 px-6 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 disabled:opacity-50 font-semibold shadow-lg transition-all"
           >
             {loading ? 'Uploading...' : 'Upload Question'}
           </button>

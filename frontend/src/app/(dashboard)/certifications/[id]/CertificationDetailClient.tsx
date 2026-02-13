@@ -85,7 +85,7 @@ export default function CertificationDetailClient() {
   if (error || !certification) {
     return (
       <div className="container mx-auto px-4 py-8">
-        <div className="p-4 bg-red-50 text-red-700 rounded-lg border border-red-200 mb-4">
+        <div className="p-4 bg-red-500/10 dark:bg-red-500/20 text-red-700 dark:text-red-400 rounded-lg border border-red-500/30 mb-4">
           {error || 'Certification not found'}
         </div>
         <Link href="/certifications" className="text-primary hover:underline font-semibold">
