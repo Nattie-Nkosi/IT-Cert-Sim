@@ -706,9 +706,11 @@ function AdminQuestionsContent() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold mb-2">Answers</label>
+                  <label className="block text-sm font-semibold mb-2">
+                    Answers <span className="text-muted-foreground font-normal">(supports multi-line)</span>
+                  </label>
                   {editingQuestion.answers.map((answer, index) => (
-                    <div key={index} className="flex gap-2 mb-2">
+                    <div key={index} className="flex gap-2 mb-2 items-start">
                       <input
                         type="checkbox"
                         checked={answer.isCorrect}
@@ -717,17 +719,17 @@ function AdminQuestionsContent() {
                           newAnswers[index].isCorrect = e.target.checked;
                           setEditingQuestion({ ...editingQuestion, answers: newAnswers });
                         }}
-                        className="w-5 h-5 accent-primary"
+                        className="w-5 h-5 accent-primary mt-3"
                       />
-                      <input
-                        type="text"
+                      <textarea
                         value={answer.answerText}
                         onChange={(e) => {
                           const newAnswers = [...editingQuestion.answers];
                           newAnswers[index].answerText = e.target.value;
                           setEditingQuestion({ ...editingQuestion, answers: newAnswers });
                         }}
-                        className="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                        rows={2}
+                        className="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary resize-y"
                       />
                     </div>
                   ))}
@@ -872,7 +874,7 @@ function AdminQuestionsContent() {
                     <span className="text-muted-foreground font-normal ml-2">(check correct answers)</span>
                   </label>
                   {newQuestion.answers.map((answer, index) => (
-                    <div key={index} className="flex gap-2 mb-2">
+                    <div key={index} className="flex gap-2 mb-2 items-start">
                       <input
                         type="checkbox"
                         checked={answer.isCorrect}
@@ -881,17 +883,17 @@ function AdminQuestionsContent() {
                           newAnswers[index].isCorrect = e.target.checked;
                           setNewQuestion({ ...newQuestion, answers: newAnswers });
                         }}
-                        className="w-5 h-5 accent-green-600 mt-2"
+                        className="w-5 h-5 accent-green-600 mt-3"
                       />
-                      <input
-                        type="text"
+                      <textarea
                         value={answer.answerText}
                         onChange={(e) => {
                           const newAnswers = [...newQuestion.answers];
                           newAnswers[index].answerText = e.target.value;
                           setNewQuestion({ ...newQuestion, answers: newAnswers });
                         }}
-                        className="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                        rows={2}
+                        className="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary resize-y"
                         placeholder={`Answer ${index + 1}`}
                       />
                     </div>

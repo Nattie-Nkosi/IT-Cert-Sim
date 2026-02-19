@@ -236,12 +236,12 @@ export function PracticeModeClient({ examId }: PracticeModeClientProps) {
                     />
                     <Label htmlFor={answer.id} className="flex-1 cursor-pointer">
                       <div className="flex items-center justify-between">
-                        <span>{answer.answerText}</span>
+                        <span className="whitespace-pre-wrap">{answer.answerText}</span>
                         {currentFeedback && isCorrect && (
-                          <CheckCircle2 className="w-5 h-5 text-green-600 dark:text-green-400 ml-2" />
+                          <CheckCircle2 className="w-5 h-5 text-green-600 dark:text-green-400 ml-2 shrink-0" />
                         )}
                         {showFeedback && !isCorrect && (
-                          <XCircle className="w-5 h-5 text-red-600 dark:text-red-400 ml-2" />
+                          <XCircle className="w-5 h-5 text-red-600 dark:text-red-400 ml-2 shrink-0" />
                         )}
                       </div>
                     </Label>
@@ -278,12 +278,12 @@ export function PracticeModeClient({ examId }: PracticeModeClientProps) {
                     <RadioGroupItem value={answer.id} id={answer.id} />
                     <Label htmlFor={answer.id} className="flex-1 cursor-pointer">
                       <div className="flex items-center justify-between">
-                        <span>{answer.answerText}</span>
+                        <span className="whitespace-pre-wrap">{answer.answerText}</span>
                         {showFeedback && isCorrect && (
-                          <CheckCircle2 className="w-5 h-5 text-green-600 dark:text-green-400 ml-2" />
+                          <CheckCircle2 className="w-5 h-5 text-green-600 dark:text-green-400 ml-2 shrink-0" />
                         )}
                         {showFeedback && isSelected && !isCorrect && (
-                          <XCircle className="w-5 h-5 text-red-600 dark:text-red-400 ml-2" />
+                          <XCircle className="w-5 h-5 text-red-600 dark:text-red-400 ml-2 shrink-0" />
                         )}
                       </div>
                     </Label>

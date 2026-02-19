@@ -392,7 +392,7 @@ export default function ExamTakingClient() {
                         }}
                         className="mt-1 mr-4 w-5 h-5 accent-primary"
                       />
-                      <span className="flex-1 font-medium">{answer.answerText}</span>
+                      <span className="flex-1 font-medium whitespace-pre-wrap">{answer.answerText}</span>
                     </label>
                   );
                 })}

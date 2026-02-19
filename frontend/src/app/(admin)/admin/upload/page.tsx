@@ -162,6 +162,42 @@ export default function UploadQuestionPage() {
           </div>
 
           <div>
+            <label className="block text-sm font-semibold mb-1">
+              Exhibit Image <span className="text-muted-foreground font-normal">(Optional — upload diagram/screenshot shown above the question)</span>
+            </label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (file) uploadImage(file);
+              }}
+              disabled={imageUploading}
+              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+            />
+            {imageUploading && (
+              <p className="text-sm text-muted-foreground mt-1">Uploading...</p>
+            )}
+            {imageUrl && (
+              <div className="mt-3 p-3 bg-muted/40 rounded-lg border">
+                <p className="text-xs font-semibold text-muted-foreground mb-2">Exhibit Preview</p>
+                <img
+                  src={imageUrl}
+                  alt="Exhibit preview"
+                  className="max-h-48 rounded-lg border object-contain"
+                />
+                <button
+                  type="button"
+                  onClick={() => setImageUrl('')}
+                  className="mt-2 text-xs text-red-500 hover:underline"
+                >
+                  Remove exhibit
+                </button>
+              </div>
+            )}
+          </div>
+
+          <div>
             <label className="block text-sm font-semibold mb-2">
               Question Text
             </label>
@@ -171,7 +207,7 @@ export default function UploadQuestionPage() {
               onChange={(e) => setQuestionText(e.target.value)}
               className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
               rows={4}
-              placeholder="Enter the question..."
+              placeholder="Enter the question... (e.g. Refer to the exhibit. Which command...)"
             />
           </div>
 
@@ -209,60 +245,19 @@ export default function UploadQuestionPage() {
 
           <div>
             <label className="block text-sm font-semibold mb-2">
-              Explanation (Optional)
-            </label>
-            <textarea
-              value={explanation}
-              onChange={(e) => setExplanation(e.target.value)}
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-              rows={3}
-              placeholder="Explain the correct answer..."
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-semibold mb-2">
-              Question Image (Optional)
-            </label>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={(e) => {
-                const file = e.target.files?.[0];
-                if (file) uploadImage(file);
-              }}
-              disabled={imageUploading}
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-            />
-            {imageUploading && (
-              <p className="text-sm text-muted-foreground mt-1">Uploading image...</p>
-            )}
-            {imageUrl && (
-              <div className="mt-3">
-                <img
-                  src={imageUrl}
-                  alt="Question preview"
-                  className="max-h-40 rounded-lg border object-contain"
-                />
-              </div>
-            )}
-          </div>
-
-          <div>
-            <label className="block text-sm font-semibold mb-2">
-              Answers (check correct answer)
+              Answers <span className="text-muted-foreground font-normal">(check correct — supports multi-line)</span>
             </label>
             {answers.map((answer, index) => (
-              <div key={index} className="flex gap-2 mb-3">
-                <input
-                  type="text"
+              <div key={index} className="flex gap-2 mb-3 items-start">
+                <textarea
                   required
                   value={answer.answerText}
                   onChange={(e) => handleAnswerChange(index, 'answerText', e.target.value)}
-                  className="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary resize-y"
+                  rows={2}
                   placeholder={`Answer ${index + 1}`}
                 />
-                <label className="flex items-center gap-2 px-4 py-2 border rounded-lg cursor-pointer hover:bg-muted">
+                <label className="flex items-center gap-2 px-4 py-2 border rounded-lg cursor-pointer hover:bg-muted shrink-0">
                   <input
                     type="checkbox"
                     checked={answer.isCorrect}
@@ -275,7 +270,7 @@ export default function UploadQuestionPage() {
                   <button
                     type="button"
                     onClick={() => handleRemoveAnswer(index)}
-                    className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all"
+                    className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all shrink-0"
                   >
                     Remove
                   </button>
@@ -289,6 +284,19 @@ export default function UploadQuestionPage() {
             >
               + Add Answer
             </button>
+          </div>
+
+          <div>
+            <label className="block text-sm font-semibold mb-2">
+              Explanation (Optional)
+            </label>
+            <textarea
+              value={explanation}
+              onChange={(e) => setExplanation(e.target.value)}
+              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+              rows={3}
+              placeholder="Explain the correct answer..."
+            />
           </div>
 
           <button

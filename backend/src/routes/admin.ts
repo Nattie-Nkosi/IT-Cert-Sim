@@ -333,10 +333,14 @@ export const adminRoutes = new Elysia({ prefix: '/api/admin' })
           let foundOptions = false;
 
           for (const line of lines) {
-            const optionMatch = line.match(/^([A-D])\.\s*(.+)$/);
+            const optionMatch = line.match(/^([A-D])\.\s*(.*)$/);
             if (optionMatch) {
               foundOptions = true;
               options.push({ letter: optionMatch[1], text: optionMatch[2].trim() });
+            } else if (foundOptions && options.length > 0 && !line.startsWith('Answer:') && !line.startsWith('Explanation:')) {
+              // Continuation line of the previous option (multi-line answer)
+              const last = options[options.length - 1];
+              last.text = last.text ? last.text + '\n' + line.trim() : line.trim();
             } else if (!foundOptions && !line.startsWith('Answer:') && !line.startsWith('Explanation:')) {
               questionTextLines.push(line.trim());
             } else if (line.startsWith('Answer:') || line.startsWith('Explanation:')) {
