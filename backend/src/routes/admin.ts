@@ -1,6 +1,7 @@
 import { Elysia, t } from 'elysia';
 import { adminMiddleware } from '../middleware/auth';
 import { prisma } from '../lib/prisma';
+import { uploadImageToCloudinary } from '../lib/cloudinary';
 
 export const adminRoutes = new Elysia({ prefix: '/api/admin' })
   .onError(({ code, error, set }) => {
@@ -98,6 +99,7 @@ export const adminRoutes = new Elysia({ prefix: '/api/admin' })
           t.Literal('TRUE_FALSE'),
         ]),
         explanation: t.Optional(t.String()),
+        imageUrl: t.Optional(t.String()),
         certificationId: t.String(),
         difficulty: t.Optional(
           t.Union([
@@ -112,6 +114,27 @@ export const adminRoutes = new Elysia({ prefix: '/api/admin' })
             isCorrect: t.Boolean(),
           })
         ),
+      }),
+    }
+  )
+
+  // Upload image for a question
+  .post(
+    '/questions/upload-image',
+    async ({ body, set }) => {
+      try {
+        const arrayBuffer = await body.image.arrayBuffer();
+        const buffer = Buffer.from(arrayBuffer);
+        const imageUrl = await uploadImageToCloudinary(buffer);
+        return { imageUrl };
+      } catch (error: any) {
+        set.status = 500;
+        return { error: 'Failed to upload image: ' + error.message };
+      }
+    },
+    {
+      body: t.Object({
+        image: t.File(),
       }),
     }
   )
@@ -401,6 +424,7 @@ export const adminRoutes = new Elysia({ prefix: '/api/admin' })
           t.Literal('TRUE_FALSE'),
         ]),
         explanation: t.Optional(t.String()),
+        imageUrl: t.Optional(t.String()),
         certificationId: t.String(),
         difficulty: t.Optional(
           t.Union([

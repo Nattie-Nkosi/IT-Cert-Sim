@@ -26,6 +26,8 @@ export default function UploadQuestionPage() {
     { answerText: '', isCorrect: false },
     { answerText: '', isCorrect: false },
   ]);
+  const [imageUrl, setImageUrl] = useState('');
+  const [imageUploading, setImageUploading] = useState(false);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
 
@@ -65,6 +67,20 @@ export default function UploadQuestionPage() {
     setAnswers(newAnswers);
   };
 
+  const uploadImage = async (file: File) => {
+    setImageUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append('image', file);
+      const response = await api.post('/admin/questions/upload-image', formData);
+      setImageUrl(response.data.imageUrl);
+    } catch (err: any) {
+      setMessage('Failed to upload image: ' + (err.response?.data?.error || err.message));
+    } finally {
+      setImageUploading(false);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -78,12 +94,14 @@ export default function UploadQuestionPage() {
         certificationId,
         difficulty,
         answers,
+        ...(imageUrl ? { imageUrl } : {}),
       });
       setMessage('Question uploaded successfully!');
 
       // Reset form
       setQuestionText('');
       setExplanation('');
+      setImageUrl('');
       setAnswers([
         { answerText: '', isCorrect: false },
         { answerText: '', isCorrect: false },
@@ -200,6 +218,34 @@ export default function UploadQuestionPage() {
               rows={3}
               placeholder="Explain the correct answer..."
             />
+          </div>
+
+          <div>
+            <label className="block text-sm font-semibold mb-2">
+              Question Image (Optional)
+            </label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (file) uploadImage(file);
+              }}
+              disabled={imageUploading}
+              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+            />
+            {imageUploading && (
+              <p className="text-sm text-muted-foreground mt-1">Uploading image...</p>
+            )}
+            {imageUrl && (
+              <div className="mt-3">
+                <img
+                  src={imageUrl}
+                  alt="Question preview"
+                  className="max-h-40 rounded-lg border object-contain"
+                />
+              </div>
+            )}
           </div>
 
           <div>

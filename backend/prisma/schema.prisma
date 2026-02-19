@@ -52,6 +52,7 @@ model Question {
   questionText     String   @db.Text
   questionType     QuestionType
   explanation      String?  @db.Text
+  imageUrl         String?
   certificationId  String
   difficulty       Difficulty @default(MEDIUM)
   createdAt        DateTime @default(now())

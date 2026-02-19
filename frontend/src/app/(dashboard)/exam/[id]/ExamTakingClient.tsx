@@ -16,6 +16,7 @@ interface Question {
   questionText: string;
   questionType: string;
   explanation: string | null;
+  imageUrl?: string | null;
   difficulty: string;
   answers: Answer[];
 }
@@ -346,6 +347,17 @@ export default function ExamTakingClient() {
               <h2 className="text-2xl font-bold mb-8 text-foreground">
                 {currentQuestion.questionText}
               </h2>
+
+              {currentQuestion.imageUrl && (
+                <div className="mb-6 flex justify-center">
+                  <img
+                    src={currentQuestion.imageUrl}
+                    alt="Question image"
+                    className="max-h-64 rounded-xl border object-contain shadow-sm"
+                    draggable={false}
+                  />
+                </div>
+              )}
 
               <div className="space-y-3">
                 {currentQuestion.answers.map((answer) => {

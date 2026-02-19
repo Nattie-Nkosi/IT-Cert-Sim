@@ -17,6 +17,7 @@ interface Question {
   questionText: string;
   questionType: string;
   explanation: string | null;
+  imageUrl?: string | null;
   difficulty: string;
   answers: Answer[];
   certification: {
@@ -84,6 +85,8 @@ function AdminQuestionsContent() {
     ],
   });
   const [addingQuestion, setAddingQuestion] = useState(false);
+  const [newQuestionImageUrl, setNewQuestionImageUrl] = useState('');
+  const [imageUploading, setImageUploading] = useState(false);
 
   useEffect(() => {
     if (!hasHydrated) return;
@@ -243,6 +246,7 @@ function AdminQuestionsContent() {
         explanation: editingQuestion.explanation,
         certificationId: editingQuestion.certification.id,
         difficulty: editingQuestion.difficulty,
+        imageUrl: editingQuestion.imageUrl || undefined,
         answers: editingQuestion.answers.map(a => ({
           answerText: a.answerText,
           isCorrect: a.isCorrect,
@@ -286,10 +290,12 @@ function AdminQuestionsContent() {
         explanation: newQuestion.explanation || undefined,
         certificationId: newQuestion.certificationId,
         answers: validAnswers,
+        ...(newQuestionImageUrl ? { imageUrl: newQuestionImageUrl } : {}),
       });
 
       setSuccess('Question added successfully!');
       setShowAddModal(false);
+      setNewQuestionImageUrl('');
       setNewQuestion({
         questionText: '',
         questionType: 'SINGLE_CHOICE',
@@ -316,9 +322,24 @@ function AdminQuestionsContent() {
       ...newQuestion,
       certificationId: selectedCertification,
     });
+    setNewQuestionImageUrl('');
     setShowAddModal(true);
     setError('');
     setSuccess('');
+  };
+
+  const uploadImage = async (file: File, onSuccess: (url: string) => void) => {
+    setImageUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append('image', file);
+      const response = await api.post('/admin/questions/upload-image', formData);
+      onSuccess(response.data.imageUrl);
+    } catch (err: any) {
+      setError('Failed to upload image: ' + (err.response?.data?.error || err.message));
+    } finally {
+      setImageUploading(false);
+    }
   };
 
   if (!hasHydrated) {
@@ -480,6 +501,16 @@ function AdminQuestionsContent() {
                   </div>
                 ))}
               </div>
+
+              {question.imageUrl && (
+                <div className="mb-3">
+                  <img
+                    src={question.imageUrl}
+                    alt="Question image"
+                    className="max-h-32 rounded-lg border object-contain"
+                  />
+                </div>
+              )}
 
               {question.explanation && (
                 <div className="p-3 bg-muted/50 border-l-4 border-primary text-sm">
@@ -714,6 +745,34 @@ function AdminQuestionsContent() {
                   />
                 </div>
 
+                <div>
+                  <label className="block text-sm font-semibold mb-2">Question Image (Optional)</label>
+                  {editingQuestion.imageUrl && (
+                    <div className="mb-3">
+                      <img
+                        src={editingQuestion.imageUrl}
+                        alt="Current image"
+                        className="max-h-32 rounded-lg border object-contain"
+                      />
+                    </div>
+                  )}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) uploadImage(file, (url) =>
+                        setEditingQuestion({ ...editingQuestion, imageUrl: url })
+                      );
+                    }}
+                    disabled={imageUploading}
+                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                  />
+                  {imageUploading && (
+                    <p className="text-sm text-muted-foreground mt-1">Uploading image...</p>
+                  )}
+                </div>
+
                 <button
                   onClick={handleUpdateQuestion}
                   className="w-full px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 font-semibold shadow-lg transition-all"
@@ -858,6 +917,32 @@ function AdminQuestionsContent() {
                     className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                     placeholder="Explain why the correct answer is correct..."
                   />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold mb-2">Question Image (Optional)</label>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) uploadImage(file, setNewQuestionImageUrl);
+                    }}
+                    disabled={imageUploading}
+                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                  />
+                  {imageUploading && (
+                    <p className="text-sm text-muted-foreground mt-1">Uploading image...</p>
+                  )}
+                  {newQuestionImageUrl && (
+                    <div className="mt-3">
+                      <img
+                        src={newQuestionImageUrl}
+                        alt="Preview"
+                        className="max-h-32 rounded-lg border object-contain"
+                      />
+                    </div>
+                  )}
                 </div>
 
                 <button

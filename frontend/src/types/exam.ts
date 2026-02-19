@@ -14,6 +14,7 @@ export interface Question {
   questionText: string;
   questionType: 'SINGLE_CHOICE' | 'MULTIPLE_CHOICE' | 'TRUE_FALSE';
   explanation?: string;
+  imageUrl?: string | null;
   difficulty: 'EASY' | 'MEDIUM' | 'HARD';
   answers: Answer[];
 }

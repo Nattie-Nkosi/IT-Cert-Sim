@@ -180,6 +180,15 @@ export function PracticeModeClient({ examId }: PracticeModeClientProps) {
               </div>
             </div>
           </CardTitle>
+          {currentQuestion.imageUrl && (
+            <div className="mt-4 flex justify-center">
+              <img
+                src={currentQuestion.imageUrl}
+                alt="Question image"
+                className="max-h-64 rounded-xl border object-contain shadow-sm"
+              />
+            </div>
+          )}
           {currentQuestion.questionType === 'MULTIPLE_CHOICE' && (
             <CardDescription>Select all correct answers</CardDescription>
           )}
