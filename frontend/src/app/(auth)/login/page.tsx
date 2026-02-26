@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import api from '@/lib/api';
 import { useAuthStore } from '@/lib/store';
+import { toast } from 'sonner';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -26,6 +27,7 @@ export default function LoginPage() {
       const response = await api.post('/auth/login', { email, password });
       const { user, token, refreshToken, expiresIn } = response.data;
       setAuth(user, token, refreshToken, expiresIn);
+      toast.success(`Welcome back, ${user.name}`);
       router.push('/dashboard');
     } catch (err: any) {
       const data = err.response?.data;

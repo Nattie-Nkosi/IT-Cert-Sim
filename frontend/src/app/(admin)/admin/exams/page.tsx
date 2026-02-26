@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuthStore } from '@/lib/store';
 import api from '@/lib/api';
+import { toast } from 'sonner';
 
 interface Certification {
   id: string;
@@ -135,6 +136,7 @@ export default function AdminExamsPage() {
       });
 
       setSuccess('Exam created successfully!');
+      toast.success('Exam created');
       setShowCreateModal(false);
       resetForm();
       fetchData();
@@ -189,6 +191,7 @@ export default function AdminExamsPage() {
       setNewCertVendor('');
       setNewCertDescription('');
       setSuccess('Certification created! Now add questions.');
+      toast.success('Certification created');
     } catch (err: any) {
       setError('Failed to create certification: ' + (err.response?.data?.error || err.message));
     } finally {
@@ -226,6 +229,7 @@ export default function AdminExamsPage() {
       });
 
       setSuccess('Exam updated successfully!');
+      toast.success('Exam updated');
       setShowEditModal(false);
       setEditingExam(null);
       setSelectedQuestions([]);
@@ -240,7 +244,7 @@ export default function AdminExamsPage() {
       setError('');
       const response = await api.post(`/admin/exams/${examId}/sync-questions`);
       setSuccess(response.data.message);
-      fetchData();
+      toast.success('Questions synced'); fetchData();
     } catch (err: any) {
       setError('Failed to sync questions: ' + (err.response?.data?.message || err.message));
     }

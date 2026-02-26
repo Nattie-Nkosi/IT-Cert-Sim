@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/lib/store';
 import api from '@/lib/api';
+import { toast } from 'sonner';
 
 interface Certification {
   id: string;
@@ -97,6 +98,7 @@ export default function UploadQuestionPage() {
         ...(imageUrl ? { imageUrl } : {}),
       });
       setMessage('Question uploaded successfully!');
+      toast.success('Question uploaded');
 
       // Reset form
       setQuestionText('');
@@ -107,7 +109,9 @@ export default function UploadQuestionPage() {
         { answerText: '', isCorrect: false },
       ]);
     } catch (err: any) {
-      setMessage('Failed to upload question: ' + (err.response?.data?.message || err.message));
+      const errMsg = err.response?.data?.message || err.message;
+      setMessage('Failed to upload question: ' + errMsg);
+      toast.error('Upload failed', { description: errMsg });
     } finally {
       setLoading(false);
     }

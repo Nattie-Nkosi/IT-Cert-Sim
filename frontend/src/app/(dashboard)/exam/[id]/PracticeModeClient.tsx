@@ -9,7 +9,18 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 import { CheckCircle2, XCircle, Clock, ChevronLeft, ChevronRight } from 'lucide-react';
+import { toast } from 'sonner';
 import type { Exam, CheckAnswerResponse, AttemptMode } from '@/types/exam';
 
 interface PracticeModeClientProps {
@@ -25,6 +36,7 @@ export function PracticeModeClient({ examId }: PracticeModeClientProps) {
   const [feedback, setFeedback] = useState<Record<string, CheckAnswerResponse>>({});
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
+  const [showEndDialog, setShowEndDialog] = useState(false);
   const [elapsedTime, setElapsedTime] = useState(0);
   const [startTime] = useState(Date.now());
 
@@ -104,11 +116,12 @@ export function PracticeModeClient({ examId }: PracticeModeClientProps) {
     }
   };
 
-  const handleEndPractice = async () => {
-    if (!confirm('Are you sure you want to end this practice session?')) {
-      return;
-    }
+  const handleEndPractice = () => {
+    setShowEndDialog(true);
+  };
 
+  const confirmEndPractice = async () => {
+    setShowEndDialog(false);
     setSubmitting(true);
     try {
       const response = await api.post(`/exams/${examId}/submit`, {
@@ -118,6 +131,7 @@ export function PracticeModeClient({ examId }: PracticeModeClientProps) {
       router.push(`/exam/${examId}/results?attemptId=${response.data.attemptId}`);
     } catch (error) {
       console.error('Failed to submit practice:', error);
+      toast.error('Failed to end practice session');
       setSubmitting(false);
     }
   };
@@ -342,6 +356,24 @@ export function PracticeModeClient({ examId }: PracticeModeClientProps) {
           )}
         </CardFooter>
       </Card>
+
+      <AlertDialog open={showEndDialog} onOpenChange={setShowEndDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>End Practice Session?</AlertDialogTitle>
+            <AlertDialogDescription>
+              You have answered {Object.keys(feedback).length} of {exam?.questions.length || 0} questions.
+              Your results will be saved.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Continue Practicing</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmEndPractice}>
+              End Practice
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

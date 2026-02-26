@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import api from '@/lib/api';
 import { useAuthStore } from '@/lib/store';
+import { toast } from 'sonner';
 
 const passwordRequirements = [
   { label: '8+ characters', test: (p: string) => p.length >= 8 },
@@ -47,6 +48,7 @@ export default function RegisterPage() {
       const response = await api.post('/auth/register', { name, email, password });
       const { user, token, refreshToken, expiresIn } = response.data;
       setAuth(user, token, refreshToken, expiresIn);
+      toast.success('Account created successfully');
       router.push('/dashboard');
     } catch (err: any) {
       const data = err.response?.data;

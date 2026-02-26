@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuthStore } from '@/lib/store';
 import api from '@/lib/api';
+import { toast } from 'sonner';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -90,6 +91,7 @@ export default function AdminCertificationsPage() {
       });
 
       setSuccess('Certification created successfully!');
+      toast.success('Certification created');
       setShowCreateModal(false);
       resetForm();
       fetchCertifications();
@@ -115,7 +117,9 @@ export default function AdminCertificationsPage() {
       setDeleteDialogOpen(false);
       setCertToDelete(null);
       setSuccess('Certification deleted successfully!');
+      toast.success('Certification deleted');
     } catch (err: any) {
+      toast.error('Failed to delete certification');
       setError('Failed to delete certification: ' + (err.response?.data?.error || err.message));
     } finally {
       setDeleting(false);

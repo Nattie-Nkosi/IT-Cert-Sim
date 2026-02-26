@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuthStore } from '@/lib/store';
 import api from '@/lib/api';
+import { toast } from 'sonner';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -85,8 +86,9 @@ export default function HistoryPage() {
       setAttempts((prev) => prev.filter((a) => a.id !== attemptToDelete.id));
       setDeleteDialogOpen(false);
       setAttemptToDelete(null);
+      toast.success('Attempt deleted');
     } catch (err: any) {
-      setError('Failed to delete exam attempt');
+      toast.error('Failed to delete exam attempt');
       console.error(err);
     } finally {
       setDeleting(false);

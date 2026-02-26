@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { useAuthStore } from '@/lib/store';
 import api from '@/lib/api';
+import { toast } from 'sonner';
 
 interface Answer {
   id: string;
@@ -167,6 +168,7 @@ function AdminQuestionsContent() {
 
       setParsedQuestions(response.data.questions);
       setSuccess(`Successfully parsed ${response.data.count} questions from PDF`);
+      toast.success(`Parsed ${response.data.count} questions from PDF`);
     } catch (err: any) {
       const errorMsg = err.response?.data?.error || err.response?.data?.message || err.message;
       setError('Failed to parse PDF: ' + errorMsg);
@@ -205,6 +207,7 @@ function AdminQuestionsContent() {
       });
 
       setSuccess(`Successfully uploaded ${parsedQuestions.length} questions!`);
+      toast.success(`Uploaded ${parsedQuestions.length} questions`);
       setShowUploadModal(false);
       setParsedQuestions([]);
       setUploadFile(null);
@@ -225,6 +228,7 @@ function AdminQuestionsContent() {
     try {
       await api.delete(`/admin/questions/${questionId}`);
       setSuccess('Question deleted successfully');
+      toast.success('Question deleted');
       fetchQuestions(selectedCertification || undefined);
     } catch (err: any) {
       setError('Failed to delete question: ' + (err.response?.data?.message || err.message));
@@ -254,6 +258,7 @@ function AdminQuestionsContent() {
       });
 
       setSuccess('Question updated successfully');
+      toast.success('Question updated');
       setShowEditModal(false);
       setEditingQuestion(null);
       fetchQuestions(selectedCertification || undefined);
@@ -294,6 +299,7 @@ function AdminQuestionsContent() {
       });
 
       setSuccess('Question added successfully!');
+      toast.success('Question added');
       setShowAddModal(false);
       setNewQuestionImageUrl('');
       setNewQuestion({

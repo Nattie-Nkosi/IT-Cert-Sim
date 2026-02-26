@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback, useRef } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { useAuthStore } from '@/lib/store';
 import api from '@/lib/api';
+import { toast } from 'sonner';
 
 interface Answer {
   id: string;
@@ -188,7 +189,9 @@ export default function ExamTakingClient() {
 
       router.push(`/exam/${exam.id}/results?attemptId=${response.data.attemptId}`);
     } catch (err: any) {
-      setError('Failed to submit exam: ' + (err.response?.data?.message || err.message));
+      const msg = err.response?.data?.message || err.message;
+      setError('Failed to submit exam: ' + msg);
+      toast.error('Failed to submit exam', { description: msg });
       setSubmitting(false);
       isSubmittingRef.current = false;
     }
