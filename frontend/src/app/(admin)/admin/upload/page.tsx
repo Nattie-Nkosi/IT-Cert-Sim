@@ -116,7 +116,7 @@ export default function UploadQuestionPage() {
   if (!hasHydrated) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+        <div className="animate-spin h-8 w-8 border-2 border-primary border-t-transparent"></div>
       </div>
     );
   }
@@ -126,7 +126,7 @@ export default function UploadQuestionPage() {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-2xl mx-auto">
-        <h1 className="text-4xl font-bold mb-3 bg-gradient-to-r from-primary to-sky-600 bg-clip-text text-transparent">
+        <h1 className="text-4xl font-bold mb-3 text-primary">
           Upload Question
         </h1>
         <p className="text-lg text-muted-foreground mb-8">
@@ -134,12 +134,12 @@ export default function UploadQuestionPage() {
         </p>
 
         {message && (
-          <div className={`p-4 mb-6 rounded-lg border ${message.includes('success') ? 'bg-green-500/10 dark:bg-green-500/20 text-green-700 dark:text-green-400 border-green-500/30' : 'bg-red-500/10 dark:bg-red-500/20 text-red-700 dark:text-red-400 border-red-500/30'}`}>
+          <div className={`p-4 mb-6 border ${message.includes('success') ? 'bg-green-500/10 dark:bg-green-500/20 text-green-700 dark:text-green-400 border-green-500/30' : 'bg-red-500/10 dark:bg-red-500/20 text-red-700 dark:text-red-400 border-red-500/30'}`}>
             {message}
           </div>
         )}
 
-        <div className="bg-card p-8 rounded-xl shadow-sm border">
+        <div className="bg-card p-8 border">
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
@@ -150,7 +150,7 @@ export default function UploadQuestionPage() {
               required
               value={certificationId}
               onChange={(e) => setCertificationId(e.target.value)}
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+              className="w-full px-4 py-2 border focus:outline-none focus:ring-2 focus:ring-primary"
             >
               <option value="">Select a certification...</option>
               {certifications.map((cert) => (
@@ -173,18 +173,18 @@ export default function UploadQuestionPage() {
                 if (file) uploadImage(file);
               }}
               disabled={imageUploading}
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+              className="w-full px-4 py-2 border focus:outline-none focus:ring-2 focus:ring-primary"
             />
             {imageUploading && (
               <p className="text-sm text-muted-foreground mt-1">Uploading...</p>
             )}
             {imageUrl && (
-              <div className="mt-3 p-3 bg-muted/40 rounded-lg border">
+              <div className="mt-3 p-3 bg-muted/40 border">
                 <p className="text-xs font-semibold text-muted-foreground mb-2">Exhibit Preview</p>
                 <img
                   src={imageUrl}
                   alt="Exhibit preview"
-                  className="max-h-48 rounded-lg border object-contain"
+                  className="max-h-48 border object-contain"
                 />
                 <button
                   type="button"
@@ -205,7 +205,7 @@ export default function UploadQuestionPage() {
               required
               value={questionText}
               onChange={(e) => setQuestionText(e.target.value)}
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+              className="w-full px-4 py-2 border focus:outline-none focus:ring-2 focus:ring-primary"
               rows={4}
               placeholder="Enter the question... (e.g. Refer to the exhibit. Which command...)"
             />
@@ -219,7 +219,7 @@ export default function UploadQuestionPage() {
               <select
                 value={questionType}
                 onChange={(e) => setQuestionType(e.target.value)}
-                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                className="w-full px-4 py-2 border focus:outline-none focus:ring-2 focus:ring-primary"
               >
                 <option value="SINGLE_CHOICE">Single Choice</option>
                 <option value="MULTIPLE_CHOICE">Multiple Choice</option>
@@ -234,7 +234,7 @@ export default function UploadQuestionPage() {
               <select
                 value={difficulty}
                 onChange={(e) => setDifficulty(e.target.value)}
-                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                className="w-full px-4 py-2 border focus:outline-none focus:ring-2 focus:ring-primary"
               >
                 <option value="EASY">Easy</option>
                 <option value="MEDIUM">Medium</option>
@@ -253,11 +253,11 @@ export default function UploadQuestionPage() {
                   required
                   value={answer.answerText}
                   onChange={(e) => handleAnswerChange(index, 'answerText', e.target.value)}
-                  className="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary resize-y"
+                  className="flex-1 px-4 py-2 border focus:outline-none focus:ring-2 focus:ring-primary resize-y"
                   rows={2}
                   placeholder={`Answer ${index + 1}`}
                 />
-                <label className="flex items-center gap-2 px-4 py-2 border rounded-lg cursor-pointer hover:bg-muted shrink-0">
+                <label className="flex items-center gap-2 px-4 py-2 border cursor-pointer hover:bg-muted shrink-0">
                   <input
                     type="checkbox"
                     checked={answer.isCorrect}
@@ -270,7 +270,7 @@ export default function UploadQuestionPage() {
                   <button
                     type="button"
                     onClick={() => handleRemoveAnswer(index)}
-                    className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all shrink-0"
+                    className="px-4 py-2 bg-red-500 text-white hover:bg-red-600 transition-all shrink-0"
                   >
                     Remove
                   </button>
@@ -280,7 +280,7 @@ export default function UploadQuestionPage() {
             <button
               type="button"
               onClick={handleAddAnswer}
-              className="mt-2 px-5 py-2 border-2 border-primary/20 rounded-lg hover:border-primary hover:bg-primary/5 text-primary font-semibold transition-all"
+              className="mt-2 px-5 py-2 border-2 border-primary/20 hover:border-primary hover:bg-primary/5 text-primary font-semibold transition-all"
             >
               + Add Answer
             </button>
@@ -293,7 +293,7 @@ export default function UploadQuestionPage() {
             <textarea
               value={explanation}
               onChange={(e) => setExplanation(e.target.value)}
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+              className="w-full px-4 py-2 border focus:outline-none focus:ring-2 focus:ring-primary"
               rows={3}
               placeholder="Explain the correct answer..."
             />
@@ -302,7 +302,7 @@ export default function UploadQuestionPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 px-6 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 disabled:opacity-50 font-semibold shadow-lg transition-all"
+            className="w-full py-3 px-6 bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50 font-semibold transition-all"
           >
             {loading ? 'Uploading...' : 'Upload Question'}
           </button>

@@ -69,7 +69,7 @@ export default function ExamsPage() {
   if (!hasHydrated) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+        <div className="animate-spin h-8 w-8 border-2 border-primary border-t-transparent"></div>
       </div>
     );
   }
@@ -82,7 +82,7 @@ export default function ExamsPage() {
     <div className="container mx-auto px-4 py-8">
       <div className="mb-10 flex items-start justify-between">
         <div>
-          <h1 className="text-4xl font-bold mb-3 bg-gradient-to-r from-primary to-sky-600 bg-clip-text text-transparent">
+          <h1 className="text-4xl font-bold mb-3 text-primary">
             Available Exams
           </h1>
           <p className="text-lg text-muted-foreground">
@@ -92,26 +92,26 @@ export default function ExamsPage() {
         <button
           onClick={handleRefresh}
           disabled={loading}
-          className="px-4 py-2 border-2 border-primary/20 rounded-lg hover:border-primary hover:bg-primary/5 font-semibold transition-all disabled:opacity-50"
+          className="px-4 py-2 border-2 border-primary/20 hover:border-primary hover:bg-primary/5 font-semibold transition-all disabled:opacity-50"
         >
           {loading ? 'Loading...' : 'Refresh'}
         </button>
       </div>
 
       {error && (
-        <div className="p-4 mb-6 bg-red-500/10 dark:bg-red-500/20 text-red-700 dark:text-red-400 rounded-lg border border-red-500/30">
+        <div className="p-4 mb-6 bg-red-500/10 dark:bg-red-500/20 text-red-700 dark:text-red-400 border border-red-500/30">
           {error}
         </div>
       )}
 
       {loading ? (
         <div className="text-center py-12">
-          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+          <div className="inline-block animate-spin h-8 w-8 border-2 border-primary border-t-transparent"></div>
           <p className="text-muted-foreground mt-4">Loading exams...</p>
         </div>
       ) : exams.length === 0 ? (
-        <div className="text-center py-12 bg-card rounded-xl shadow-sm border">
-          <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
+        <div className="text-center py-12 bg-card border">
+          <div className="w-16 h-16 bg-muted flex items-center justify-center mx-auto mb-4">
             <span className="text-3xl">🎯</span>
           </div>
           <p className="text-muted-foreground mb-4">
@@ -128,14 +128,14 @@ export default function ExamsPage() {
           {exams.map((exam) => (
             <div
               key={exam.id}
-              className="group bg-card p-6 rounded-xl shadow-sm border hover:shadow-lg hover:scale-105 transition-all duration-200"
+              className="group bg-card p-6 border hover:border-primary transition-colors"
             >
               <div className="mb-4">
                 <div className="flex items-center justify-between mb-2">
                   <div className="text-xs font-medium text-muted-foreground">
                     {exam.certification.vendor} • {exam.certification.code}
                   </div>
-                  <div className="w-10 h-10 bg-muted rounded-lg flex items-center justify-center">
+                  <div className="w-10 h-10 bg-muted flex items-center justify-center">
                     <span className="text-lg">⏱️</span>
                   </div>
                 </div>
@@ -154,7 +154,7 @@ export default function ExamsPage() {
                 </p>
               )}
 
-              <div className="space-y-2 mb-4 text-sm bg-muted/50 p-4 rounded-lg">
+              <div className="space-y-2 mb-4 text-sm bg-muted/50 p-4">
                 <div className="flex justify-between items-center">
                   <span className="text-muted-foreground flex items-center gap-2">
                     <span>📝</span> Questions:
@@ -178,13 +178,13 @@ export default function ExamsPage() {
               <div className="flex gap-2">
                 <Link
                   href={`/exam/${exam.id}/practice`}
-                  className="flex-1 px-4 py-3 border-2 rounded-lg hover:border-primary hover:bg-accent transition-all text-center font-semibold"
+                  className="flex-1 px-4 py-3 border-2 hover:border-primary hover:bg-accent transition-all text-center font-semibold"
                 >
                   📚 Practice
                 </Link>
                 <Link
                   href={`/exam/${exam.id}`}
-                  className="flex-1 px-4 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-all text-center font-semibold"
+                  className="flex-1 px-4 py-3 bg-primary text-primary-foreground hover:bg-primary/90 transition-all text-center font-semibold"
                 >
                   🎯 Start Exam
                 </Link>

@@ -345,7 +345,7 @@ function AdminQuestionsContent() {
   if (!hasHydrated) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+        <div className="animate-spin h-8 w-8 border-2 border-primary border-t-transparent"></div>
       </div>
     );
   }
@@ -356,7 +356,7 @@ function AdminQuestionsContent() {
     <div className="container mx-auto px-4 py-8">
       <div className="mb-8 flex items-center justify-between">
         <div>
-          <h1 className="text-4xl font-bold mb-3 bg-gradient-to-r from-primary to-sky-600 bg-clip-text text-transparent">
+          <h1 className="text-4xl font-bold mb-3 text-primary">
             Question Management
           </h1>
           <p className="text-lg text-muted-foreground">
@@ -366,13 +366,13 @@ function AdminQuestionsContent() {
         <div className="flex gap-3">
           <button
             onClick={openAddModal}
-            className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 font-semibold shadow-lg transition-all"
+            className="px-6 py-3 bg-primary text-primary-foreground hover:bg-primary/90 font-semibold transition-all"
           >
             Add Question
           </button>
           <button
             onClick={() => setShowUploadModal(true)}
-            className="px-6 py-3 border-2 border-primary/20 rounded-lg hover:border-primary hover:bg-accent font-semibold transition-all"
+            className="px-6 py-3 border-2 border-primary/20 hover:border-primary hover:bg-accent font-semibold transition-all"
           >
             Upload from PDF
           </button>
@@ -380,24 +380,24 @@ function AdminQuestionsContent() {
       </div>
 
       {error && (
-        <div className="p-4 mb-6 bg-red-500/10 dark:bg-red-500/20 text-red-700 dark:text-red-400 rounded-lg border border-red-500/30">
+        <div className="p-4 mb-6 bg-red-500/10 dark:bg-red-500/20 text-red-700 dark:text-red-400 border border-red-500/30">
           {error}
         </div>
       )}
 
       {success && (
-        <div className="p-4 mb-6 bg-green-500/10 dark:bg-green-500/20 text-green-700 dark:text-green-400 rounded-lg border border-green-500/30">
+        <div className="p-4 mb-6 bg-green-500/10 dark:bg-green-500/20 text-green-700 dark:text-green-400 border border-green-500/30">
           {success}
         </div>
       )}
 
-      <div className="bg-card p-4 rounded-xl shadow-sm border mb-6">
+      <div className="bg-card p-4 border mb-6">
         <div className="flex gap-4 items-center">
           <label className="text-sm font-semibold text-muted-foreground">Filter by Certification:</label>
           <select
             value={selectedCertification}
             onChange={(e) => handleCertificationFilter(e.target.value)}
-            className="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+            className="flex-1 px-4 py-2 border focus:outline-none focus:ring-2 focus:ring-primary"
           >
             <option value="">All Certifications</option>
             {certifications.map((cert) => (
@@ -411,25 +411,25 @@ function AdminQuestionsContent() {
 
       {loading ? (
         <div className="text-center py-12">
-          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+          <div className="inline-block animate-spin h-8 w-8 border-2 border-primary border-t-transparent"></div>
           <p className="text-muted-foreground mt-4">Loading questions...</p>
         </div>
       ) : questions.length === 0 ? (
-        <div className="text-center py-12 bg-card rounded-xl shadow-sm border">
-          <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
+        <div className="text-center py-12 bg-card border">
+          <div className="w-16 h-16 bg-muted flex items-center justify-center mx-auto mb-4">
             <span className="text-3xl">📝</span>
           </div>
           <p className="text-muted-foreground mb-4">No questions found</p>
           <div className="flex gap-3 justify-center">
             <button
               onClick={openAddModal}
-              className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-all shadow-md font-semibold"
+              className="px-6 py-3 bg-primary text-primary-foreground hover:bg-primary/90 transition-all font-semibold"
             >
               Add Question
             </button>
             <button
               onClick={() => setShowUploadModal(true)}
-              className="px-6 py-3 border-2 border-primary/20 rounded-lg hover:border-primary hover:bg-accent transition-all font-semibold"
+              className="px-6 py-3 border-2 border-primary/20 hover:border-primary hover:bg-accent transition-all font-semibold"
             >
               Upload from PDF
             </button>
@@ -440,18 +440,18 @@ function AdminQuestionsContent() {
           {questions.map((question, index) => (
             <div
               key={question.id}
-              className="bg-card p-6 rounded-xl shadow-sm border hover:shadow-md transition-all"
+              className="bg-card p-6 border hover:border-primary transition-colors"
             >
               <div className="flex items-start justify-between mb-4">
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-2">
-                    <span className="text-sm font-semibold px-3 py-1 bg-primary/10 text-primary rounded-full">
+                    <span className="text-sm font-semibold px-3 py-1 bg-primary/10 text-primary">
                       #{index + 1}
                     </span>
-                    <span className="text-sm font-semibold px-3 py-1 bg-blue-500/10 dark:bg-blue-500/20 text-blue-700 dark:text-blue-400 rounded-full">
+                    <span className="text-sm font-semibold px-3 py-1 bg-blue-500/10 dark:bg-blue-500/20 text-blue-700 dark:text-blue-400">
                       {question.questionType.replace('_', ' ')}
                     </span>
-                    <span className={`text-sm font-semibold px-3 py-1 rounded-full ${
+                    <span className={`text-sm font-semibold px-3 py-1 ${
                       question.difficulty === 'EASY'
                         ? 'bg-green-500/10 dark:bg-green-500/20 text-green-700 dark:text-green-400'
                         : question.difficulty === 'MEDIUM'
@@ -469,13 +469,13 @@ function AdminQuestionsContent() {
                 <div className="flex gap-2 ml-4">
                   <button
                     onClick={() => openEditModal(question)}
-                    className="px-4 py-2 border-2 border-primary/20 rounded-lg hover:border-primary hover:bg-primary/5 text-sm font-semibold transition-all"
+                    className="px-4 py-2 border-2 border-primary/20 hover:border-primary hover:bg-primary/5 text-sm font-semibold transition-all"
                   >
                     Edit
                   </button>
                   <button
                     onClick={() => handleDeleteQuestion(question.id)}
-                    className="px-4 py-2 border-2 border-red-500/30 rounded-lg hover:border-red-500/50 hover:bg-red-500/10 text-red-600 dark:text-red-400 text-sm font-semibold transition-all"
+                    className="px-4 py-2 border-2 border-red-500/30 hover:border-red-500/50 hover:bg-red-500/10 text-red-600 dark:text-red-400 text-sm font-semibold transition-all"
                   >
                     Delete
                   </button>
@@ -507,7 +507,7 @@ function AdminQuestionsContent() {
                   <img
                     src={question.imageUrl}
                     alt="Question image"
-                    className="max-h-32 rounded-lg border object-contain"
+                    className="max-h-32 border object-contain"
                   />
                 </div>
               )}
@@ -524,7 +524,7 @@ function AdminQuestionsContent() {
 
       {showUploadModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-card rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-auto">
+          <div className="bg-card border max-w-4xl w-full max-h-[90vh] overflow-auto">
             <div className="p-6 border-b sticky top-0 bg-card z-10">
               <div className="flex items-center justify-between">
                 <h2 className="text-2xl font-bold">Upload Questions from PDF</h2>
@@ -543,7 +543,7 @@ function AdminQuestionsContent() {
 
             <div className="p-6">
               {error && (
-                <div className="p-4 mb-4 bg-red-500/10 dark:bg-red-500/20 text-red-700 dark:text-red-400 rounded-lg border border-red-500/30">
+                <div className="p-4 mb-4 bg-red-500/10 dark:bg-red-500/20 text-red-700 dark:text-red-400 border border-red-500/30">
                   {error}
                 </div>
               )}
@@ -556,7 +556,7 @@ function AdminQuestionsContent() {
                   <select
                     value={uploadCertificationId}
                     onChange={(e) => setUploadCertificationId(e.target.value)}
-                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                    className="w-full px-4 py-2 border focus:outline-none focus:ring-2 focus:ring-primary"
                   >
                     <option value="">Choose certification...</option>
                     {certifications.map((cert) => (
@@ -575,14 +575,14 @@ function AdminQuestionsContent() {
                     type="file"
                     accept=".pdf"
                     onChange={(e) => setUploadFile(e.target.files?.[0] || null)}
-                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                    className="w-full px-4 py-2 border focus:outline-none focus:ring-2 focus:ring-primary"
                   />
                 </div>
 
                 <button
                   onClick={handleParsePDF}
                   disabled={!uploadFile || parsing}
-                  className="w-full px-6 py-3 bg-blue-600 text-white rounded-lg hover:opacity-90 disabled:opacity-50 font-semibold transition-all"
+                  className="w-full px-6 py-3 bg-blue-600 text-white hover:opacity-90 disabled:opacity-50 font-semibold transition-all"
                 >
                   {parsing ? 'Parsing PDF...' : 'Parse PDF'}
                 </button>
@@ -601,7 +601,7 @@ function AdminQuestionsContent() {
 
                   <div className="max-h-96 overflow-auto mb-4 space-y-4">
                     {parsedQuestions.map((q, index) => (
-                      <div key={index} className="border rounded-lg p-4">
+                      <div key={index} className="border p-4">
                         <div className="flex items-center gap-2 mb-2">
                           <span className="text-xs font-semibold px-2 py-1 bg-primary/10 text-primary rounded">
                             Q{q.questionNumber}
@@ -632,7 +632,7 @@ function AdminQuestionsContent() {
                   <button
                     onClick={handleBulkUpload}
                     disabled={!uploadCertificationId || uploading}
-                    className="w-full px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 disabled:opacity-50 font-semibold shadow-lg transition-all"
+                    className="w-full px-6 py-3 bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50 font-semibold transition-all"
                   >
                     {uploading ? 'Uploading...' : `Upload ${parsedQuestions.length} Questions`}
                   </button>
@@ -645,7 +645,7 @@ function AdminQuestionsContent() {
 
       {showEditModal && editingQuestion && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-card rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-auto">
+          <div className="bg-card border max-w-2xl w-full max-h-[90vh] overflow-auto">
             <div className="p-6 border-b sticky top-0 bg-card z-10">
               <div className="flex items-center justify-between">
                 <h2 className="text-2xl font-bold">Edit Question</h2>
@@ -671,7 +671,7 @@ function AdminQuestionsContent() {
                       setEditingQuestion({ ...editingQuestion, questionText: e.target.value })
                     }
                     rows={4}
-                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                    className="w-full px-4 py-2 border focus:outline-none focus:ring-2 focus:ring-primary"
                   />
                 </div>
 
@@ -682,7 +682,7 @@ function AdminQuestionsContent() {
                     onChange={(e) =>
                       setEditingQuestion({ ...editingQuestion, questionType: e.target.value })
                     }
-                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                    className="w-full px-4 py-2 border focus:outline-none focus:ring-2 focus:ring-primary"
                   >
                     <option value="SINGLE_CHOICE">Single Choice</option>
                     <option value="MULTIPLE_CHOICE">Multiple Choice</option>
@@ -697,7 +697,7 @@ function AdminQuestionsContent() {
                     onChange={(e) =>
                       setEditingQuestion({ ...editingQuestion, difficulty: e.target.value })
                     }
-                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                    className="w-full px-4 py-2 border focus:outline-none focus:ring-2 focus:ring-primary"
                   >
                     <option value="EASY">Easy</option>
                     <option value="MEDIUM">Medium</option>
@@ -729,7 +729,7 @@ function AdminQuestionsContent() {
                           setEditingQuestion({ ...editingQuestion, answers: newAnswers });
                         }}
                         rows={2}
-                        className="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary resize-y"
+                        className="flex-1 px-4 py-2 border focus:outline-none focus:ring-2 focus:ring-primary resize-y"
                       />
                     </div>
                   ))}
@@ -743,7 +743,7 @@ function AdminQuestionsContent() {
                       setEditingQuestion({ ...editingQuestion, explanation: e.target.value })
                     }
                     rows={3}
-                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                    className="w-full px-4 py-2 border focus:outline-none focus:ring-2 focus:ring-primary"
                   />
                 </div>
 
@@ -754,7 +754,7 @@ function AdminQuestionsContent() {
                       <img
                         src={editingQuestion.imageUrl}
                         alt="Current image"
-                        className="max-h-32 rounded-lg border object-contain"
+                        className="max-h-32 border object-contain"
                       />
                     </div>
                   )}
@@ -768,7 +768,7 @@ function AdminQuestionsContent() {
                       );
                     }}
                     disabled={imageUploading}
-                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                    className="w-full px-4 py-2 border focus:outline-none focus:ring-2 focus:ring-primary"
                   />
                   {imageUploading && (
                     <p className="text-sm text-muted-foreground mt-1">Uploading image...</p>
@@ -777,7 +777,7 @@ function AdminQuestionsContent() {
 
                 <button
                   onClick={handleUpdateQuestion}
-                  className="w-full px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 font-semibold shadow-lg transition-all"
+                  className="w-full px-6 py-3 bg-primary text-primary-foreground hover:bg-primary/90 font-semibold transition-all"
                 >
                   Update Question
                 </button>
@@ -789,7 +789,7 @@ function AdminQuestionsContent() {
 
       {showAddModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-card rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-auto">
+          <div className="bg-card border max-w-2xl w-full max-h-[90vh] overflow-auto">
             <div className="p-6 border-b sticky top-0 bg-card z-10">
               <div className="flex items-center justify-between">
                 <h2 className="text-2xl font-bold">Add New Question</h2>
@@ -804,7 +804,7 @@ function AdminQuestionsContent() {
 
             <div className="p-6">
               {error && (
-                <div className="p-4 mb-4 bg-red-500/10 dark:bg-red-500/20 text-red-700 dark:text-red-400 rounded-lg border border-red-500/30 text-sm">
+                <div className="p-4 mb-4 bg-red-500/10 dark:bg-red-500/20 text-red-700 dark:text-red-400 border border-red-500/30 text-sm">
                   {error}
                 </div>
               )}
@@ -817,7 +817,7 @@ function AdminQuestionsContent() {
                   <select
                     value={newQuestion.certificationId}
                     onChange={(e) => setNewQuestion({ ...newQuestion, certificationId: e.target.value })}
-                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                    className="w-full px-4 py-2 border focus:outline-none focus:ring-2 focus:ring-primary"
                   >
                     <option value="">Select certification...</option>
                     {certifications.map((cert) => (
@@ -836,7 +836,7 @@ function AdminQuestionsContent() {
                     value={newQuestion.questionText}
                     onChange={(e) => setNewQuestion({ ...newQuestion, questionText: e.target.value })}
                     rows={4}
-                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                    className="w-full px-4 py-2 border focus:outline-none focus:ring-2 focus:ring-primary"
                     placeholder="Enter the question..."
                   />
                 </div>
@@ -847,7 +847,7 @@ function AdminQuestionsContent() {
                     <select
                       value={newQuestion.questionType}
                       onChange={(e) => setNewQuestion({ ...newQuestion, questionType: e.target.value })}
-                      className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                      className="w-full px-4 py-2 border focus:outline-none focus:ring-2 focus:ring-primary"
                     >
                       <option value="SINGLE_CHOICE">Single Choice</option>
                       <option value="MULTIPLE_CHOICE">Multiple Choice</option>
@@ -859,7 +859,7 @@ function AdminQuestionsContent() {
                     <select
                       value={newQuestion.difficulty}
                       onChange={(e) => setNewQuestion({ ...newQuestion, difficulty: e.target.value })}
-                      className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                      className="w-full px-4 py-2 border focus:outline-none focus:ring-2 focus:ring-primary"
                     >
                       <option value="EASY">Easy</option>
                       <option value="MEDIUM">Medium</option>
@@ -893,7 +893,7 @@ function AdminQuestionsContent() {
                           setNewQuestion({ ...newQuestion, answers: newAnswers });
                         }}
                         rows={2}
-                        className="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary resize-y"
+                        className="flex-1 px-4 py-2 border focus:outline-none focus:ring-2 focus:ring-primary resize-y"
                         placeholder={`Answer ${index + 1}`}
                       />
                     </div>
@@ -916,7 +916,7 @@ function AdminQuestionsContent() {
                     value={newQuestion.explanation}
                     onChange={(e) => setNewQuestion({ ...newQuestion, explanation: e.target.value })}
                     rows={3}
-                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                    className="w-full px-4 py-2 border focus:outline-none focus:ring-2 focus:ring-primary"
                     placeholder="Explain why the correct answer is correct..."
                   />
                 </div>
@@ -931,7 +931,7 @@ function AdminQuestionsContent() {
                       if (file) uploadImage(file, setNewQuestionImageUrl);
                     }}
                     disabled={imageUploading}
-                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                    className="w-full px-4 py-2 border focus:outline-none focus:ring-2 focus:ring-primary"
                   />
                   {imageUploading && (
                     <p className="text-sm text-muted-foreground mt-1">Uploading image...</p>
@@ -941,7 +941,7 @@ function AdminQuestionsContent() {
                       <img
                         src={newQuestionImageUrl}
                         alt="Preview"
-                        className="max-h-32 rounded-lg border object-contain"
+                        className="max-h-32 border object-contain"
                       />
                     </div>
                   )}
@@ -950,7 +950,7 @@ function AdminQuestionsContent() {
                 <button
                   onClick={handleAddQuestion}
                   disabled={addingQuestion || !newQuestion.questionText || !newQuestion.certificationId}
-                  className="w-full px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 disabled:opacity-50 font-semibold shadow-lg transition-all"
+                  className="w-full px-6 py-3 bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50 font-semibold transition-all"
                 >
                   {addingQuestion ? 'Adding...' : 'Add Question'}
                 </button>
@@ -967,7 +967,7 @@ export default function AdminQuestionsPage() {
   return (
     <Suspense fallback={
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+        <div className="animate-spin h-8 w-8 border-2 border-primary border-t-transparent"></div>
       </div>
     }>
       <AdminQuestionsContent />

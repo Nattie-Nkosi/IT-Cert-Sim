@@ -68,7 +68,7 @@ export default function DashboardPage() {
   if (!hasHydrated) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+        <div className="w-8 h-8 border-2 border-primary border-t-transparent animate-spin" />
       </div>
     );
   }
@@ -79,130 +79,71 @@ export default function DashboardPage() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="mb-10">
-        <h1 className="text-4xl font-bold mb-3 bg-gradient-to-r from-primary to-sky-600 bg-clip-text text-transparent">
-          Welcome back, {user.name}! 👋
+      <div className="mb-10 border-l-4 border-primary pl-4">
+        <h1 className="text-3xl font-bold mb-1">
+          Welcome back, {user.name}
         </h1>
-        <p className="text-lg text-muted-foreground">
+        <p className="text-muted-foreground">
           Ready to continue your certification journey?
         </p>
       </div>
 
       {loading ? (
         <div className="text-center py-12">
-          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+          <div className="inline-block w-8 h-8 border-2 border-primary border-t-transparent animate-spin" />
           <p className="text-muted-foreground mt-4">Loading your stats...</p>
         </div>
       ) : (
         <>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
-            <div className="group bg-card p-6 rounded-xl shadow-sm border hover:shadow-md hover:border-primary/50 transition-all duration-200">
-              <div className="flex items-center justify-between mb-3">
-                <div className="text-sm font-medium text-muted-foreground">
-                  Exam Attempts
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-border mb-10">
+            {[
+              { label: 'Exam Attempts', value: stats?.examAttempts || 0, icon: '🎯' },
+              { label: 'Practice Sessions', value: stats?.practiceAttempts || 0, icon: '📚' },
+              { label: 'Passed Exams', value: stats?.passedExams || 0, icon: '✅' },
+              { label: 'Average Score', value: `${stats?.averageScore || 0}%`, icon: '📊' },
+              { label: 'Total Attempts', value: stats?.totalAttempts || 0, icon: '📝' },
+              { label: 'Available Exams', value: stats?.exams || 0, icon: '🎓' },
+            ].map((stat) => (
+              <div key={stat.label} className="bg-card p-6 hover:bg-primary/5 transition-colors">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="text-sm font-medium text-muted-foreground">{stat.label}</div>
+                  <div className="w-10 h-10 bg-muted flex items-center justify-center">
+                    <span className="text-lg">{stat.icon}</span>
+                  </div>
                 </div>
-                <div className="w-10 h-10 bg-muted rounded-lg flex items-center justify-center">
-                  <span className="text-lg">🎯</span>
-                </div>
+                <div className="text-4xl font-bold">{stat.value}</div>
               </div>
-              <div className="text-4xl font-bold">{stats?.examAttempts || 0}</div>
-            </div>
-
-            <div className="group bg-card p-6 rounded-xl shadow-sm border hover:shadow-md hover:border-primary/50 transition-all duration-200">
-              <div className="flex items-center justify-between mb-3">
-                <div className="text-sm font-medium text-muted-foreground">
-                  Practice Sessions
-                </div>
-                <div className="w-10 h-10 bg-muted rounded-lg flex items-center justify-center">
-                  <span className="text-lg">📚</span>
-                </div>
-              </div>
-              <div className="text-4xl font-bold">
-                {stats?.practiceAttempts || 0}
-              </div>
-            </div>
-
-            <div className="group bg-card p-6 rounded-xl shadow-sm border hover:shadow-md hover:border-primary/50 transition-all duration-200">
-              <div className="flex items-center justify-between mb-3">
-                <div className="text-sm font-medium text-muted-foreground">
-                  Passed Exams
-                </div>
-                <div className="w-10 h-10 bg-muted rounded-lg flex items-center justify-center">
-                  <span className="text-lg">✅</span>
-                </div>
-              </div>
-              <div className="text-4xl font-bold">
-                {stats?.passedExams || 0}
-              </div>
-            </div>
-
-            <div className="group bg-card p-6 rounded-xl shadow-sm border hover:shadow-md hover:border-primary/50 transition-all duration-200">
-              <div className="flex items-center justify-between mb-3">
-                <div className="text-sm font-medium text-muted-foreground">
-                  Average Score
-                </div>
-                <div className="w-10 h-10 bg-muted rounded-lg flex items-center justify-center">
-                  <span className="text-lg">📊</span>
-                </div>
-              </div>
-              <div className="text-4xl font-bold">{stats?.averageScore || 0}%</div>
-            </div>
-
-            <div className="group bg-card p-6 rounded-xl shadow-sm border hover:shadow-md hover:border-primary/50 transition-all duration-200">
-              <div className="flex items-center justify-between mb-3">
-                <div className="text-sm font-medium text-muted-foreground">
-                  Total Attempts
-                </div>
-                <div className="w-10 h-10 bg-muted rounded-lg flex items-center justify-center">
-                  <span className="text-lg">📝</span>
-                </div>
-              </div>
-              <div className="text-4xl font-bold">{stats?.totalAttempts || 0}</div>
-            </div>
-
-            <div className="group bg-card p-6 rounded-xl shadow-sm border hover:shadow-md hover:border-primary/50 transition-all duration-200">
-              <div className="flex items-center justify-between mb-3">
-                <div className="text-sm font-medium text-muted-foreground">
-                  Available Exams
-                </div>
-                <div className="w-10 h-10 bg-muted rounded-lg flex items-center justify-center">
-                  <span className="text-lg">🎓</span>
-                </div>
-              </div>
-              <div className="text-4xl font-bold">
-                {stats?.exams || 0}
-              </div>
-            </div>
+            ))}
           </div>
 
           {user.role === 'ADMIN' && (
-            <div className="mb-6 bg-card p-6 rounded-xl shadow-sm border">
-              <h2 className="text-2xl font-bold mb-4 flex items-center">
-                <span className="mr-2">🛠️</span>
+            <div className="mb-6 bg-card border p-6">
+              <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
+                <span className="w-1 h-6 bg-orange-500 inline-block" />
                 Admin Panel
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
                 <Link
                   href="/admin/questions"
-                  className="block w-full px-4 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-all text-center font-semibold"
+                  className="block w-full px-4 py-3 bg-primary text-primary-foreground hover:bg-sky-600 transition-colors text-center font-semibold"
                 >
                   📝 Manage Questions
                 </Link>
                 <Link
                   href="/admin/exams"
-                  className="block w-full px-4 py-3 border-2 rounded-lg hover:border-primary hover:bg-accent transition-all text-center font-semibold"
+                  className="block w-full px-4 py-3 border-2 border-border hover:border-primary hover:bg-primary/5 transition-colors text-center font-semibold"
                 >
                   🎯 Manage Exams
                 </Link>
                 <Link
                   href="/admin/upload"
-                  className="block w-full px-4 py-3 border-2 rounded-lg hover:border-primary hover:bg-accent transition-all text-center font-semibold"
+                  className="block w-full px-4 py-3 border-2 border-border hover:border-primary hover:bg-primary/5 transition-colors text-center font-semibold"
                 >
                   📤 Upload Question
                 </Link>
                 <Link
                   href="/certifications"
-                  className="block w-full px-4 py-3 border-2 rounded-lg hover:border-primary hover:bg-accent transition-all text-center font-semibold"
+                  className="block w-full px-4 py-3 border-2 border-border hover:border-primary hover:bg-primary/5 transition-colors text-center font-semibold"
                 >
                   🎓 Manage Certs
                 </Link>
@@ -211,74 +152,54 @@ export default function DashboardPage() {
           )}
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-card p-8 rounded-xl shadow-sm border hover:shadow-md transition-shadow">
-              <h2 className="text-2xl font-bold mb-6 flex items-center">
-                <span className="mr-2">⚡</span>
+            <div className="bg-card p-8 border">
+              <h2 className="text-xl font-bold mb-6 flex items-center gap-2">
+                <span className="w-1 h-6 bg-primary inline-block" />
                 Quick Actions
               </h2>
               <div className="space-y-3">
                 <Link
                   href="/exams"
-                  className="block w-full px-6 py-4 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-all text-center font-semibold"
+                  className="block w-full px-6 py-4 bg-primary text-primary-foreground hover:bg-sky-600 transition-colors text-center font-semibold"
                 >
                   🎯 Browse Exams
                 </Link>
                 <Link
                   href="/certifications"
-                  className="block w-full px-6 py-4 border-2 rounded-lg hover:border-primary hover:bg-accent transition-all text-center font-semibold"
+                  className="block w-full px-6 py-4 border-2 border-border hover:border-primary hover:bg-primary/5 transition-colors text-center font-semibold"
                 >
                   📚 View Certifications
                 </Link>
                 <Link
                   href="/history"
-                  className="block w-full px-6 py-4 border-2 rounded-lg hover:border-primary hover:bg-accent transition-all text-center font-semibold"
+                  className="block w-full px-6 py-4 border-2 border-border hover:border-primary hover:bg-primary/5 transition-colors text-center font-semibold"
                 >
                   📈 View My History
                 </Link>
               </div>
             </div>
 
-            <div className="bg-card p-8 rounded-xl shadow-sm border hover:shadow-md transition-shadow">
-              <h2 className="text-2xl font-bold mb-6 flex items-center">
-                <span className="mr-2">🚀</span>
+            <div className="bg-card p-8 border">
+              <h2 className="text-xl font-bold mb-6 flex items-center gap-2">
+                <span className="w-1 h-6 bg-primary inline-block" />
                 Getting Started
               </h2>
               <div className="space-y-5">
-                <div className="flex items-start">
-                  <div className="flex-shrink-0 w-10 h-10 bg-primary text-primary-foreground rounded-lg flex items-center justify-center font-bold mr-4">
-                    1
+                {[
+                  { n: '1', title: 'Choose a Certification', desc: 'Browse available IT certifications' },
+                  { n: '2', title: 'Take Practice Exams', desc: 'Test your knowledge with realistic exams' },
+                  { n: '3', title: 'Track Your Progress', desc: 'Review results and improve your scores' },
+                ].map((step) => (
+                  <div key={step.n} className="flex items-start gap-4">
+                    <div className="flex-shrink-0 w-10 h-10 bg-primary text-primary-foreground flex items-center justify-center font-bold">
+                      {step.n}
+                    </div>
+                    <div>
+                      <h3 className="font-semibold">{step.title}</h3>
+                      <p className="text-sm text-muted-foreground mt-0.5">{step.desc}</p>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="font-semibold text-lg">Choose a Certification</h3>
-                    <p className="text-sm text-muted-foreground mt-1">
-                      Browse available IT certifications
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start">
-                  <div className="flex-shrink-0 w-10 h-10 bg-primary text-primary-foreground rounded-lg flex items-center justify-center font-bold mr-4">
-                    2
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-lg">Take Practice Exams</h3>
-                    <p className="text-sm text-muted-foreground mt-1">
-                      Test your knowledge with realistic exams
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start">
-                  <div className="flex-shrink-0 w-10 h-10 bg-primary text-primary-foreground rounded-lg flex items-center justify-center font-bold mr-4">
-                    3
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-lg">Track Your Progress</h3>
-                    <p className="text-sm text-muted-foreground mt-1">
-                      Review results and improve your scores
-                    </p>
-                  </div>
-                </div>
+                ))}
               </div>
             </div>
           </div>

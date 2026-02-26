@@ -132,7 +132,7 @@ export default function AdminCertificationsPage() {
   if (!hasHydrated) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+        <div className="animate-spin h-8 w-8 border-2 border-primary border-t-transparent"></div>
       </div>
     );
   }
@@ -143,7 +143,7 @@ export default function AdminCertificationsPage() {
     <div className="container mx-auto px-4 py-8">
       <div className="mb-8 flex items-center justify-between">
         <div>
-          <h1 className="text-4xl font-bold mb-3 bg-gradient-to-r from-primary to-sky-600 bg-clip-text text-transparent">
+          <h1 className="text-4xl font-bold mb-3 text-primary">
             Certification Management
           </h1>
           <p className="text-lg text-muted-foreground">
@@ -156,32 +156,32 @@ export default function AdminCertificationsPage() {
             setError('');
             setSuccess('');
           }}
-          className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 font-semibold shadow-lg transition-all"
+          className="px-6 py-3 bg-primary text-primary-foreground hover:bg-primary/90 font-semibold transition-all"
         >
           Add Certification
         </button>
       </div>
 
       {error && (
-        <div className="p-4 mb-6 bg-red-500/10 dark:bg-red-500/20 text-red-700 dark:text-red-400 rounded-lg border border-red-500/30">
+        <div className="p-4 mb-6 bg-red-500/10 dark:bg-red-500/20 text-red-700 dark:text-red-400 border border-red-500/30">
           {error}
         </div>
       )}
 
       {success && (
-        <div className="p-4 mb-6 bg-green-500/10 dark:bg-green-500/20 text-green-700 dark:text-green-400 rounded-lg border border-green-500/30">
+        <div className="p-4 mb-6 bg-green-500/10 dark:bg-green-500/20 text-green-700 dark:text-green-400 border border-green-500/30">
           {success}
         </div>
       )}
 
       {loading ? (
         <div className="text-center py-12">
-          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+          <div className="inline-block animate-spin h-8 w-8 border-2 border-primary border-t-transparent"></div>
           <p className="text-muted-foreground mt-4">Loading certifications...</p>
         </div>
       ) : certifications.length === 0 ? (
-        <div className="text-center py-12 bg-card rounded-xl shadow-sm border">
-          <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
+        <div className="text-center py-12 bg-card border">
+          <div className="w-16 h-16 bg-muted flex items-center justify-center mx-auto mb-4">
             <span className="text-3xl">📜</span>
           </div>
           <p className="text-muted-foreground mb-4">No certifications found</p>
@@ -191,7 +191,7 @@ export default function AdminCertificationsPage() {
               setError('');
               setSuccess('');
             }}
-            className="inline-block px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-all shadow-md font-semibold"
+            className="inline-block px-6 py-3 bg-primary text-primary-foreground hover:bg-primary/90 transition-all font-semibold"
           >
             Create First Certification
           </button>
@@ -201,7 +201,7 @@ export default function AdminCertificationsPage() {
           {certifications.map((cert) => (
             <div
               key={cert.id}
-              className="bg-card p-6 rounded-xl shadow-sm border hover:shadow-lg transition-all group"
+              className="bg-card p-6 border hover:border-primary transition-colors group"
             >
               <div className="flex items-start justify-between mb-3">
                 <div>
@@ -212,7 +212,7 @@ export default function AdminCertificationsPage() {
                     {cert.name}
                   </h3>
                 </div>
-                <span className="px-3 py-1 bg-primary/10 text-primary font-bold text-sm rounded-lg">
+                <span className="px-3 py-1 bg-primary/10 text-primary font-bold text-sm">
                   {cert.code}
                 </span>
               </div>
@@ -225,13 +225,13 @@ export default function AdminCertificationsPage() {
 
               <div className="flex gap-4 mb-4 text-sm">
                 <div className="flex items-center gap-2">
-                  <span className="w-8 h-8 bg-blue-500/10 dark:bg-blue-500/20 text-blue-700 dark:text-blue-400 rounded-lg flex items-center justify-center font-bold">
+                  <span className="w-8 h-8 bg-blue-500/10 dark:bg-blue-500/20 text-blue-700 dark:text-blue-400 flex items-center justify-center font-bold">
                     {cert._count?.questions || 0}
                   </span>
                   <span className="text-muted-foreground">Questions</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="w-8 h-8 bg-green-500/10 dark:bg-green-500/20 text-green-700 dark:text-green-400 rounded-lg flex items-center justify-center font-bold">
+                  <span className="w-8 h-8 bg-green-500/10 dark:bg-green-500/20 text-green-700 dark:text-green-400 flex items-center justify-center font-bold">
                     {cert._count?.exams || 0}
                   </span>
                   <span className="text-muted-foreground">Exams</span>
@@ -241,13 +241,13 @@ export default function AdminCertificationsPage() {
               <div className="flex gap-2">
                 <Link
                   href={`/admin/questions?certificationId=${cert.id}`}
-                  className="flex-1 px-4 py-2 border-2 border-primary/20 rounded-lg hover:border-primary hover:bg-primary/5 text-center text-sm font-semibold transition-all"
+                  className="flex-1 px-4 py-2 border-2 border-primary/20 hover:border-primary hover:bg-primary/5 text-center text-sm font-semibold transition-all"
                 >
                   Manage Questions
                 </Link>
                 <button
                   onClick={() => handleDeleteClick(cert)}
-                  className="px-4 py-2 border-2 border-red-500/30 text-red-600 dark:text-red-400 rounded-lg hover:bg-red-500/10 hover:border-red-500/50 text-sm font-semibold transition-all"
+                  className="px-4 py-2 border-2 border-red-500/30 text-red-600 dark:text-red-400 hover:bg-red-500/10 hover:border-red-500/50 text-sm font-semibold transition-all"
                 >
                   Delete
                 </button>
@@ -260,7 +260,7 @@ export default function AdminCertificationsPage() {
       {/* Create Modal */}
       {showCreateModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-card rounded-xl shadow-2xl max-w-lg w-full">
+          <div className="bg-card border max-w-lg w-full">
             <div className="p-6 border-b">
               <div className="flex items-center justify-between">
                 <h2 className="text-2xl font-bold">Add New Certification</h2>
@@ -278,7 +278,7 @@ export default function AdminCertificationsPage() {
 
             <div className="p-6">
               {error && (
-                <div className="p-4 mb-4 bg-red-500/10 dark:bg-red-500/20 text-red-700 dark:text-red-400 rounded-lg border border-red-500/30 text-sm">
+                <div className="p-4 mb-4 bg-red-500/10 dark:bg-red-500/20 text-red-700 dark:text-red-400 border border-red-500/30 text-sm">
                   {error}
                 </div>
               )}
@@ -292,7 +292,7 @@ export default function AdminCertificationsPage() {
                     type="text"
                     value={vendor}
                     onChange={(e) => setVendor(e.target.value)}
-                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                    className="w-full px-4 py-2 border focus:outline-none focus:ring-2 focus:ring-primary"
                     placeholder="e.g., Microsoft, CompTIA, Cisco"
                   />
                 </div>
@@ -305,7 +305,7 @@ export default function AdminCertificationsPage() {
                     type="text"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                    className="w-full px-4 py-2 border focus:outline-none focus:ring-2 focus:ring-primary"
                     placeholder="e.g., Microsoft 365 Endpoint Administrator"
                   />
                 </div>
@@ -318,7 +318,7 @@ export default function AdminCertificationsPage() {
                     type="text"
                     value={code}
                     onChange={(e) => setCode(e.target.value)}
-                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                    className="w-full px-4 py-2 border focus:outline-none focus:ring-2 focus:ring-primary"
                     placeholder="e.g., MD-102"
                   />
                 </div>
@@ -331,7 +331,7 @@ export default function AdminCertificationsPage() {
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     rows={3}
-                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                    className="w-full px-4 py-2 border focus:outline-none focus:ring-2 focus:ring-primary"
                     placeholder="Brief description of the certification..."
                   />
                 </div>
@@ -339,7 +339,7 @@ export default function AdminCertificationsPage() {
                 <button
                   onClick={handleCreate}
                   disabled={creating || !name || !code || !vendor}
-                  className="w-full px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 disabled:opacity-50 font-semibold shadow-lg transition-all"
+                  className="w-full px-6 py-3 bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50 font-semibold transition-all"
                 >
                   {creating ? 'Creating...' : 'Create Certification'}
                 </button>

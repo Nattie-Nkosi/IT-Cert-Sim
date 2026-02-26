@@ -51,7 +51,7 @@ export default function CertificationsPage() {
   if (!hasHydrated) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+        <div className="animate-spin h-8 w-8 border-2 border-primary border-t-transparent"></div>
       </div>
     );
   }
@@ -63,7 +63,7 @@ export default function CertificationsPage() {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="mb-10">
-        <h1 className="text-4xl font-bold mb-3 bg-gradient-to-r from-primary to-sky-600 bg-clip-text text-transparent">
+        <h1 className="text-4xl font-bold mb-3 text-primary">
           IT Certifications
         </h1>
         <p className="text-lg text-muted-foreground">
@@ -72,19 +72,19 @@ export default function CertificationsPage() {
       </div>
 
       {error && (
-        <div className="p-4 mb-6 bg-red-500/10 dark:bg-red-500/20 text-red-700 dark:text-red-400 rounded-lg border border-red-500/30">
+        <div className="p-4 mb-6 bg-red-500/10 dark:bg-red-500/20 text-red-700 dark:text-red-400 border border-red-500/30">
           {error}
         </div>
       )}
 
       {loading ? (
         <div className="text-center py-12">
-          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+          <div className="inline-block animate-spin h-8 w-8 border-2 border-primary border-t-transparent"></div>
           <p className="text-muted-foreground mt-4">Loading certifications...</p>
         </div>
       ) : certifications.length === 0 ? (
-        <div className="text-center py-12 bg-gradient-to-br from-primary/5 to-sky-500/5 rounded-xl shadow-sm border border-primary/10">
-          <div className="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-4">
+        <div className="text-center py-12 border bg-muted/30">
+          <div className="w-16 h-16 bg-primary/20 flex items-center justify-center mx-auto mb-4">
             <span className="text-3xl">📚</span>
           </div>
           <p className="text-muted-foreground mb-4">
@@ -104,19 +104,19 @@ export default function CertificationsPage() {
           {certifications.map((cert) => (
             <div
               key={cert.id}
-              className="group bg-card p-6 rounded-xl shadow-sm border hover:shadow-lg hover:scale-105 transition-all duration-200"
+              className="group bg-card p-6 border hover:border-primary transition-colors"
             >
               <div className="mb-4">
                 <div className="flex items-center justify-between mb-2">
                   <div className="text-sm font-medium text-primary/80">
                     {cert.vendor}
                   </div>
-                  <div className="w-10 h-10 bg-gradient-to-br from-primary/20 to-sky-500/20 rounded-lg flex items-center justify-center">
+                  <div className="w-10 h-10 bg-primary/15 flex items-center justify-center">
                     <span className="text-lg">🎓</span>
                   </div>
                 </div>
                 <h2 className="text-xl font-bold mb-2 group-hover:text-primary transition-colors">{cert.name}</h2>
-                <div className="inline-block px-3 py-1 bg-gradient-to-r from-primary/10 to-sky-500/10 text-primary text-xs font-semibold rounded-full border border-primary/20">
+                <div className="inline-block px-3 py-1 bg-primary/10 text-primary text-xs font-semibold border border-primary/20">
                   {cert.code}
                 </div>
               </div>
@@ -127,7 +127,7 @@ export default function CertificationsPage() {
                 </p>
               )}
 
-              <div className="flex items-center justify-between text-sm mb-4 p-3 bg-primary/5 rounded-lg">
+              <div className="flex items-center justify-between text-sm mb-4 p-3 bg-primary/5">
                 <div className="flex items-center gap-1">
                   <span className="text-base">📝</span>
                   <span className="text-muted-foreground">{cert._count.questions} questions</span>
@@ -140,7 +140,7 @@ export default function CertificationsPage() {
 
               <Link
                 href={`/certifications/${cert.id}`}
-                className="block w-full px-4 py-3 bg-gradient-to-r from-primary to-sky-600 text-white rounded-lg hover:opacity-90 transition-all hover:scale-105 text-center font-semibold shadow-md"
+                className="block w-full px-4 py-3 bg-primary text-primary-foreground hover:bg-sky-600 transition-colors text-center font-semibold"
               >
                 View Details
               </Link>

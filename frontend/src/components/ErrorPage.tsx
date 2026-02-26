@@ -48,7 +48,7 @@ export default function ErrorPage({
           {showRetry && onRetry && (
             <button
               onClick={onRetry}
-              className="px-6 py-3 bg-primary text-primary-foreground rounded-lg font-medium hover:opacity-90 transition-all"
+              className="px-6 py-3 bg-primary text-primary-foreground font-medium hover:opacity-90 transition-all"
             >
               Try Again
             </button>
@@ -56,7 +56,7 @@ export default function ErrorPage({
           {showBack && (
             <button
               onClick={() => router.back()}
-              className="px-6 py-3 border border-primary/20 rounded-lg font-medium hover:bg-primary/5 transition-all"
+              className="px-6 py-3 border border-primary/20 font-medium hover:bg-primary/5 transition-all"
             >
               Go Back
             </button>
@@ -64,7 +64,7 @@ export default function ErrorPage({
           {showHome && (
             <Link
               href="/"
-              className="px-6 py-3 border border-primary/20 rounded-lg font-medium hover:bg-primary/5 transition-all"
+              className="px-6 py-3 border border-primary/20 font-medium hover:bg-primary/5 transition-all"
             >
               Home
             </Link>
@@ -72,7 +72,7 @@ export default function ErrorPage({
           {showLogin && (
             <Link
               href="/login"
-              className="px-6 py-3 bg-primary text-primary-foreground rounded-lg font-medium hover:opacity-90 transition-all"
+              className="px-6 py-3 bg-primary text-primary-foreground font-medium hover:opacity-90 transition-all"
             >
               Login
             </Link>

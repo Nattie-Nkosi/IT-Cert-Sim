@@ -160,9 +160,9 @@ export function PracticeModeClient({ examId }: PracticeModeClientProps) {
         <div className="text-sm text-muted-foreground">
           Question {currentQuestionIndex + 1} of {exam.questions.length}
         </div>
-        <div className="w-full bg-secondary h-2 rounded-full mt-2">
+        <div className="w-full bg-secondary h-2 mt-2">
           <div
-            className="bg-primary h-2 rounded-full transition-all"
+            className="bg-primary h-2 transition-all"
             style={{ width: `${((currentQuestionIndex + 1) / exam.questions.length) * 100}%` }}
           />
         </div>
@@ -185,7 +185,7 @@ export function PracticeModeClient({ examId }: PracticeModeClientProps) {
               <img
                 src={currentQuestion.imageUrl}
                 alt="Question image"
-                className="max-h-64 rounded-xl border object-contain shadow-sm"
+                className="max-h-64 border object-contain"
               />
             </div>
           )}
@@ -205,7 +205,7 @@ export function PracticeModeClient({ examId }: PracticeModeClientProps) {
                 return (
                   <div
                     key={answer.id}
-                    className={`flex items-start space-x-3 p-4 rounded-lg border-2 transition-colors ${
+                    className={`flex items-start space-x-3 p-4 border-2 transition-colors ${
                       currentFeedback
                         ? isCorrect
                           ? 'border-green-500 bg-green-500/10 dark:bg-green-500/20'
@@ -263,7 +263,7 @@ export function PracticeModeClient({ examId }: PracticeModeClientProps) {
                 return (
                   <div
                     key={answer.id}
-                    className={`flex items-start space-x-3 p-4 rounded-lg border-2 transition-colors ${
+                    className={`flex items-start space-x-3 p-4 border-2 transition-colors ${
                       showFeedback
                         ? isCorrect
                           ? 'border-green-500 bg-green-500/10 dark:bg-green-500/20'

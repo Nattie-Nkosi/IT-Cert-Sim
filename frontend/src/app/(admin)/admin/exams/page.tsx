@@ -249,7 +249,7 @@ export default function AdminExamsPage() {
   if (!hasHydrated) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+        <div className="animate-spin h-8 w-8 border-2 border-primary border-t-transparent"></div>
       </div>
     );
   }
@@ -260,7 +260,7 @@ export default function AdminExamsPage() {
     <div className="container mx-auto px-4 py-8">
       <div className="mb-8 flex items-center justify-between">
         <div>
-          <h1 className="text-4xl font-bold mb-3 bg-gradient-to-r from-primary to-sky-600 bg-clip-text text-transparent">
+          <h1 className="text-4xl font-bold mb-3 text-primary">
             Exam Management
           </h1>
           <p className="text-lg text-muted-foreground">
@@ -273,32 +273,32 @@ export default function AdminExamsPage() {
             setError('');
             setSuccess('');
           }}
-          className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 font-semibold shadow-lg transition-all"
+          className="px-6 py-3 bg-primary text-primary-foreground hover:bg-primary/90 font-semibold transition-all"
         >
           Create New Exam
         </button>
       </div>
 
       {error && (
-        <div className="p-4 mb-6 bg-red-500/10 dark:bg-red-500/20 text-red-700 dark:text-red-400 rounded-lg border border-red-500/30">
+        <div className="p-4 mb-6 bg-red-500/10 dark:bg-red-500/20 text-red-700 dark:text-red-400 border border-red-500/30">
           {error}
         </div>
       )}
 
       {success && (
-        <div className="p-4 mb-6 bg-green-500/10 dark:bg-green-500/20 text-green-700 dark:text-green-400 rounded-lg border border-green-500/30">
+        <div className="p-4 mb-6 bg-green-500/10 dark:bg-green-500/20 text-green-700 dark:text-green-400 border border-green-500/30">
           {success}
         </div>
       )}
 
       {loading ? (
         <div className="text-center py-12">
-          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+          <div className="inline-block animate-spin h-8 w-8 border-2 border-primary border-t-transparent"></div>
           <p className="text-muted-foreground mt-4">Loading exams...</p>
         </div>
       ) : exams.length === 0 ? (
-        <div className="text-center py-12 bg-card rounded-xl shadow-sm border">
-          <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
+        <div className="text-center py-12 bg-card border">
+          <div className="w-16 h-16 bg-muted flex items-center justify-center mx-auto mb-4">
             <span className="text-3xl">🎯</span>
           </div>
           <p className="text-muted-foreground mb-4">No exams found</p>
@@ -308,7 +308,7 @@ export default function AdminExamsPage() {
               setError('');
               setSuccess('');
             }}
-            className="inline-block px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-all shadow-md font-semibold"
+            className="inline-block px-6 py-3 bg-primary text-primary-foreground hover:bg-primary/90 transition-all font-semibold"
           >
             Create First Exam
           </button>
@@ -318,12 +318,12 @@ export default function AdminExamsPage() {
           {exams.map((exam) => (
             <div
               key={exam.id}
-              className="bg-card p-6 rounded-xl shadow-sm border hover:shadow-lg transition-all"
+              className="bg-card p-6 border transition-all"
             >
               <div className="flex items-start justify-between mb-4">
                 <h3 className="text-xl font-bold flex-1">{exam.name}</h3>
                 <span
-                  className={`px-3 py-1 text-xs font-bold rounded-full ${
+                  className={`px-3 py-1 text-xs font-bold ${
                     exam.isActive
                       ? 'bg-green-500/10 dark:bg-green-500/20 text-green-700 dark:text-green-400'
                       : 'bg-muted text-muted-foreground'
@@ -341,7 +341,7 @@ export default function AdminExamsPage() {
                 <p className="text-sm mb-4 line-clamp-2">{exam.description}</p>
               )}
 
-              <div className="space-y-2 mb-4 text-sm bg-primary/5 p-4 rounded-lg">
+              <div className="space-y-2 mb-4 text-sm bg-primary/5 p-4">
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Questions:</span>
                   <span className="font-semibold text-primary">{exam._count?.questions || 0}</span>
@@ -359,13 +359,13 @@ export default function AdminExamsPage() {
               <div className="flex gap-2">
                 <button
                   onClick={() => handleEditExam(exam.id)}
-                  className="flex-1 px-4 py-2 border-2 border-primary/20 rounded-lg hover:border-primary hover:bg-primary/5 text-primary font-semibold transition-all"
+                  className="flex-1 px-4 py-2 border-2 border-primary/20 hover:border-primary hover:bg-primary/5 text-primary font-semibold transition-all"
                 >
                   Edit Questions
                 </button>
                 <button
                   onClick={() => handleSyncQuestions(exam.id)}
-                  className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 font-semibold transition-all"
+                  className="px-4 py-2 bg-green-600 text-white hover:bg-green-700 font-semibold transition-all"
                   title="Add all certification questions to this exam"
                 >
                   Sync All
@@ -379,7 +379,7 @@ export default function AdminExamsPage() {
       {/* Create Exam Modal */}
       {showCreateModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-card rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-auto">
+          <div className="bg-card border max-w-4xl w-full max-h-[90vh] overflow-auto">
             <div className="p-6 border-b sticky top-0 bg-card z-10">
               <div className="flex items-center justify-between">
                 <h2 className="text-2xl font-bold">Create New Exam</h2>
@@ -397,7 +397,7 @@ export default function AdminExamsPage() {
 
             <div className="p-6">
               {error && (
-                <div className="p-4 mb-4 bg-red-500/10 dark:bg-red-500/20 text-red-700 dark:text-red-400 rounded-lg border border-red-500/30">
+                <div className="p-4 mb-4 bg-red-500/10 dark:bg-red-500/20 text-red-700 dark:text-red-400 border border-red-500/30">
                   {error}
                 </div>
               )}
@@ -409,7 +409,7 @@ export default function AdminExamsPage() {
                     type="text"
                     value={examName}
                     onChange={(e) => setExamName(e.target.value)}
-                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                    className="w-full px-4 py-2 border focus:outline-none focus:ring-2 focus:ring-primary"
                     placeholder="e.g., CompTIA Network+ Practice Exam 1"
                   />
                 </div>
@@ -421,7 +421,7 @@ export default function AdminExamsPage() {
                       <select
                         value={examCertificationId}
                         onChange={(e) => handleCertificationChange(e.target.value)}
-                        className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                        className="w-full px-4 py-2 border focus:outline-none focus:ring-2 focus:ring-primary"
                       >
                         <option value="">Select certification...</option>
                         {certifications.map((cert) => (
@@ -439,7 +439,7 @@ export default function AdminExamsPage() {
                       </button>
                     </div>
                   ) : (
-                    <div className="p-4 border-2 border-dashed border-primary/30 rounded-lg bg-primary/5 space-y-3">
+                    <div className="p-4 border-2 border-dashed border-primary/30 bg-primary/5 space-y-3">
                       <div className="flex items-center justify-between">
                         <span className="text-sm font-semibold text-primary">New Certification</span>
                         <button
@@ -455,14 +455,14 @@ export default function AdminExamsPage() {
                           type="text"
                           value={newCertVendor}
                           onChange={(e) => setNewCertVendor(e.target.value)}
-                          className="px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                          className="px-3 py-2 border text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                           placeholder="Vendor (e.g., Microsoft)"
                         />
                         <input
                           type="text"
                           value={newCertCode}
                           onChange={(e) => setNewCertCode(e.target.value)}
-                          className="px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                          className="px-3 py-2 border text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                           placeholder="Code (e.g., MD-102)"
                         />
                       </div>
@@ -470,21 +470,21 @@ export default function AdminExamsPage() {
                         type="text"
                         value={newCertName}
                         onChange={(e) => setNewCertName(e.target.value)}
-                        className="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                        className="w-full px-3 py-2 border text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                         placeholder="Name (e.g., Microsoft 365 Endpoint Administrator)"
                       />
                       <textarea
                         value={newCertDescription}
                         onChange={(e) => setNewCertDescription(e.target.value)}
                         rows={2}
-                        className="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                        className="w-full px-3 py-2 border text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                         placeholder="Description (optional)"
                       />
                       <button
                         type="button"
                         onClick={handleCreateCertification}
                         disabled={creatingCert || !newCertName || !newCertCode || !newCertVendor}
-                        className="w-full px-4 py-2 bg-primary text-white rounded-lg text-sm font-semibold hover:opacity-90 disabled:opacity-50 transition-all"
+                        className="w-full px-4 py-2 bg-primary text-white text-sm font-semibold hover:opacity-90 disabled:opacity-50 transition-all"
                       >
                         {creatingCert ? 'Creating...' : 'Create Certification'}
                       </button>
@@ -498,7 +498,7 @@ export default function AdminExamsPage() {
                     value={examDescription}
                     onChange={(e) => setExamDescription(e.target.value)}
                     rows={2}
-                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                    className="w-full px-4 py-2 border focus:outline-none focus:ring-2 focus:ring-primary"
                     placeholder="Brief description of the exam"
                   />
                 </div>
@@ -510,7 +510,7 @@ export default function AdminExamsPage() {
                       type="number"
                       value={examDuration}
                       onChange={(e) => setExamDuration(parseInt(e.target.value))}
-                      className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                      className="w-full px-4 py-2 border focus:outline-none focus:ring-2 focus:ring-primary"
                     />
                   </div>
                   <div>
@@ -519,7 +519,7 @@ export default function AdminExamsPage() {
                       type="number"
                       value={examPassingScore}
                       onChange={(e) => setExamPassingScore(parseInt(e.target.value))}
-                      className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                      className="w-full px-4 py-2 border focus:outline-none focus:ring-2 focus:ring-primary"
                     />
                   </div>
                 </div>
@@ -530,13 +530,13 @@ export default function AdminExamsPage() {
                       Select Questions ({selectedQuestions.length} selected)
                     </label>
                     {questions.length === 0 ? (
-                      <div className="p-6 bg-muted rounded-lg text-center">
+                      <div className="p-6 bg-muted text-center">
                         <p className="text-sm text-muted-foreground mb-4">
                           No questions available for this certification yet.
                         </p>
                         <Link
                           href={`/admin/questions?certificationId=${examCertificationId}&action=add`}
-                          className="inline-block px-4 py-2 bg-primary text-white rounded-lg text-sm font-semibold hover:opacity-90 transition-all"
+                          className="inline-block px-4 py-2 bg-primary text-white text-sm font-semibold hover:opacity-90 transition-all"
                         >
                           Add Questions
                         </Link>
@@ -559,11 +559,11 @@ export default function AdminExamsPage() {
                             Clear All
                           </button>
                         </div>
-                        <div className="max-h-96 overflow-auto border rounded-lg p-4 space-y-2">
+                        <div className="max-h-96 overflow-auto border p-4 space-y-2">
                         {questions.map((question) => (
                           <label
                             key={question.id}
-                            className={`flex items-start gap-3 p-3 rounded-lg cursor-pointer transition-all ${
+                            className={`flex items-start gap-3 p-3 cursor-pointer transition-all ${
                               selectedQuestions.includes(question.id)
                                 ? 'bg-primary/10 border-2 border-primary'
                                 : 'bg-muted border-2 border-transparent hover:border-border'
@@ -603,7 +603,7 @@ export default function AdminExamsPage() {
                 <button
                   onClick={handleCreateExam}
                   disabled={!examName || !examCertificationId || selectedQuestions.length === 0}
-                  className="w-full px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 disabled:opacity-50 font-semibold shadow-lg transition-all"
+                  className="w-full px-6 py-3 bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50 font-semibold transition-all"
                 >
                   Create Exam with {selectedQuestions.length} Questions
                 </button>
@@ -616,7 +616,7 @@ export default function AdminExamsPage() {
       {/* Edit Exam Modal */}
       {showEditModal && editingExam && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-card rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-auto">
+          <div className="bg-card border max-w-4xl w-full max-h-[90vh] overflow-auto">
             <div className="p-6 border-b sticky top-0 bg-card z-10">
               <div className="flex items-center justify-between">
                 <h2 className="text-2xl font-bold">Edit Exam: {editingExam.name}</h2>
@@ -635,12 +635,12 @@ export default function AdminExamsPage() {
 
             <div className="p-6">
               {error && (
-                <div className="p-4 mb-4 bg-red-500/10 dark:bg-red-500/20 text-red-700 dark:text-red-400 rounded-lg border border-red-500/30">
+                <div className="p-4 mb-4 bg-red-500/10 dark:bg-red-500/20 text-red-700 dark:text-red-400 border border-red-500/30">
                   {error}
                 </div>
               )}
 
-              <div className="mb-4 p-4 bg-blue-500/10 dark:bg-blue-500/20 border border-blue-500/30 rounded-lg">
+              <div className="mb-4 p-4 bg-blue-500/10 dark:bg-blue-500/20 border border-blue-500/30">
                 <p className="text-sm text-blue-800 dark:text-blue-300">
                   <strong>Note:</strong> Select which questions should be included in this exam.
                   Currently selected: {selectedQuestions.length} questions
@@ -652,15 +652,15 @@ export default function AdminExamsPage() {
                   Select Questions ({selectedQuestions.length} selected)
                 </label>
                 {questions.length === 0 ? (
-                  <p className="text-sm text-muted-foreground p-4 bg-muted rounded-lg">
+                  <p className="text-sm text-muted-foreground p-4 bg-muted">
                     No questions available for this certification.
                   </p>
                 ) : (
-                  <div className="max-h-96 overflow-auto border rounded-lg p-4 space-y-2">
+                  <div className="max-h-96 overflow-auto border p-4 space-y-2">
                     {questions.map((question) => (
                       <label
                         key={question.id}
-                        className={`flex items-start gap-3 p-3 rounded-lg cursor-pointer transition-all ${
+                        className={`flex items-start gap-3 p-3 cursor-pointer transition-all ${
                           selectedQuestions.includes(question.id)
                             ? 'bg-primary/10 border-2 border-primary'
                             : 'bg-muted border-2 border-transparent hover:border-border'
@@ -698,7 +698,7 @@ export default function AdminExamsPage() {
               <button
                 onClick={handleUpdateExamQuestions}
                 disabled={selectedQuestions.length === 0}
-                className="w-full mt-6 px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 disabled:opacity-50 font-semibold shadow-lg transition-all"
+                className="w-full mt-6 px-6 py-3 bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50 font-semibold transition-all"
               >
                 Update Exam with {selectedQuestions.length} Questions
               </button>

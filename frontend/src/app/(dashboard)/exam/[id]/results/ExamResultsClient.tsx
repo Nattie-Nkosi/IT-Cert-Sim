@@ -81,7 +81,7 @@ export default function ExamResultsClient() {
   if (!hasHydrated) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+        <div className="animate-spin h-8 w-8 border-2 border-primary border-t-transparent"></div>
       </div>
     );
   }
@@ -92,7 +92,7 @@ export default function ExamResultsClient() {
     return (
       <div className="container mx-auto px-4 py-8">
         <div className="text-center py-12">
-          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+          <div className="inline-block animate-spin h-8 w-8 border-2 border-primary border-t-transparent"></div>
           <p className="text-muted-foreground mt-4">Loading results...</p>
         </div>
       </div>
@@ -102,7 +102,7 @@ export default function ExamResultsClient() {
   if (error || !attempt) {
     return (
       <div className="container mx-auto px-4 py-8">
-        <div className="p-4 bg-red-500/10 dark:bg-red-500/20 text-red-700 dark:text-red-400 rounded-lg border border-red-500/30 mb-4">
+        <div className="p-4 bg-red-500/10 dark:bg-red-500/20 text-red-700 dark:text-red-400 border border-red-500/30 mb-4">
           {error || 'Results not found'}
         </div>
         <Link href="/dashboard" className="text-primary hover:underline font-semibold">
@@ -128,10 +128,10 @@ export default function ExamResultsClient() {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-4xl mx-auto">
-        <div className="bg-card p-8 rounded-xl shadow-sm border mb-8">
+        <div className="bg-card p-8 border mb-8">
           <div className="text-center mb-6">
             <div
-              className={`inline-flex items-center justify-center w-24 h-24 rounded-full mb-4 border-2 ${
+              className={`inline-flex items-center justify-center w-24 h-24 mb-4 border-2 ${
                 attempt.passed
                   ? 'bg-green-500/10 dark:bg-green-500/20 border-green-500'
                   : 'bg-red-500/10 dark:bg-red-500/20 border-red-500'
@@ -152,24 +152,24 @@ export default function ExamResultsClient() {
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="text-center p-5 bg-muted/50 rounded-xl border hover:shadow-md transition-shadow">
-              <div className="w-10 h-10 bg-muted rounded-lg flex items-center justify-center mx-auto mb-2">
+            <div className="text-center p-5 bg-muted/50 border hover:shadow-md transition-shadow">
+              <div className="w-10 h-10 bg-muted flex items-center justify-center mx-auto mb-2">
                 <span className="text-lg">📊</span>
               </div>
               <div className="text-3xl font-bold">{Math.round(attempt.score)}%</div>
               <div className="text-sm text-muted-foreground mt-1 font-medium">Your Score</div>
             </div>
 
-            <div className="text-center p-5 bg-muted/50 rounded-xl border hover:shadow-md transition-shadow">
-              <div className="w-10 h-10 bg-muted rounded-lg flex items-center justify-center mx-auto mb-2">
+            <div className="text-center p-5 bg-muted/50 border hover:shadow-md transition-shadow">
+              <div className="w-10 h-10 bg-muted flex items-center justify-center mx-auto mb-2">
                 <span className="text-lg">🎯</span>
               </div>
               <div className="text-3xl font-bold">{attempt.exam.passingScore}%</div>
               <div className="text-sm text-muted-foreground mt-1 font-medium">Passing Score</div>
             </div>
 
-            <div className="text-center p-5 bg-muted/50 rounded-xl border hover:shadow-md transition-shadow">
-              <div className="w-10 h-10 bg-muted rounded-lg flex items-center justify-center mx-auto mb-2">
+            <div className="text-center p-5 bg-muted/50 border hover:shadow-md transition-shadow">
+              <div className="w-10 h-10 bg-muted flex items-center justify-center mx-auto mb-2">
                 <span className="text-lg">✅</span>
               </div>
               <div className="text-3xl font-bold">
@@ -178,8 +178,8 @@ export default function ExamResultsClient() {
               <div className="text-sm text-muted-foreground mt-1 font-medium">Correct</div>
             </div>
 
-            <div className="text-center p-5 bg-muted/50 rounded-xl border hover:shadow-md transition-shadow">
-              <div className="w-10 h-10 bg-muted rounded-lg flex items-center justify-center mx-auto mb-2">
+            <div className="text-center p-5 bg-muted/50 border hover:shadow-md transition-shadow">
+              <div className="w-10 h-10 bg-muted flex items-center justify-center mx-auto mb-2">
                 <span className="text-lg">📅</span>
               </div>
               <div className="text-2xl font-bold">
@@ -190,7 +190,7 @@ export default function ExamResultsClient() {
           </div>
         </div>
 
-        <div className="bg-card p-6 rounded-xl shadow-sm border mb-6">
+        <div className="bg-card p-6 border mb-6">
           <div className="flex items-start justify-between">
             <div>
               <h2 className="text-2xl font-bold mb-2">
@@ -200,13 +200,13 @@ export default function ExamResultsClient() {
                 {attempt.exam.certification.name} ({attempt.exam.certification.code})
               </p>
             </div>
-            <div className="w-12 h-12 bg-muted rounded-lg flex items-center justify-center">
+            <div className="w-12 h-12 bg-muted flex items-center justify-center">
               <span className="text-2xl">🎓</span>
             </div>
           </div>
         </div>
 
-        <div className="bg-card p-6 rounded-xl shadow-sm border mb-6">
+        <div className="bg-card p-6 border mb-6">
           <button
             onClick={() => setShowAnswers(!showAnswers)}
             className="w-full flex items-center justify-between text-left font-bold text-lg hover:text-primary transition-colors"
@@ -297,13 +297,13 @@ export default function ExamResultsClient() {
         <div className="flex gap-4 flex-col sm:flex-row">
           <Link
             href={`/exam/${attempt.exam.id}`}
-            className="flex-1 px-6 py-4 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-all text-center font-semibold"
+            className="flex-1 px-6 py-4 bg-primary text-primary-foreground hover:bg-primary/90 transition-all text-center font-semibold"
           >
             Retake Exam
           </Link>
           <Link
             href="/dashboard"
-            className="flex-1 px-6 py-4 border-2 rounded-lg hover:border-primary hover:bg-accent text-center font-semibold transition-all"
+            className="flex-1 px-6 py-4 border-2 hover:border-primary hover:bg-accent text-center font-semibold transition-all"
           >
             Back to Dashboard
           </Link>

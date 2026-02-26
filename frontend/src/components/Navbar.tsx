@@ -31,55 +31,57 @@ export default function Navbar() {
   const isActive = (path: string) => pathname === path;
 
   return (
-    <nav className="border-b bg-background/80 backdrop-blur-lg shadow-sm sticky top-0 z-50">
+    <nav className="border-b bg-background sticky top-0 z-50">
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
           <div className="flex items-center space-x-8">
             <Link href={user ? "/dashboard" : "/"} className="flex items-center space-x-2">
-              <span className="text-2xl">🎓</span>
-              <span className="text-xl font-bold bg-gradient-to-r from-primary to-sky-600 bg-clip-text text-transparent">
-                IT Cert Simulator
+              <div className="w-8 h-8 bg-primary flex items-center justify-center">
+                <span className="text-primary-foreground font-bold text-sm">IT</span>
+              </div>
+              <span className="text-xl font-bold text-foreground tracking-tight">
+                Cert Simulator
               </span>
             </Link>
 
             {user && (
-              <div className="hidden md:flex space-x-1">
+              <div className="hidden md:flex space-x-0.5">
                 <Link
                   href="/dashboard"
-                  className={`px-3 py-2 text-sm font-medium rounded-md transition-colors ${
+                  className={`px-3 py-2 text-sm font-medium transition-colors border-b-2 ${
                     isActive('/dashboard')
-                      ? 'bg-primary/10 text-primary'
-                      : 'hover:bg-primary/5 hover:text-primary'
+                      ? 'border-primary text-primary'
+                      : 'border-transparent hover:text-primary hover:border-primary/40'
                   }`}
                 >
                   Dashboard
                 </Link>
                 <Link
                   href="/certifications"
-                  className={`px-3 py-2 text-sm font-medium rounded-md transition-colors ${
+                  className={`px-3 py-2 text-sm font-medium transition-colors border-b-2 ${
                     pathname?.startsWith('/certifications')
-                      ? 'bg-primary/10 text-primary'
-                      : 'hover:bg-primary/5 hover:text-primary'
+                      ? 'border-primary text-primary'
+                      : 'border-transparent hover:text-primary hover:border-primary/40'
                   }`}
                 >
                   Certifications
                 </Link>
                 <Link
                   href="/exams"
-                  className={`px-3 py-2 text-sm font-medium rounded-md transition-colors ${
+                  className={`px-3 py-2 text-sm font-medium transition-colors border-b-2 ${
                     isActive('/exams')
-                      ? 'bg-primary/10 text-primary'
-                      : 'hover:bg-primary/5 hover:text-primary'
+                      ? 'border-primary text-primary'
+                      : 'border-transparent hover:text-primary hover:border-primary/40'
                   }`}
                 >
                   Exams
                 </Link>
                 <Link
                   href="/history"
-                  className={`px-3 py-2 text-sm font-medium rounded-md transition-colors ${
+                  className={`px-3 py-2 text-sm font-medium transition-colors border-b-2 ${
                     isActive('/history')
-                      ? 'bg-primary/10 text-primary'
-                      : 'hover:bg-primary/5 hover:text-primary'
+                      ? 'border-primary text-primary'
+                      : 'border-transparent hover:text-primary hover:border-primary/40'
                   }`}
                 >
                   History
@@ -87,10 +89,10 @@ export default function Navbar() {
                 {user.role === 'ADMIN' && (
                   <Link
                     href="/admin"
-                    className={`px-3 py-2 text-sm font-medium rounded-md transition-colors ${
+                    className={`px-3 py-2 text-sm font-medium transition-colors border-b-2 ${
                       pathname?.startsWith('/admin')
-                        ? 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400'
-                        : 'text-orange-600 hover:bg-orange-50 dark:text-orange-400 dark:hover:bg-orange-900/20'
+                        ? 'border-orange-500 text-orange-600 dark:text-orange-400'
+                        : 'border-transparent text-orange-600 hover:border-orange-400 dark:text-orange-400'
                     }`}
                   >
                     Admin
@@ -103,7 +105,7 @@ export default function Navbar() {
           <div className="flex items-center space-x-2">
             <button
               onClick={toggleTheme}
-              className="p-2 rounded-md hover:bg-primary/10 transition-colors"
+              className="p-2 hover:bg-primary/10 transition-colors"
               title={`Theme: ${theme}`}
             >
               {theme === 'light' ? (
@@ -125,14 +127,14 @@ export default function Navbar() {
               <>
                 <Link
                   href="/profile"
-                  className={`hidden sm:flex items-center space-x-2 px-3 py-1.5 rounded-md transition-colors ${
+                  className={`hidden sm:flex items-center space-x-2 px-3 py-1.5 border transition-colors ${
                     isActive('/profile')
-                      ? 'bg-primary/10'
-                      : 'bg-primary/5 hover:bg-primary/10'
+                      ? 'border-primary bg-primary/5'
+                      : 'border-transparent hover:border-primary/30 hover:bg-primary/5'
                   }`}
                 >
-                  <div className="w-6 h-6 bg-primary/20 rounded-full flex items-center justify-center">
-                    <span className="text-xs font-bold text-primary">
+                  <div className="w-6 h-6 bg-primary flex items-center justify-center">
+                    <span className="text-xs font-bold text-primary-foreground">
                       {user.name.charAt(0).toUpperCase()}
                     </span>
                   </div>
@@ -140,7 +142,7 @@ export default function Navbar() {
                 </Link>
                 <button
                   onClick={handleLogout}
-                  className="px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-md transition-colors"
+                  className="px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
                 >
                   Logout
                 </button>
@@ -155,7 +157,7 @@ export default function Navbar() {
                 </Link>
                 <Link
                   href="/register"
-                  className="px-4 py-2 text-sm font-medium bg-primary text-primary-foreground rounded-md hover:opacity-90 transition-all hover:scale-105 shadow-sm"
+                  className="px-4 py-2 text-sm font-medium bg-primary text-primary-foreground hover:bg-sky-600 transition-colors"
                 >
                   Get Started
                 </Link>

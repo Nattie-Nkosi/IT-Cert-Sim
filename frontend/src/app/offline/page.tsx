@@ -34,7 +34,7 @@ export default function OfflinePage() {
         <p className="text-muted-foreground mb-8 max-w-md">
           Please check your internet connection and try again.
         </p>
-        <div className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-gray-800 rounded-lg text-sm font-medium">
+        <div className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-gray-800 text-sm font-medium">
           <div className="w-2 h-2 bg-red-500 rounded-full" />
           No connection
         </div>

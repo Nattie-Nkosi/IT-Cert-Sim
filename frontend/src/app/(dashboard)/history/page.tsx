@@ -96,7 +96,7 @@ export default function HistoryPage() {
   if (!hasHydrated) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+        <div className="animate-spin h-8 w-8 border-2 border-primary border-t-transparent"></div>
       </div>
     );
   }
@@ -131,7 +131,7 @@ export default function HistoryPage() {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="mb-10">
-        <h1 className="text-4xl font-bold mb-3 bg-gradient-to-r from-primary to-sky-600 bg-clip-text text-transparent">
+        <h1 className="text-4xl font-bold mb-3 text-primary">
           Exam History
         </h1>
         <p className="text-lg text-muted-foreground">
@@ -140,55 +140,55 @@ export default function HistoryPage() {
       </div>
 
       {error && (
-        <div className="p-4 mb-6 bg-red-500/10 dark:bg-red-500/20 text-red-700 dark:text-red-400 rounded-lg border border-red-500/30">
+        <div className="p-4 mb-6 bg-red-500/10 dark:bg-red-500/20 text-red-700 dark:text-red-400 border border-red-500/30">
           {error}
         </div>
       )}
 
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <div className="group bg-card p-6 rounded-xl shadow-sm border hover:shadow-md hover:border-primary/50 transition-all duration-200">
+        <div className="group bg-card p-6 border hover:border-primary transition-colors">
           <div className="flex items-center justify-between mb-3">
             <div className="text-sm font-medium text-muted-foreground">
               Total Attempts
             </div>
-            <div className="w-10 h-10 bg-muted rounded-lg flex items-center justify-center">
+            <div className="w-10 h-10 bg-muted flex items-center justify-center">
               <span className="text-lg">📝</span>
             </div>
           </div>
           <div className="text-4xl font-bold">{stats.total}</div>
         </div>
 
-        <div className="group bg-card p-6 rounded-xl shadow-sm border hover:shadow-md hover:border-primary/50 transition-all duration-200">
+        <div className="group bg-card p-6 border hover:border-primary transition-colors">
           <div className="flex items-center justify-between mb-3">
             <div className="text-sm font-medium text-muted-foreground">
               Passed
             </div>
-            <div className="w-10 h-10 bg-muted rounded-lg flex items-center justify-center">
+            <div className="w-10 h-10 bg-muted flex items-center justify-center">
               <span className="text-lg">✅</span>
             </div>
           </div>
           <div className="text-4xl font-bold">{stats.passed}</div>
         </div>
 
-        <div className="group bg-card p-6 rounded-xl shadow-sm border hover:shadow-md hover:border-primary/50 transition-all duration-200">
+        <div className="group bg-card p-6 border hover:border-primary transition-colors">
           <div className="flex items-center justify-between mb-3">
             <div className="text-sm font-medium text-muted-foreground">
               Failed
             </div>
-            <div className="w-10 h-10 bg-muted rounded-lg flex items-center justify-center">
+            <div className="w-10 h-10 bg-muted flex items-center justify-center">
               <span className="text-lg">❌</span>
             </div>
           </div>
           <div className="text-4xl font-bold">{stats.failed}</div>
         </div>
 
-        <div className="group bg-card p-6 rounded-xl shadow-sm border hover:shadow-md hover:border-primary/50 transition-all duration-200">
+        <div className="group bg-card p-6 border hover:border-primary transition-colors">
           <div className="flex items-center justify-between mb-3">
             <div className="text-sm font-medium text-muted-foreground">
               Average Score
             </div>
-            <div className="w-10 h-10 bg-muted rounded-lg flex items-center justify-center">
+            <div className="w-10 h-10 bg-muted flex items-center justify-center">
               <span className="text-lg">📊</span>
             </div>
           </div>
@@ -197,7 +197,7 @@ export default function HistoryPage() {
       </div>
 
       {/* Filter */}
-      <div className="bg-card p-4 rounded-xl shadow-sm border mb-6">
+      <div className="bg-card p-4 border mb-6">
         <div className="space-y-3">
           <div>
             <label className="text-sm font-medium text-muted-foreground mb-2 block">
@@ -206,7 +206,7 @@ export default function HistoryPage() {
             <div className="flex gap-2 flex-wrap">
               <button
                 onClick={() => setFilter('all')}
-                className={`px-5 py-2.5 rounded-lg text-sm font-semibold transition-all ${
+                className={`px-5 py-2.5 text-sm font-semibold transition-all ${
                   filter === 'all'
                     ? 'bg-primary text-primary-foreground'
                     : 'border hover:bg-accent'
@@ -216,7 +216,7 @@ export default function HistoryPage() {
               </button>
               <button
                 onClick={() => setFilter('passed')}
-                className={`px-5 py-2.5 rounded-lg text-sm font-semibold transition-all ${
+                className={`px-5 py-2.5 text-sm font-semibold transition-all ${
                   filter === 'passed'
                     ? 'bg-primary text-primary-foreground'
                     : 'border hover:bg-accent'
@@ -226,7 +226,7 @@ export default function HistoryPage() {
               </button>
               <button
                 onClick={() => setFilter('failed')}
-                className={`px-5 py-2.5 rounded-lg text-sm font-semibold transition-all ${
+                className={`px-5 py-2.5 text-sm font-semibold transition-all ${
                   filter === 'failed'
                     ? 'bg-primary text-primary-foreground'
                     : 'border hover:bg-accent'
@@ -244,7 +244,7 @@ export default function HistoryPage() {
             <div className="flex gap-2 flex-wrap">
               <button
                 onClick={() => setModeFilter('all')}
-                className={`px-5 py-2.5 rounded-lg text-sm font-semibold transition-all ${
+                className={`px-5 py-2.5 text-sm font-semibold transition-all ${
                   modeFilter === 'all'
                     ? 'bg-primary text-primary-foreground'
                     : 'border hover:bg-accent'
@@ -254,7 +254,7 @@ export default function HistoryPage() {
               </button>
               <button
                 onClick={() => setModeFilter('EXAM')}
-                className={`px-5 py-2.5 rounded-lg text-sm font-semibold transition-all ${
+                className={`px-5 py-2.5 text-sm font-semibold transition-all ${
                   modeFilter === 'EXAM'
                     ? 'bg-primary text-primary-foreground'
                     : 'border hover:bg-accent'
@@ -264,7 +264,7 @@ export default function HistoryPage() {
               </button>
               <button
                 onClick={() => setModeFilter('PRACTICE')}
-                className={`px-5 py-2.5 rounded-lg text-sm font-semibold transition-all ${
+                className={`px-5 py-2.5 text-sm font-semibold transition-all ${
                   modeFilter === 'PRACTICE'
                     ? 'bg-primary text-primary-foreground'
                     : 'border hover:bg-accent'
@@ -280,12 +280,12 @@ export default function HistoryPage() {
       {/* Attempts List */}
       {loading ? (
         <div className="text-center py-12">
-          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+          <div className="inline-block animate-spin h-8 w-8 border-2 border-primary border-t-transparent"></div>
           <p className="text-muted-foreground mt-4">Loading history...</p>
         </div>
       ) : filteredAttempts.length === 0 ? (
-        <div className="text-center py-12 bg-card rounded-xl shadow-sm border">
-          <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
+        <div className="text-center py-12 bg-card border">
+          <div className="w-16 h-16 bg-muted flex items-center justify-center mx-auto mb-4">
             <span className="text-3xl">📈</span>
           </div>
           <p className="text-muted-foreground mb-4">
@@ -296,7 +296,7 @@ export default function HistoryPage() {
           {filter === 'all' && (
             <Link
               href="/exams"
-              className="inline-block px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-all font-semibold"
+              className="inline-block px-6 py-3 bg-primary text-primary-foreground hover:bg-primary/90 transition-all font-semibold"
             >
               Browse Exams
             </Link>
@@ -307,14 +307,14 @@ export default function HistoryPage() {
           {filteredAttempts.map((attempt) => (
             <div
               key={attempt.id}
-              className="group bg-card p-6 rounded-xl shadow-sm border hover:shadow-lg transition-all duration-200"
+              className="group bg-card p-6 border transition-all duration-200"
             >
               <div className="flex items-start justify-between">
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-2 flex-wrap">
                     <h3 className="text-lg font-bold group-hover:text-primary transition-colors">{attempt.exam.name}</h3>
                     <span
-                      className={`px-3 py-1 text-xs font-bold rounded-full border ${
+                      className={`px-3 py-1 text-xs font-bold border ${
                         attempt.mode === 'PRACTICE'
                           ? 'bg-green-500/10 dark:bg-green-500/20 text-green-700 dark:text-green-400 border-green-500/30'
                           : 'bg-purple-500/10 dark:bg-purple-500/20 text-purple-700 dark:text-purple-400 border-purple-500/30'
@@ -323,7 +323,7 @@ export default function HistoryPage() {
                       {attempt.mode === 'PRACTICE' ? '📚 PRACTICE' : '🎯 EXAM'}
                     </span>
                     <span
-                      className={`px-3 py-1 text-xs font-bold rounded-full border ${
+                      className={`px-3 py-1 text-xs font-bold border ${
                         attempt.passed
                           ? 'bg-green-500/10 dark:bg-green-500/20 text-green-700 dark:text-green-400 border-green-500/30'
                           : 'bg-red-500/10 dark:bg-red-500/20 text-red-700 dark:text-red-400 border-red-500/30'
@@ -360,19 +360,19 @@ export default function HistoryPage() {
                 <div className="flex flex-col gap-2 ml-4">
                   <Link
                     href={`/exam/${attempt.exam.id}/results?attemptId=${attempt.id}`}
-                    className="px-4 py-2 border-2 border-primary/20 rounded-lg hover:border-primary hover:bg-primary/5 text-center text-sm font-semibold whitespace-nowrap transition-all"
+                    className="px-4 py-2 border-2 border-primary/20 hover:border-primary hover:bg-primary/5 text-center text-sm font-semibold whitespace-nowrap transition-all"
                   >
                     View Results
                   </Link>
                   <Link
                     href={`/exam/${attempt.exam.id}`}
-                    className="px-4 py-2 bg-gradient-to-r from-primary to-sky-600 text-white rounded-lg hover:opacity-90 transition-all hover:scale-105 text-center text-sm font-semibold whitespace-nowrap shadow-md"
+                    className="px-4 py-2 bg-primary text-primary-foreground hover:bg-sky-600 transition-colors text-center text-sm font-semibold whitespace-nowrap"
                   >
                     Retake
                   </Link>
                   <button
                     onClick={() => handleDeleteClick(attempt)}
-                    className="px-4 py-2 border-2 border-red-500/30 text-red-600 dark:text-red-400 rounded-lg hover:bg-red-500/10 hover:border-red-500/50 text-center text-sm font-semibold whitespace-nowrap transition-all"
+                    className="px-4 py-2 border-2 border-red-500/30 text-red-600 dark:text-red-400 hover:bg-red-500/10 hover:border-red-500/50 text-center text-sm font-semibold whitespace-nowrap transition-all"
                   >
                     Delete
                   </button>

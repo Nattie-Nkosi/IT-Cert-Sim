@@ -48,21 +48,21 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center">
-      <div className="w-full max-w-md space-y-8 p-8 bg-card rounded-lg shadow border">
-        <div>
-          <h2 className="text-3xl font-bold text-center">Login</h2>
-          <p className="mt-2 text-center text-sm text-muted-foreground">
+    <div className="flex min-h-screen items-center justify-center bg-background">
+      <div className="w-full max-w-md">
+        <div className="border-l-4 border-primary pl-4 mb-8">
+          <h2 className="text-3xl font-bold">Sign In</h2>
+          <p className="mt-1 text-sm text-muted-foreground">
             Access your IT certification practice
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="mt-8 space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-5 border p-8 bg-card">
           {error && (
-            <div className={`p-3 rounded-md text-sm ${
+            <div className={`p-3 text-sm border-l-4 ${
               isLocked
-                ? 'bg-orange-500/10 dark:bg-orange-500/20 text-orange-700 dark:text-orange-400 border border-orange-500/30'
-                : 'bg-destructive/10 text-destructive'
+                ? 'bg-orange-50 dark:bg-orange-900/20 text-orange-700 dark:text-orange-400 border-orange-500'
+                : 'bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 border-red-500'
             }`}>
               {isLocked && <span className="font-bold">🔒 </span>}
               {error}
@@ -70,13 +70,13 @@ export default function LoginPage() {
           )}
 
           {warning && !isLocked && (
-            <div className="p-3 bg-yellow-500/10 dark:bg-yellow-500/20 text-yellow-700 dark:text-yellow-400 rounded-md text-sm border border-yellow-500/30">
+            <div className="p-3 bg-yellow-50 dark:bg-yellow-900/20 text-yellow-700 dark:text-yellow-400 text-sm border-l-4 border-yellow-500">
               ⚠️ {warning}
             </div>
           )}
 
           <div>
-            <label htmlFor="email" className="block text-sm font-medium">
+            <label htmlFor="email" className="block text-sm font-medium mb-1">
               Email
             </label>
             <input
@@ -85,13 +85,13 @@ export default function LoginPage() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-input rounded-md bg-background text-foreground"
+              className="block w-full px-3 py-2 border border-input bg-background text-foreground focus:outline-none focus:border-primary"
               disabled={isLocked}
             />
           </div>
 
           <div>
-            <label htmlFor="password" className="block text-sm font-medium">
+            <label htmlFor="password" className="block text-sm font-medium mb-1">
               Password
             </label>
             <input
@@ -100,7 +100,7 @@ export default function LoginPage() {
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-input rounded-md bg-background text-foreground"
+              className="block w-full px-3 py-2 border border-input bg-background text-foreground focus:outline-none focus:border-primary"
               disabled={isLocked}
             />
           </div>
@@ -108,14 +108,14 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading || isLocked}
-            className="w-full py-2 px-4 bg-primary text-primary-foreground rounded-md hover:opacity-90 disabled:opacity-50"
+            className="w-full py-2 px-4 bg-primary text-primary-foreground font-medium hover:bg-sky-600 disabled:opacity-50 transition-colors"
           >
-            {loading ? 'Logging in...' : isLocked ? 'Account Locked' : 'Login'}
+            {loading ? 'Signing in...' : isLocked ? 'Account Locked' : 'Sign In'}
           </button>
 
-          <p className="text-center text-sm">
-            Don't have an account?{' '}
-            <Link href="/register" className="text-primary hover:underline">
+          <p className="text-center text-sm text-muted-foreground">
+            Don&apos;t have an account?{' '}
+            <Link href="/register" className="text-primary hover:underline font-medium">
               Register
             </Link>
           </p>

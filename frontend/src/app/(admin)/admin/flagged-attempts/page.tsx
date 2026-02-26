@@ -69,7 +69,7 @@ export default function FlaggedAttemptsPage() {
   if (!hasHydrated) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+        <div className="animate-spin h-8 w-8 border-2 border-primary border-t-transparent"></div>
       </div>
     );
   }
@@ -79,7 +79,7 @@ export default function FlaggedAttemptsPage() {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="mb-8">
-        <h1 className="text-4xl font-bold mb-3 bg-gradient-to-r from-red-500 to-orange-500 bg-clip-text text-transparent">
+        <h1 className="text-4xl font-bold mb-3 text-red-600">
           Flagged Exam Attempts
         </h1>
         <p className="text-lg text-muted-foreground">
@@ -88,19 +88,19 @@ export default function FlaggedAttemptsPage() {
       </div>
 
       {error && (
-        <div className="p-4 mb-6 bg-red-500/10 dark:bg-red-500/20 text-red-700 dark:text-red-400 rounded-lg border border-red-500/30">
+        <div className="p-4 mb-6 bg-red-500/10 dark:bg-red-500/20 text-red-700 dark:text-red-400 border border-red-500/30">
           {error}
         </div>
       )}
 
       {loading ? (
         <div className="text-center py-12">
-          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+          <div className="inline-block animate-spin h-8 w-8 border-2 border-primary border-t-transparent"></div>
           <p className="text-muted-foreground mt-4">Loading flagged attempts...</p>
         </div>
       ) : attempts.length === 0 ? (
-        <div className="text-center py-12 bg-card rounded-xl shadow-sm border">
-          <div className="w-16 h-16 bg-green-500/10 dark:bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+        <div className="text-center py-12 bg-card border">
+          <div className="w-16 h-16 bg-green-500/10 dark:bg-green-500/20 flex items-center justify-center mx-auto mb-4">
             <span className="text-3xl">✓</span>
           </div>
           <p className="text-green-700 dark:text-green-400 font-semibold">No flagged attempts found</p>
@@ -111,7 +111,7 @@ export default function FlaggedAttemptsPage() {
           {attempts.map((attempt) => (
             <div
               key={attempt.id}
-              className="bg-card p-6 rounded-xl shadow-sm border border-red-500/30 hover:shadow-md transition-all"
+              className="bg-card p-6 border border-red-500/30 hover:shadow-md transition-all"
             >
               <div className="flex flex-wrap items-start justify-between gap-4 mb-4">
                 <div>
@@ -121,25 +121,25 @@ export default function FlaggedAttemptsPage() {
                   </p>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className={`px-3 py-1 rounded-full text-xs font-bold ${
+                  <span className={`px-3 py-1 text-xs font-bold ${
                     attempt.passed
                       ? 'bg-green-500/10 dark:bg-green-500/20 text-green-700 dark:text-green-400'
                       : 'bg-red-500/10 dark:bg-red-500/20 text-red-700 dark:text-red-400'
                   }`}>
                     {attempt.passed ? 'PASSED' : 'FAILED'}
                   </span>
-                  <span className="px-3 py-1 bg-red-500/10 dark:bg-red-500/20 text-red-700 dark:text-red-400 rounded-full text-xs font-bold">
+                  <span className="px-3 py-1 bg-red-500/10 dark:bg-red-500/20 text-red-700 dark:text-red-400 text-xs font-bold">
                     FLAGGED
                   </span>
                 </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                <div className="bg-muted/50 p-3 rounded-lg">
+                <div className="bg-muted/50 p-3">
                   <div className="text-sm text-muted-foreground">Score</div>
                   <div className="text-xl font-bold">{attempt.score.toFixed(1)}%</div>
                 </div>
-                <div className="bg-muted/50 p-3 rounded-lg">
+                <div className="bg-muted/50 p-3">
                   <div className="text-sm text-muted-foreground">Tab Switches</div>
                   <div className={`text-xl font-bold ${
                     attempt.tabSwitchCount >= 3 ? 'text-red-600 dark:text-red-400' : 'text-yellow-600 dark:text-yellow-400'
@@ -147,13 +147,13 @@ export default function FlaggedAttemptsPage() {
                     {attempt.tabSwitchCount}
                   </div>
                 </div>
-                <div className="bg-muted/50 p-3 rounded-lg">
+                <div className="bg-muted/50 p-3">
                   <div className="text-sm text-muted-foreground">Started</div>
                   <div className="text-sm font-medium">{formatDate(attempt.startedAt)}</div>
                 </div>
               </div>
 
-              <div className="bg-red-500/10 dark:bg-red-500/20 border border-red-500/30 rounded-lg p-4">
+              <div className="bg-red-500/10 dark:bg-red-500/20 border border-red-500/30 p-4">
                 <div className="text-sm font-semibold text-red-700 dark:text-red-400 mb-1">Flag Reason:</div>
                 <p className="text-red-600 dark:text-red-400">{attempt.flagReason || 'No reason provided'}</p>
               </div>

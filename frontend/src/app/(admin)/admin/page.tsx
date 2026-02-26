@@ -53,7 +53,7 @@ export default function AdminDashboard() {
   if (!hasHydrated) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+        <div className="animate-spin h-8 w-8 border-2 border-primary border-t-transparent"></div>
       </div>
     );
   }
@@ -108,7 +108,7 @@ export default function AdminDashboard() {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="mb-10">
-        <h1 className="text-4xl font-bold mb-3 bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-transparent">
+        <h1 className="text-4xl font-bold mb-3 text-orange-500">
           Admin Dashboard
         </h1>
         <p className="text-lg text-muted-foreground">
@@ -119,15 +119,15 @@ export default function AdminDashboard() {
       {/* Stats Overview */}
       {!loading && (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-          <div className="bg-card p-6 rounded-xl border hover:shadow-md transition-all">
+          <div className="bg-card p-6 border hover:border-primary transition-colors">
             <div className="text-3xl font-bold text-blue-600 dark:text-blue-400">{stats.certifications}</div>
             <div className="text-sm text-muted-foreground">Certifications</div>
           </div>
-          <div className="bg-card p-6 rounded-xl border hover:shadow-md transition-all">
+          <div className="bg-card p-6 border hover:border-primary transition-colors">
             <div className="text-3xl font-bold text-purple-600 dark:text-purple-400">{stats.questions}</div>
             <div className="text-sm text-muted-foreground">Questions</div>
           </div>
-          <div className="bg-card p-6 rounded-xl border hover:shadow-md transition-all">
+          <div className="bg-card p-6 border hover:border-primary transition-colors">
             <div className="text-3xl font-bold text-green-600 dark:text-green-400">{stats.exams}</div>
             <div className="text-sm text-muted-foreground">Exams</div>
           </div>
@@ -135,16 +135,16 @@ export default function AdminDashboard() {
       )}
 
       {/* Workflow Guide */}
-      <div className="bg-card border rounded-xl p-6 mb-10">
+      <div className="bg-card border p-6 mb-10">
         <h2 className="text-lg font-bold mb-3">Quick Start Guide</h2>
         <div className="flex flex-wrap gap-2 items-center text-sm">
-          <span className="px-3 py-1.5 bg-muted rounded-lg font-medium">1. Create Certification</span>
+          <span className="px-3 py-1.5 bg-muted font-medium">1. Create Certification</span>
           <span className="text-muted-foreground">→</span>
-          <span className="px-3 py-1.5 bg-muted rounded-lg font-medium">2. Add Questions</span>
+          <span className="px-3 py-1.5 bg-muted font-medium">2. Add Questions</span>
           <span className="text-muted-foreground">→</span>
-          <span className="px-3 py-1.5 bg-muted rounded-lg font-medium">3. Create Exam</span>
+          <span className="px-3 py-1.5 bg-muted font-medium">3. Create Exam</span>
           <span className="text-muted-foreground">→</span>
-          <span className="px-3 py-1.5 bg-green-500/10 dark:bg-green-500/20 text-green-700 dark:text-green-400 rounded-lg font-medium">Ready for Students!</span>
+          <span className="px-3 py-1.5 bg-green-500/10 dark:bg-green-500/20 text-green-700 dark:text-green-400 font-medium">Ready for Students!</span>
         </div>
       </div>
 
@@ -154,14 +154,14 @@ export default function AdminDashboard() {
           <Link
             key={section.href}
             href={section.href}
-            className="group bg-card p-6 rounded-xl border hover:shadow-lg hover:border-primary/50 transition-all"
+            className="group bg-card p-6 border hover:border-primary transition-colors"
           >
             <div className="flex items-start justify-between mb-4">
-              <div className="w-12 h-12 bg-muted rounded-xl flex items-center justify-center text-2xl">
+              <div className="w-12 h-12 bg-muted flex items-center justify-center text-2xl">
                 {section.icon}
               </div>
               {section.count !== undefined && (
-                <span className="px-3 py-1 bg-muted rounded-lg text-sm font-bold">
+                <span className="px-3 py-1 bg-muted text-sm font-bold">
                   {section.count} {section.countLabel}
                 </span>
               )}

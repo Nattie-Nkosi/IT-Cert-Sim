@@ -61,24 +61,24 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center">
-      <div className="w-full max-w-md space-y-8 p-8 bg-card rounded-lg shadow border">
-        <div>
-          <h2 className="text-3xl font-bold text-center">Register</h2>
-          <p className="mt-2 text-center text-sm text-muted-foreground">
-            Create your account to start practicing
+    <div className="flex min-h-screen items-center justify-center bg-background">
+      <div className="w-full max-w-md">
+        <div className="border-l-4 border-primary pl-4 mb-8">
+          <h2 className="text-3xl font-bold">Create Account</h2>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Start your certification journey
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="mt-8 space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-5 border p-8 bg-card">
           {error && (
-            <div className="p-3 bg-destructive/10 text-destructive rounded-md text-sm">
+            <div className="p-3 bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 text-sm border-l-4 border-red-500">
               {error}
             </div>
           )}
 
           <div>
-            <label htmlFor="name" className="block text-sm font-medium">
+            <label htmlFor="name" className="block text-sm font-medium mb-1">
               Name
             </label>
             <input
@@ -87,12 +87,12 @@ export default function RegisterPage() {
               required
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-input rounded-md bg-background text-foreground"
+              className="block w-full px-3 py-2 border border-input bg-background text-foreground focus:outline-none focus:border-primary"
             />
           </div>
 
           <div>
-            <label htmlFor="email" className="block text-sm font-medium">
+            <label htmlFor="email" className="block text-sm font-medium mb-1">
               Email
             </label>
             <input
@@ -101,12 +101,12 @@ export default function RegisterPage() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-input rounded-md bg-background text-foreground"
+              className="block w-full px-3 py-2 border border-input bg-background text-foreground focus:outline-none focus:border-primary"
             />
           </div>
 
           <div>
-            <label htmlFor="password" className="block text-sm font-medium">
+            <label htmlFor="password" className="block text-sm font-medium mb-1">
               Password
             </label>
             <input
@@ -115,11 +115,11 @@ export default function RegisterPage() {
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-input rounded-md bg-background text-foreground"
+              className="block w-full px-3 py-2 border border-input bg-background text-foreground focus:outline-none focus:border-primary"
             />
 
             {password && (
-              <div className="mt-3 p-3 bg-muted rounded-lg">
+              <div className="mt-3 p-3 bg-muted border-l-4 border-primary/30">
                 <p className="text-xs font-medium mb-2">Password requirements:</p>
                 <div className="grid grid-cols-2 gap-1">
                   {passwordChecks.map((check) => (
@@ -141,15 +141,15 @@ export default function RegisterPage() {
           <button
             type="submit"
             disabled={loading || !isPasswordValid}
-            className="w-full py-2 px-4 bg-primary text-primary-foreground rounded-md hover:opacity-90 disabled:opacity-50"
+            className="w-full py-2 px-4 bg-primary text-primary-foreground font-medium hover:bg-sky-600 disabled:opacity-50 transition-colors"
           >
-            {loading ? 'Creating account...' : 'Register'}
+            {loading ? 'Creating account...' : 'Create Account'}
           </button>
 
-          <p className="text-center text-sm">
+          <p className="text-center text-sm text-muted-foreground">
             Already have an account?{' '}
-            <Link href="/login" className="text-primary hover:underline">
-              Login
+            <Link href="/login" className="text-primary hover:underline font-medium">
+              Sign In
             </Link>
           </p>
         </form>

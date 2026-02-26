@@ -99,7 +99,7 @@ export default function AuditLogsPage() {
   if (!hasHydrated) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+        <div className="animate-spin h-8 w-8 border-2 border-primary border-t-transparent"></div>
       </div>
     );
   }
@@ -119,7 +119,7 @@ export default function AuditLogsPage() {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="mb-8">
-        <h1 className="text-4xl font-bold mb-3 bg-gradient-to-r from-primary to-sky-600 bg-clip-text text-transparent">
+        <h1 className="text-4xl font-bold mb-3 text-primary">
           Audit Logs
         </h1>
         <p className="text-lg text-muted-foreground">
@@ -128,21 +128,21 @@ export default function AuditLogsPage() {
       </div>
 
       {error && (
-        <div className="p-4 mb-6 bg-red-500/10 dark:bg-red-500/20 text-red-700 dark:text-red-400 rounded-lg border border-red-500/30">
+        <div className="p-4 mb-6 bg-red-500/10 dark:bg-red-500/20 text-red-700 dark:text-red-400 border border-red-500/30">
           {error}
         </div>
       )}
 
       {/* Filters */}
-      <div className="bg-card p-4 rounded-xl shadow-sm border mb-6">
+      <div className="bg-card p-4 border mb-6">
         <div className="flex gap-2 flex-wrap">
           {filterOptions.map((option) => (
             <button
               key={option.value}
               onClick={() => setFilter(option.value)}
-              className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
+              className={`px-4 py-2 text-sm font-semibold transition-all ${
                 filter === option.value
-                  ? 'bg-primary text-primary-foreground shadow-md'
+                  ? 'bg-primary text-primary-foreground'
                   : 'border hover:bg-accent'
               }`}
             >
@@ -154,16 +154,16 @@ export default function AuditLogsPage() {
 
       {loading && logs.length === 0 ? (
         <div className="text-center py-12">
-          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+          <div className="inline-block animate-spin h-8 w-8 border-2 border-primary border-t-transparent"></div>
           <p className="text-muted-foreground mt-4">Loading logs...</p>
         </div>
       ) : logs.length === 0 ? (
-        <div className="text-center py-12 bg-card rounded-xl shadow-sm border">
+        <div className="text-center py-12 bg-card border">
           <p className="text-muted-foreground">No audit logs found</p>
         </div>
       ) : (
         <>
-          <div className="overflow-x-auto bg-card rounded-xl shadow-sm border">
+          <div className="overflow-x-auto bg-card border">
             <table className="w-full">
               <thead className="bg-muted">
                 <tr>
@@ -180,7 +180,7 @@ export default function AuditLogsPage() {
                       {formatDate(log.createdAt)}
                     </td>
                     <td className="px-4 py-3">
-                      <span className={`px-3 py-1 rounded-full text-xs font-bold ${
+                      <span className={`px-3 py-1 text-xs font-bold ${
                         actionColors[log.action] || 'bg-gray-100 text-gray-700'
                       }`}>
                         {log.action}
@@ -202,7 +202,7 @@ export default function AuditLogsPage() {
             <div className="text-center mt-6">
               <button
                 onClick={() => fetchLogs(true)}
-                className="px-6 py-3 border-2 border-primary/20 rounded-lg hover:border-primary hover:bg-primary/5 font-semibold transition-all"
+                className="px-6 py-3 border-2 border-primary/20 hover:border-primary hover:bg-primary/5 font-semibold transition-all"
               >
                 Load More
               </button>
