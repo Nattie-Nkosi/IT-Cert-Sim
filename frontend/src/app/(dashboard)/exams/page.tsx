@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuthStore } from '@/lib/store';
 import api from '@/lib/api';
+import { ExamCardSkeleton } from '@/components/Skeleton';
 
 interface Exam {
   id: string;
@@ -30,6 +31,8 @@ export default function ExamsPage() {
   const [exams, setExams] = useState<Exam[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [search, setSearch] = useState('');
+  const [sortBy, setSortBy] = useState<'name' | 'questions' | 'duration'>('name');
 
   useEffect(() => {
     if (!hasHydrated) return;
@@ -98,6 +101,27 @@ export default function ExamsPage() {
         </button>
       </div>
 
+      {!loading && exams.length > 0 && (
+        <div className="flex flex-col sm:flex-row gap-3 mb-6">
+          <input
+            type="text"
+            placeholder="Search exams..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="flex-1 max-w-md px-4 py-2.5 border border-input bg-background text-foreground focus:outline-none focus:border-primary text-sm"
+          />
+          <select
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value as any)}
+            className="px-4 py-2.5 border border-input bg-background text-foreground text-sm focus:outline-none focus:border-primary"
+          >
+            <option value="name">Sort: Name</option>
+            <option value="questions">Sort: Questions</option>
+            <option value="duration">Sort: Duration</option>
+          </select>
+        </div>
+      )}
+
       {error && (
         <div className="p-4 mb-6 bg-red-500/10 dark:bg-red-500/20 text-red-700 dark:text-red-400 border border-red-500/30">
           {error}
@@ -105,9 +129,8 @@ export default function ExamsPage() {
       )}
 
       {loading ? (
-        <div className="text-center py-12">
-          <div className="inline-block animate-spin h-8 w-8 border-2 border-primary border-t-transparent"></div>
-          <p className="text-muted-foreground mt-4">Loading exams...</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {Array.from({ length: 6 }).map((_, i) => <ExamCardSkeleton key={i} />)}
         </div>
       ) : exams.length === 0 ? (
         <div className="text-center py-12 bg-card border">
@@ -125,7 +148,18 @@ export default function ExamsPage() {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {exams.map((exam) => (
+          {exams
+            .filter((exam) => {
+              if (!search) return true;
+              const q = search.toLowerCase();
+              return exam.name.toLowerCase().includes(q) || exam.certification.name.toLowerCase().includes(q) || exam.certification.code.toLowerCase().includes(q);
+            })
+            .sort((a, b) => {
+              if (sortBy === 'questions') return b._count.questions - a._count.questions;
+              if (sortBy === 'duration') return a.duration - b.duration;
+              return a.name.localeCompare(b.name);
+            })
+            .map((exam) => (
             <div
               key={exam.id}
               className="group bg-card p-6 border hover:border-primary transition-colors"

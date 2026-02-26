@@ -1,46 +1,44 @@
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 
-const certifications = [
-  { name: 'CompTIA A+', code: 'A+', bg: 'bg-red-500' },
-  { name: 'CompTIA Network+', code: 'N+', bg: 'bg-sky-500' },
-  { name: 'CompTIA Security+', code: 'S+', bg: 'bg-emerald-600' },
-  { name: 'AWS Cloud', code: 'AWS', bg: 'bg-amber-500' },
-  { name: 'Microsoft 365', code: 'MS', bg: 'bg-purple-600' },
-  { name: 'Cisco CCNA', code: 'CCNA', bg: 'bg-indigo-600' },
-];
-
 const features = [
   {
-    icon: '⏱️',
+    tag: 'timed_exams',
     title: 'Timed Exams',
-    description: 'Realistic exam conditions with countdown timers',
+    description: 'Realistic exam conditions with countdown timers that mirror actual certification tests.',
   },
   {
-    icon: '🔀',
+    tag: 'randomized_q',
     title: 'Randomized Questions',
-    description: 'Questions and answers shuffle every attempt',
+    description: 'Questions and answers shuffle every attempt so you never memorize patterns.',
   },
   {
-    icon: '📊',
+    tag: 'progress',
     title: 'Progress Tracking',
-    description: 'Track scores and review your exam history',
+    description: 'Track your scores, review history, and monitor improvement over time.',
   },
   {
-    icon: '🔒',
+    tag: 'anti_cheat',
     title: 'Anti-Cheating',
-    description: 'Tab monitoring and activity tracking',
+    description: 'Tab monitoring and activity tracking for honest practice sessions.',
   },
   {
-    icon: '💡',
+    tag: 'explanations',
     title: 'Explanations',
-    description: 'Learn from detailed answer explanations',
+    description: 'Detailed answer breakdowns so you learn why, not just what.',
   },
   {
-    icon: '📱',
-    title: 'Responsive',
-    description: 'Practice on any device, anywhere',
+    tag: 'practice_mode',
+    title: 'Practice Mode',
+    description: 'No timer, instant feedback, free navigation — learn at your own pace.',
   },
+];
+
+const stats = [
+  { label: 'certifications', value: '6' },
+  { label: 'questions', value: '500+' },
+  { label: 'exam_modes', value: '2' },
+  { label: 'pass_rate', value: '85%' },
 ];
 
 export default function Home() {
@@ -51,59 +49,90 @@ export default function Home() {
       {/* Hero */}
       <section className="border-b">
         <div className="container mx-auto px-4 py-20 md:py-32">
-          <div className="max-w-4xl mx-auto text-center">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 border border-primary/20 text-sm font-medium text-primary mb-8">
-              <span className="w-2 h-2 bg-sky-500 block" />
-              Free Practice Exams Available
-            </div>
+          <div className="max-w-5xl mx-auto">
+            <div className="flex flex-col lg:flex-row lg:items-center lg:gap-16">
+              <div className="flex-1">
+                <span className="inline-block font-mono text-sm text-primary/70 mb-6">
+                  {'// free & open'}
+                </span>
 
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 tracking-tight">
-              Ace Your{' '}
-              <span className="text-primary">
-                IT Certification
-              </span>{' '}
-              Exams
-            </h1>
+                <h1 className="font-mono text-4xl md:text-5xl lg:text-6xl font-bold mb-6 tracking-tight">
+                  {'> ace your'}
+                  <br />
+                  <span className="text-primary">{'IT certs'}</span>
+                  <span className="animate-blink text-primary">_</span>
+                </h1>
 
-            <p className="text-lg md:text-xl text-muted-foreground mb-10 max-w-2xl mx-auto">
-              Practice with realistic exam simulations featuring timed tests,
-              randomized questions, and detailed explanations.
-            </p>
+                <p className="text-lg text-muted-foreground mb-10 max-w-lg">
+                  Practice with realistic exam simulations. Timed tests,
+                  randomized questions, instant feedback, and detailed explanations.
+                </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link
-                href="/register"
-                className="px-8 py-4 bg-primary text-primary-foreground font-semibold hover:bg-sky-600 transition-colors"
-              >
-                Start Practicing Free
-              </Link>
-              <Link
-                href="/login"
-                className="px-8 py-4 border-2 border-primary font-semibold hover:bg-primary/5 transition-colors"
-              >
-                Sign In
-              </Link>
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <Link
+                    href="/register"
+                    className="px-6 py-3 bg-primary text-primary-foreground font-mono text-sm font-medium hover:bg-primary/90 transition-colors inline-flex items-center gap-2"
+                  >
+                    <span className="text-primary-foreground/60">$</span> start-practicing
+                  </Link>
+                  <Link
+                    href="/login"
+                    className="px-6 py-3 border border-border font-mono text-sm font-medium hover:border-primary hover:text-primary transition-colors inline-flex items-center gap-2"
+                  >
+                    <span className="text-muted-foreground">$</span> sign-in
+                  </Link>
+                </div>
+              </div>
+
+              {/* Decorative terminal */}
+              <div className="flex-1 mt-12 lg:mt-0">
+                <div className="border border-border bg-card">
+                  <div className="flex items-center gap-2 px-4 py-2 border-b border-border bg-muted/50">
+                    <div className="flex gap-1.5">
+                      <div className="w-3 h-3 bg-destructive/60" />
+                      <div className="w-3 h-3 bg-chart-4/60" />
+                      <div className="w-3 h-3 bg-chart-3/60" />
+                    </div>
+                    <span className="font-mono text-xs text-muted-foreground ml-2">~/cert-simulator</span>
+                  </div>
+                  <div className="p-5 font-mono text-sm space-y-2">
+                    <p className="text-muted-foreground">
+                      <span className="text-primary">$</span> cert-sim --status
+                    </p>
+                    <p className="text-foreground/80">
+                      ✓ 6 certifications loaded
+                    </p>
+                    <p className="text-foreground/80">
+                      ✓ 500+ practice questions
+                    </p>
+                    <p className="text-foreground/80">
+                      ✓ exam mode: <span className="text-primary">active</span>
+                    </p>
+                    <p className="text-foreground/80">
+                      ✓ practice mode: <span className="text-primary">active</span>
+                    </p>
+                    <p className="text-muted-foreground mt-3">
+                      <span className="text-primary">$</span> <span className="animate-blink">▌</span>
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Certifications */}
-      <section className="py-16 border-b bg-muted/30">
-        <div className="container mx-auto px-4">
-          <p className="text-center text-xs font-semibold tracking-widest text-muted-foreground mb-8 uppercase">
-            Prepare for Popular Certifications
-          </p>
-          <div className="flex flex-wrap justify-center gap-3">
-            {certifications.map((cert) => (
-              <div
-                key={cert.code}
-                className="flex items-center gap-3 px-5 py-3 bg-card border hover:border-primary transition-colors"
-              >
-                <div className={`w-10 h-10 ${cert.bg} flex items-center justify-center text-white font-bold text-sm`}>
-                  {cert.code}
-                </div>
-                <span className="font-medium">{cert.name}</span>
+      {/* Stats */}
+      <section className="border-b bg-muted/30">
+        <div className="container mx-auto px-4 py-8">
+          <div className="flex flex-wrap justify-center divide-x divide-border">
+            {stats.map((stat) => (
+              <div key={stat.label} className="px-6 md:px-10 py-3">
+                <p className="font-mono text-sm text-muted-foreground">
+                  <span className="text-primary mr-2">{'>'}</span>
+                  {stat.label}:{' '}
+                  <span className="text-foreground font-bold">{stat.value}</span>
+                </p>
               </div>
             ))}
           </div>
@@ -114,49 +143,33 @@ export default function Home() {
       <section className="py-20">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              Everything You Need to Pass
+            <h2 className="font-mono text-2xl md:text-3xl font-bold mb-3">
+              <span className="text-primary">{'>'}</span> features
             </h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              Our simulator provides a complete exam preparation experience
+            <p className="text-muted-foreground">
+              Everything you need to pass, nothing you don&apos;t.
             </p>
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-0 border-l border-t max-w-5xl mx-auto">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-5xl mx-auto">
             {features.map((feature) => (
               <div
-                key={feature.title}
-                className="p-6 border-r border-b bg-card hover:bg-primary/5 transition-colors"
+                key={feature.tag}
+                className="border border-border bg-card hover:border-primary transition-colors group"
               >
-                <div className="w-12 h-12 bg-primary/10 flex items-center justify-center text-2xl mb-4">
-                  {feature.icon}
+                <div className="px-4 py-2 border-b border-border bg-muted/50 flex items-center gap-2">
+                  <span className="font-mono text-xs text-muted-foreground">
+                    [{feature.tag}]
+                  </span>
                 </div>
-                <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
-                <p className="text-sm text-muted-foreground">{feature.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* How it works */}
-      <section className="py-20 border-t border-b bg-muted/30">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">How It Works</h2>
-          </div>
-
-          <div className="flex flex-col md:flex-row items-start justify-center gap-0 max-w-4xl mx-auto border-l border-t">
-            {[
-              { step: '01', title: 'Create Account', desc: 'Sign up for free' },
-              { step: '02', title: 'Choose Exam', desc: 'Pick your certification' },
-              { step: '03', title: 'Practice', desc: 'Take timed exams' },
-              { step: '04', title: 'Review', desc: 'Learn from results' },
-            ].map((item) => (
-              <div key={item.step} className="flex-1 p-8 border-r border-b">
-                <div className="text-4xl font-bold text-primary/20 mb-3">{item.step}</div>
-                <h3 className="font-semibold text-lg mb-1">{item.title}</h3>
-                <p className="text-sm text-muted-foreground">{item.desc}</p>
+                <div className="p-5">
+                  <h3 className="font-mono text-base font-semibold mb-2 group-hover:text-primary transition-colors">
+                    {feature.title}
+                  </h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    {feature.description}
+                  </p>
+                </div>
               </div>
             ))}
           </div>
@@ -164,37 +177,42 @@ export default function Home() {
       </section>
 
       {/* CTA */}
-      <section className="py-20">
+      <section className="py-20 border-t">
         <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto text-center p-10 border-2 border-primary">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              Ready to Get Certified?
-            </h2>
-            <p className="text-muted-foreground mb-8">
-              Join thousands of IT professionals preparing for their certifications
-            </p>
-            <Link
-              href="/register"
-              className="inline-block px-8 py-4 bg-primary text-primary-foreground font-semibold hover:bg-sky-600 transition-colors"
-            >
-              Get Started Free
-            </Link>
+          <div className="max-w-2xl mx-auto text-center">
+            <div className="border border-border bg-card p-10">
+              <p className="font-mono text-sm text-muted-foreground mb-6">
+                <span className="text-primary">$</span> register --free --start-now
+              </p>
+              <h2 className="text-2xl md:text-3xl font-bold mb-4">
+                Ready to get certified?
+              </h2>
+              <p className="text-muted-foreground mb-8">
+                Create a free account and start practicing today.
+              </p>
+              <Link
+                href="/register"
+                className="inline-block px-8 py-4 bg-primary text-primary-foreground font-mono text-sm font-semibold hover:bg-primary/90 transition-colors"
+              >
+                Get Started Free
+              </Link>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="py-8 border-t">
+      <footer className="py-6 border-t">
         <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
             <div className="flex items-center gap-2">
               <div className="w-6 h-6 bg-primary flex items-center justify-center">
-                <span className="text-primary-foreground font-bold text-xs">IT</span>
+                <span className="text-primary-foreground font-mono font-bold text-xs">IT</span>
               </div>
-              <span className="font-semibold">Cert Simulator</span>
+              <span className="font-mono text-sm font-semibold">cert-simulator</span>
             </div>
-            <p className="text-sm text-muted-foreground">
-              Built for learning. Practice exams for educational purposes.
+            <p className="font-mono text-xs text-muted-foreground">
+              // built for learning — {new Date().getFullYear()}
             </p>
           </div>
         </div>

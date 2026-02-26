@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuthStore } from '@/lib/store';
 import api from '@/lib/api';
+import { CertCardSkeleton } from '@/components/Skeleton';
 
 interface Certification {
   id: string;
@@ -24,6 +25,7 @@ export default function CertificationsPage() {
   const [certifications, setCertifications] = useState<Certification[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [search, setSearch] = useState('');
 
   useEffect(() => {
     if (!hasHydrated) return;
@@ -71,6 +73,18 @@ export default function CertificationsPage() {
         </p>
       </div>
 
+      {!loading && certifications.length > 0 && (
+        <div className="mb-6">
+          <input
+            type="text"
+            placeholder="Search by name, code, or vendor..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="w-full max-w-md px-4 py-2.5 border border-input bg-background text-foreground focus:outline-none focus:border-primary text-sm"
+          />
+        </div>
+      )}
+
       {error && (
         <div className="p-4 mb-6 bg-red-500/10 dark:bg-red-500/20 text-red-700 dark:text-red-400 border border-red-500/30">
           {error}
@@ -78,9 +92,8 @@ export default function CertificationsPage() {
       )}
 
       {loading ? (
-        <div className="text-center py-12">
-          <div className="inline-block animate-spin h-8 w-8 border-2 border-primary border-t-transparent"></div>
-          <p className="text-muted-foreground mt-4">Loading certifications...</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {Array.from({ length: 6 }).map((_, i) => <CertCardSkeleton key={i} />)}
         </div>
       ) : certifications.length === 0 ? (
         <div className="text-center py-12 border bg-muted/30">
@@ -101,7 +114,11 @@ export default function CertificationsPage() {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {certifications.map((cert) => (
+          {certifications.filter((cert) => {
+            if (!search) return true;
+            const q = search.toLowerCase();
+            return cert.name.toLowerCase().includes(q) || cert.code.toLowerCase().includes(q) || cert.vendor.toLowerCase().includes(q);
+          }).map((cert) => (
             <div
               key={cert.id}
               className="group bg-card p-6 border hover:border-primary transition-colors"

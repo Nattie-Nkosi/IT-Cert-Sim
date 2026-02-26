@@ -1,10 +1,14 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import ThemeProvider from "@/components/ThemeProvider";
 import { ToastProvider } from "@/components/ToastProvider";
 
 const inter = Inter({ subsets: ["latin"] });
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono",
+});
 
 export const metadata: Metadata = {
   title: "IT Cert Simulator",
@@ -38,7 +42,7 @@ export default function RootLayout({
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
-      <body className={inter.className}>
+      <body className={`${inter.className} ${jetbrainsMono.variable}`}>
         <ThemeProvider>
           {children}
           <ToastProvider />
