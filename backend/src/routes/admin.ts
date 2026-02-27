@@ -538,9 +538,19 @@ export const adminRoutes = new Elysia({ prefix: '/api/admin' })
   .get('/audit-logs', async ({ query }) => {
     const page = parseInt(query.page || '1');
     const limit = Math.min(parseInt(query.limit || '50'), 100);
-    const action = query.action;
+    const { action, startDate, endDate } = query;
 
-    const where = action ? { action } : {};
+    const where: any = {};
+    if (action) where.action = action;
+    if (startDate || endDate) {
+      where.createdAt = {};
+      if (startDate) where.createdAt.gte = new Date(startDate);
+      if (endDate) {
+        const end = new Date(endDate);
+        end.setHours(23, 59, 59, 999);
+        where.createdAt.lte = end;
+      }
+    }
 
     const [logs, total] = await Promise.all([
       prisma.auditLog.findMany({
@@ -559,6 +569,25 @@ export const adminRoutes = new Elysia({ prefix: '/api/admin' })
       limit,
       hasMore: page * limit < total,
     };
+  })
+
+  // Purge audit logs older than N days
+  .delete('/audit-logs/purge', async ({ query }) => {
+    const olderThanDays = parseInt(query.olderThanDays);
+
+    if (!olderThanDays || olderThanDays < 1) {
+      return { error: 'olderThanDays must be a positive integer', deleted: 0 };
+    }
+
+    const cutoff = new Date();
+    cutoff.setDate(cutoff.getDate() - olderThanDays);
+
+    const where: any = { createdAt: { lt: cutoff } };
+    if (query.action) where.action = query.action;
+
+    const { count } = await prisma.auditLog.deleteMany({ where });
+
+    return { deleted: count, cutoffDate: cutoff.toISOString() };
   })
 
   // Get flagged exam attempts
