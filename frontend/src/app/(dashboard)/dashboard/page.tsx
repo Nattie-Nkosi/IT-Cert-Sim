@@ -63,7 +63,7 @@ export default function DashboardPage() {
           : 0;
 
         setStats({
-          totalAttempts: attempts.length,
+          totalAttempts: rawAttempts.length,
           passedExams,
           averageScore: Math.round(averageScore),
           certifications: certificationsRes.data.length,
@@ -80,18 +80,6 @@ export default function DashboardPage() {
 
     fetchStats();
   }, [token, user, router, hasHydrated]);
-
-  if (!hasHydrated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="w-8 h-8 border-2 border-primary border-t-transparent animate-spin" />
-      </div>
-    );
-  }
-
-  if (!user) {
-    return null;
-  }
 
   const scoreTrendData = useMemo(() => {
     if (!attempts.length) return [];
@@ -131,6 +119,18 @@ export default function DashboardPage() {
       { name: 'Practice', avg: avgPractice, count: practiceScores.length },
     ];
   }, [attempts]);
+
+  if (!hasHydrated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-primary border-t-transparent animate-spin" />
+      </div>
+    );
+  }
+
+  if (!user) {
+    return null;
+  }
 
   return (
     <div className="container mx-auto px-4 py-8">

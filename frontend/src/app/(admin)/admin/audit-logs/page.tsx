@@ -45,6 +45,7 @@ const actionColors: Record<string, string> = {
 };
 
 const RETENTION_OPTIONS = [
+  { label: 'All matching logs', days: 0 },
   { label: 'Older than 30 days', days: 30 },
   { label: 'Older than 60 days', days: 60 },
   { label: 'Older than 90 days', days: 90 },
@@ -135,7 +136,10 @@ export default function AuditLogsPage() {
       const response = await api.delete(`/admin/audit-logs/purge?${params.toString()}`);
       const { deleted, cutoffDate } = response.data;
 
-      toast.success(`Purged ${deleted} log${deleted !== 1 ? 's' : ''} older than ${new Date(cutoffDate).toLocaleDateString()}`);
+      const suffix = cutoffDate
+        ? `older than ${new Date(cutoffDate).toLocaleDateString()}`
+        : 'in total';
+      toast.success(`Purged ${deleted} log${deleted !== 1 ? 's' : ''} ${suffix}`);
       fetchLogs();
     } catch (err: any) {
       toast.error('Failed to purge logs');
@@ -223,10 +227,8 @@ export default function AuditLogsPage() {
 
               <p className="text-xs text-muted-foreground bg-muted px-3 py-2">
                 This will permanently delete{' '}
-                <strong>
-                  {purgeAction === 'all' ? 'all' : purgeAction}
-                </strong>{' '}
-                logs older than <strong>{purgeRetention} days</strong>.
+                <strong>{purgeAction === 'all' ? 'all' : purgeAction}</strong>{' '}
+                logs{purgeRetention === 0 ? ' regardless of age' : ` older than ${purgeRetention} days`}.
               </p>
             </div>
 

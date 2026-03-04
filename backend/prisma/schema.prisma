@@ -139,6 +139,10 @@ model ExamAttempt {
 
   // Anti-cheating fields
   tabSwitchCount  Int       @default(0)
+  fullscreenExits Int       @default(0)
+  copyAttempts    Int       @default(0)
+  pasteAttempts   Int       @default(0)
+  windowBlurs     Int       @default(0)
   ipAddress       String?
   userAgent       String?
   serverStartTime DateTime  @default(now())

@@ -56,33 +56,52 @@ export default function ExamTakingClient() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
 
-  // Anti-cheating state
+  // Security state
   const [tabSwitchCount, setTabSwitchCount] = useState(0);
   const [showTabWarning, setShowTabWarning] = useState(false);
-  const isSubmittingRef = useRef(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [fullscreenExits, setFullscreenExits] = useState(0);
+  const [showFullscreenWarning, setShowFullscreenWarning] = useState(false);
+  const [copyAttempts, setCopyAttempts] = useState(0);
 
-  // Start exam and create attempt
+  const isSubmittingRef = useRef(false);
+  const attemptIdRef = useRef<string | null>(null);
+  const hasBeenFullscreenRef = useRef(false);
+
+  const reportSecurityEvent = useCallback(
+    (type: 'FULLSCREEN_EXIT' | 'COPY_ATTEMPT' | 'PASTE_ATTEMPT' | 'WINDOW_BLUR') => {
+      if (!attemptIdRef.current || isSubmittingRef.current) return;
+      api
+        .post(`/exams/attempts/${attemptIdRef.current}/security-event`, { type })
+        .catch(() => {});
+    },
+    []
+  );
+
   const startExam = useCallback(async () => {
     if (!params.id) return;
 
     try {
       const startResponse = await api.post(`/exams/${params.id}/start`);
-      setAttemptId(startResponse.data.attemptId);
+      const id = startResponse.data.attemptId;
+      setAttemptId(id);
+      attemptIdRef.current = id;
       setTabSwitchCount(startResponse.data.tabSwitchCount || 0);
 
       const examResponse = await api.get(`/exams/${params.id}`);
       setExam(examResponse.data);
 
-      // Calculate remaining time based on server start time
       if (startResponse.data.resuming && startResponse.data.serverStartTime) {
-        const serverStart = new Date(startResponse.data.serverStartTime).getTime();
-        const now = Date.now();
-        const elapsedSeconds = Math.floor((now - serverStart) / 1000);
-        const remaining = Math.max(0, examResponse.data.duration * 60 - elapsedSeconds);
-        setTimeRemaining(remaining);
+        const elapsed = Math.floor(
+          (Date.now() - new Date(startResponse.data.serverStartTime).getTime()) / 1000
+        );
+        setTimeRemaining(Math.max(0, examResponse.data.duration * 60 - elapsed));
       } else {
         setTimeRemaining(examResponse.data.duration * 60);
       }
+
+      // Request fullscreen — needs a prior user gesture, so we attempt it and fall back silently
+      document.documentElement.requestFullscreen().catch(() => {});
     } catch (err: any) {
       setError('Failed to load exam');
       console.error(err);
@@ -93,12 +112,10 @@ export default function ExamTakingClient() {
 
   useEffect(() => {
     if (!hasHydrated) return;
-
     if (!token || !user) {
       router.push('/login');
       return;
     }
-
     startExam();
   }, [token, user, router, hasHydrated, startExam]);
 
@@ -125,32 +142,89 @@ export default function ExamTakingClient() {
     return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
   }, [attemptId]);
 
-  // Prevent copy/paste and right-click
+  // Fullscreen tracking
   useEffect(() => {
-    const preventCopy = (e: ClipboardEvent) => {
-      e.preventDefault();
-    };
+    const handleFullscreenChange = () => {
+      const inFullscreen = !!document.fullscreenElement;
+      setIsFullscreen(inFullscreen);
 
-    const preventContextMenu = (e: MouseEvent) => {
-      e.preventDefault();
-    };
-
-    const preventKeyboardShortcuts = (e: KeyboardEvent) => {
-      if ((e.ctrlKey || e.metaKey) && (e.key === 'c' || e.key === 'C' || e.key === 'p' || e.key === 'P')) {
-        e.preventDefault();
+      if (inFullscreen) {
+        hasBeenFullscreenRef.current = true;
+        setShowFullscreenWarning(false);
+      } else if (hasBeenFullscreenRef.current && !isSubmittingRef.current) {
+        setFullscreenExits((prev) => prev + 1);
+        setShowFullscreenWarning(true);
+        reportSecurityEvent('FULLSCREEN_EXIT');
       }
     };
 
-    document.addEventListener('copy', preventCopy);
-    document.addEventListener('contextmenu', preventContextMenu);
-    document.addEventListener('keydown', preventKeyboardShortcuts);
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
+  }, [reportSecurityEvent]);
+
+  // Copy, paste, right-click, and keyboard shortcut prevention + reporting
+  useEffect(() => {
+    const handleCopy = (e: ClipboardEvent) => {
+      e.preventDefault();
+      setCopyAttempts((prev) => prev + 1);
+      reportSecurityEvent('COPY_ATTEMPT');
+      toast.warning('Copying is not allowed during this exam');
+    };
+
+    const handlePaste = (e: ClipboardEvent) => {
+      e.preventDefault();
+      reportSecurityEvent('PASTE_ATTEMPT');
+      toast.error('Pasting is not allowed during this exam');
+    };
+
+    const handleContextMenu = (e: MouseEvent) => e.preventDefault();
+
+    const handleKeydown = (e: KeyboardEvent) => {
+      if (e.ctrlKey || e.metaKey) {
+        if (['c', 'C'].includes(e.key)) {
+          e.preventDefault();
+          setCopyAttempts((prev) => prev + 1);
+          reportSecurityEvent('COPY_ATTEMPT');
+        } else if (['v', 'V'].includes(e.key)) {
+          e.preventDefault();
+          reportSecurityEvent('PASTE_ATTEMPT');
+        } else if (['p', 'P', 'u', 'U', 's', 'S'].includes(e.key)) {
+          e.preventDefault();
+        }
+      }
+    };
+
+    document.addEventListener('copy', handleCopy);
+    document.addEventListener('paste', handlePaste);
+    document.addEventListener('contextmenu', handleContextMenu);
+    document.addEventListener('keydown', handleKeydown);
 
     return () => {
-      document.removeEventListener('copy', preventCopy);
-      document.removeEventListener('contextmenu', preventContextMenu);
-      document.removeEventListener('keydown', preventKeyboardShortcuts);
+      document.removeEventListener('copy', handleCopy);
+      document.removeEventListener('paste', handlePaste);
+      document.removeEventListener('contextmenu', handleContextMenu);
+      document.removeEventListener('keydown', handleKeydown);
     };
-  }, []);
+  }, [reportSecurityEvent]);
+
+  // Window blur tracking (debounced to avoid double-firing with visibilitychange)
+  useEffect(() => {
+    if (!attemptId) return;
+
+    let lastBlur = 0;
+    const DEBOUNCE_MS = 2000;
+
+    const handleBlur = () => {
+      if (isSubmittingRef.current) return;
+      const now = Date.now();
+      if (now - lastBlur < DEBOUNCE_MS) return;
+      lastBlur = now;
+      reportSecurityEvent('WINDOW_BLUR');
+    };
+
+    window.addEventListener('blur', handleBlur);
+    return () => window.removeEventListener('blur', handleBlur);
+  }, [attemptId, reportSecurityEvent]);
 
   // Timer
   useEffect(() => {
@@ -170,10 +244,7 @@ export default function ExamTakingClient() {
   }, [timeRemaining, exam]);
 
   const handleAnswerChange = (questionId: string, answerId: string | string[]) => {
-    setUserAnswers((prev) => ({
-      ...prev,
-      [questionId]: answerId,
-    }));
+    setUserAnswers((prev) => ({ ...prev, [questionId]: answerId }));
   };
 
   const handleSubmitExam = async () => {
@@ -182,11 +253,13 @@ export default function ExamTakingClient() {
     isSubmittingRef.current = true;
     setSubmitting(true);
 
-    try {
-      const response = await api.post(`/exams/${exam.id}/submit`, {
-        answers: userAnswers,
-      });
+    // Exit fullscreen on submit
+    if (document.fullscreenElement) {
+      document.exitFullscreen().catch(() => {});
+    }
 
+    try {
+      const response = await api.post(`/exams/${exam.id}/submit`, { answers: userAnswers });
       router.push(`/exam/${exam.id}/results?attemptId=${response.data.attemptId}`);
     } catch (err: any) {
       const msg = err.response?.data?.message || err.message;
@@ -197,10 +270,16 @@ export default function ExamTakingClient() {
     }
   };
 
+  const enterFullscreen = () => {
+    document.documentElement.requestFullscreen().catch(() => {
+      toast.error('Could not enter fullscreen. Please use F11.');
+    });
+  };
+
   if (!hasHydrated) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin h-8 w-8 border-2 border-primary border-t-transparent"></div>
+        <div className="animate-spin h-8 w-8 border-2 border-primary border-t-transparent" />
       </div>
     );
   }
@@ -211,7 +290,7 @@ export default function ExamTakingClient() {
     return (
       <div className="container mx-auto px-4 py-8">
         <div className="text-center py-12">
-          <div className="inline-block animate-spin h-8 w-8 border-2 border-primary border-t-transparent"></div>
+          <div className="inline-block animate-spin h-8 w-8 border-2 border-primary border-t-transparent" />
           <p className="text-muted-foreground mt-4">Loading exam...</p>
         </div>
       </div>
@@ -255,9 +334,32 @@ export default function ExamTakingClient() {
   const minutes = Math.floor(timeRemaining / 60);
   const seconds = timeRemaining % 60;
 
+  const totalViolations = tabSwitchCount + fullscreenExits + copyAttempts;
+
   return (
     <div className="min-h-screen bg-background select-none">
-      {/* Tab Switch Warning */}
+      {/* Fullscreen exit warning overlay */}
+      {showFullscreenWarning && (
+        <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center">
+          <div className="bg-card border-2 border-red-500 p-8 max-w-md w-full mx-4 text-center">
+            <div className="text-5xl mb-4">⛶</div>
+            <h2 className="text-xl font-bold mb-2">Fullscreen Required</h2>
+            <p className="text-muted-foreground mb-1">Exiting fullscreen has been recorded.</p>
+            <p className="text-sm text-red-600 mb-6">
+              Exit count: <strong>{fullscreenExits}</strong>
+              {fullscreenExits >= 2 && ' — This attempt has been flagged.'}
+            </p>
+            <button
+              onClick={enterFullscreen}
+              className="px-6 py-3 bg-primary text-primary-foreground font-semibold w-full"
+            >
+              Return to Fullscreen
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Tab switch warning */}
       {showTabWarning && (
         <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 animate-pulse">
           <div className="bg-red-600 text-white px-6 py-3 flex items-center gap-3">
@@ -270,14 +372,36 @@ export default function ExamTakingClient() {
         </div>
       )}
 
-      {/* Tab Switch Counter */}
-      {tabSwitchCount > 0 && (
-        <div className="fixed top-4 right-4 z-50">
-          <div className={`px-3 py-2 text-sm font-semibold ${
-            tabSwitchCount >= 3 ? 'bg-red-500/10 dark:bg-red-500/20 text-red-700 dark:text-red-400 border border-red-500/30' : 'bg-yellow-500/10 dark:bg-yellow-500/20 text-yellow-700 dark:text-yellow-400 border border-yellow-500/30'
-          }`}>
-            Tab Switches: {tabSwitchCount}
-          </div>
+      {/* Security status badge */}
+      {totalViolations > 0 && (
+        <div className="fixed top-4 right-4 z-40 space-y-1.5">
+          {tabSwitchCount > 0 && (
+            <div className={`px-3 py-1.5 text-xs font-semibold text-right ${
+              tabSwitchCount >= 3
+                ? 'bg-red-500/10 text-red-700 dark:text-red-400 border border-red-500/30'
+                : 'bg-yellow-500/10 text-yellow-700 dark:text-yellow-400 border border-yellow-500/30'
+            }`}>
+              Tab Switches: {tabSwitchCount}
+            </div>
+          )}
+          {fullscreenExits > 0 && (
+            <div className={`px-3 py-1.5 text-xs font-semibold text-right ${
+              fullscreenExits >= 2
+                ? 'bg-red-500/10 text-red-700 dark:text-red-400 border border-red-500/30'
+                : 'bg-yellow-500/10 text-yellow-700 dark:text-yellow-400 border border-yellow-500/30'
+            }`}>
+              Fullscreen Exits: {fullscreenExits}
+            </div>
+          )}
+          {copyAttempts > 0 && (
+            <div className={`px-3 py-1.5 text-xs font-semibold text-right ${
+              copyAttempts >= 3
+                ? 'bg-red-500/10 text-red-700 dark:text-red-400 border border-red-500/30'
+                : 'bg-orange-500/10 text-orange-700 dark:text-orange-400 border border-orange-500/30'
+            }`}>
+              Copy Attempts: {copyAttempts}
+            </div>
+          )}
         </div>
       )}
 
@@ -285,14 +409,18 @@ export default function ExamTakingClient() {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-bold text-primary">
-                {exam.name}
-              </h1>
-              <p className="text-sm text-muted-foreground font-medium">
-                {exam.certification.name}
-              </p>
+              <h1 className="text-2xl font-bold text-primary">{exam.name}</h1>
+              <p className="text-sm text-muted-foreground font-medium">{exam.certification.name}</p>
             </div>
-            <div className="text-right">
+            <div className="flex items-center gap-3">
+              {!isFullscreen && (
+                <button
+                  onClick={enterFullscreen}
+                  className="px-3 py-1.5 text-xs font-semibold border border-yellow-500/50 text-yellow-700 dark:text-yellow-400 hover:bg-yellow-500/10 transition-colors"
+                >
+                  ⛶ Enter Fullscreen
+                </button>
+              )}
               <div className={`inline-flex items-center gap-2 px-4 py-2 ${
                 timeRemaining < 300
                   ? 'bg-red-500/10 dark:bg-red-500/20 border-2 border-red-500'
@@ -362,9 +490,10 @@ export default function ExamTakingClient() {
 
               <div className="space-y-3">
                 {currentQuestion.answers.map((answer) => {
-                  const isSelected = currentQuestion.questionType === 'MULTIPLE_CHOICE'
-                    ? (userAnswers[currentQuestion.id] as string[] || []).includes(answer.id)
-                    : userAnswers[currentQuestion.id] === answer.id;
+                  const isSelected =
+                    currentQuestion.questionType === 'MULTIPLE_CHOICE'
+                      ? (userAnswers[currentQuestion.id] as string[] || []).includes(answer.id)
+                      : userAnswers[currentQuestion.id] === answer.id;
 
                   return (
                     <label

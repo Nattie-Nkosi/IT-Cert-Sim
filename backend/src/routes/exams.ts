@@ -218,6 +218,75 @@ export const examRoutes = new Elysia({ prefix: '/api/exams' })
     }
   )
 
+  // Track security events (fullscreen exits, copy/paste attempts, window blurs)
+  .post(
+    '/attempts/:id/security-event',
+    async (context: any) => {
+      const { params, body, headers, jwt } = context;
+      const auth = headers.authorization;
+      if (!auth?.startsWith('Bearer ')) throw new Error('Unauthorized');
+
+      const token = auth.slice(7);
+      const payload = await jwt.verify(token);
+      if (!payload) throw new Error('Invalid token');
+
+      const user = payload as { id: string };
+
+      const attempt = await prisma.examAttempt.findUnique({ where: { id: params.id } });
+
+      if (!attempt || attempt.userId !== user.id || attempt.completedAt || attempt.mode === 'PRACTICE') {
+        return { ok: false };
+      }
+
+      const update: any = {};
+      const existingReasons = attempt.flagReason ? [attempt.flagReason] : [];
+
+      switch (body.type) {
+        case 'FULLSCREEN_EXIT': {
+          const n = attempt.fullscreenExits + 1;
+          update.fullscreenExits = n;
+          if (n >= 2) { update.flagged = true; existingReasons.push(`Fullscreen exited ${n}x`); }
+          break;
+        }
+        case 'COPY_ATTEMPT': {
+          const n = attempt.copyAttempts + 1;
+          update.copyAttempts = n;
+          if (n >= 3) { update.flagged = true; existingReasons.push(`Copy attempted ${n}x`); }
+          break;
+        }
+        case 'PASTE_ATTEMPT': {
+          const n = attempt.pasteAttempts + 1;
+          update.pasteAttempts = n;
+          update.flagged = true;
+          existingReasons.push(`Paste attempted ${n}x`);
+          break;
+        }
+        case 'WINDOW_BLUR': {
+          const n = attempt.windowBlurs + 1;
+          update.windowBlurs = n;
+          if (n >= 5) { update.flagged = true; existingReasons.push(`Window focus lost ${n}x`); }
+          break;
+        }
+      }
+
+      if (update.flagged) update.flagReason = existingReasons.join('. ').trim();
+
+      await prisma.examAttempt.update({ where: { id: params.id }, data: update });
+
+      return { ok: true, flagged: update.flagged || attempt.flagged };
+    },
+    {
+      body: t.Object({
+        type: t.Union([
+          t.Literal('FULLSCREEN_EXIT'),
+          t.Literal('COPY_ATTEMPT'),
+          t.Literal('PASTE_ATTEMPT'),
+          t.Literal('WINDOW_BLUR'),
+        ]),
+      }),
+    }
+  )
+
   // Check answer for practice mode (immediate feedback)
   .post(
     '/attempts/:id/check-answer',
@@ -359,13 +428,22 @@ export const examRoutes = new Elysia({ prefix: '/api/exams' })
 
       // Check for time manipulation if we have a start time (skip for practice mode)
       let timeViolation = false;
+      let rapidCompletion = false;
+
       if (attempt?.serverStartTime && attempt.mode !== 'PRACTICE') {
         const elapsedMinutes = (now.getTime() - attempt.serverStartTime.getTime()) / 60000;
-        const allowedMinutes = exam.duration + 1; // 1 minute grace period
-        if (elapsedMinutes > allowedMinutes) {
-          timeViolation = true;
-        }
+        if (elapsedMinutes > exam.duration + 1) timeViolation = true;
+        if (elapsedMinutes < exam.duration * 0.20 && totalQuestions >= 10) rapidCompletion = true;
       }
+
+      const buildFlagReason = (existing: string | null) => {
+        const parts = [existing, timeViolation ? 'Time exceeded' : null];
+        if (rapidCompletion) {
+          const elapsed = ((now.getTime() - attempt!.serverStartTime!.getTime()) / 60000).toFixed(1);
+          parts.push(`Completed in ${elapsed}min (${exam.duration}min allowed)`);
+        }
+        return parts.filter(Boolean).join('. ').trim() || null;
+      };
 
       if (attempt) {
         // Update existing attempt
@@ -376,10 +454,8 @@ export const examRoutes = new Elysia({ prefix: '/api/exams' })
             passed,
             answers: body.answers,
             completedAt: now,
-            flagged: attempt.flagged || timeViolation,
-            flagReason: timeViolation
-              ? `${attempt.flagReason || ''} Time exceeded`.trim()
-              : attempt.flagReason,
+            flagged: attempt.flagged || timeViolation || rapidCompletion,
+            flagReason: buildFlagReason(attempt.flagReason),
           },
         });
       } else {

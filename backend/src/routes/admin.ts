@@ -571,39 +571,85 @@ export const adminRoutes = new Elysia({ prefix: '/api/admin' })
     };
   })
 
-  // Purge audit logs older than N days
+  // Purge audit logs. olderThanDays=0 deletes all matching logs regardless of age.
   .delete('/audit-logs/purge', async ({ query }) => {
     const olderThanDays = parseInt(query.olderThanDays);
 
-    if (!olderThanDays || olderThanDays < 1) {
-      return { error: 'olderThanDays must be a positive integer', deleted: 0 };
+    if (isNaN(olderThanDays) || olderThanDays < 0) {
+      return { error: 'olderThanDays must be a non-negative integer', deleted: 0 };
     }
 
-    const cutoff = new Date();
-    cutoff.setDate(cutoff.getDate() - olderThanDays);
+    const where: any = {};
+    let cutoffDate: string | null = null;
 
-    const where: any = { createdAt: { lt: cutoff } };
+    if (olderThanDays > 0) {
+      const cutoff = new Date();
+      cutoff.setDate(cutoff.getDate() - olderThanDays);
+      where.createdAt = { lt: cutoff };
+      cutoffDate = cutoff.toISOString();
+    }
+
     if (query.action) where.action = query.action;
 
     const { count } = await prisma.auditLog.deleteMany({ where });
 
-    return { deleted: count, cutoffDate: cutoff.toISOString() };
+    return { deleted: count, cutoffDate };
   })
 
   // Get flagged exam attempts
-  .get('/flagged-attempts', async () => {
-    return await prisma.examAttempt.findMany({
-      where: { flagged: true },
-      include: {
-        user: {
-          select: { id: true, email: true, name: true },
+  .get('/flagged-attempts', async ({ query }) => {
+    const page = parseInt(query.page || '1');
+    const limit = Math.min(parseInt(query.limit || '20'), 100);
+    const { reason, search } = query;
+
+    const where: any = { flagged: true };
+    if (reason === 'tab_switch') where.tabSwitchCount = { gte: 3 };
+    if (reason === 'time') where.flagReason = { contains: 'Time', mode: 'insensitive' };
+    if (search) {
+      where.OR = [
+        { user: { name: { contains: search, mode: 'insensitive' } } },
+        { user: { email: { contains: search, mode: 'insensitive' } } },
+      ];
+    }
+
+    const [attempts, total] = await Promise.all([
+      prisma.examAttempt.findMany({
+        where,
+        include: {
+          user: { select: { id: true, email: true, name: true } },
+          exam: { select: { id: true, name: true } },
         },
-        exam: {
-          select: { id: true, name: true },
-        },
-      },
-      orderBy: { startedAt: 'desc' },
+        orderBy: { startedAt: 'desc' },
+        skip: (page - 1) * limit,
+        take: limit,
+      }),
+      prisma.examAttempt.count({ where }),
+    ]);
+
+    return { attempts, total, page, hasMore: page * limit < total };
+  })
+
+  // Clear flag on an attempt (mark as reviewed)
+  .patch('/flagged-attempts/:id/unflag', async ({ params }) => {
+    const attempt = await prisma.examAttempt.findUnique({ where: { id: params.id } });
+    if (!attempt) throw new Error('Attempt not found');
+
+    await prisma.examAttempt.update({
+      where: { id: params.id },
+      data: { flagged: false, flagReason: null },
     });
+
+    return { success: true };
+  })
+
+  // Delete a flagged attempt
+  .delete('/flagged-attempts/:id', async ({ params }) => {
+    const attempt = await prisma.examAttempt.findUnique({ where: { id: params.id } });
+    if (!attempt) throw new Error('Attempt not found');
+
+    await prisma.examAttempt.delete({ where: { id: params.id } });
+
+    return { success: true };
   })
 
   // Sync all certification questions to exam
